@@ -4,13 +4,14 @@ from langchain_openai import ChatOpenAI
 from .state import RAGState
 from ..retrieval.vector_store import load_vector_store, get_retriever
 
-
-llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
 from dotenv import load_dotenv
+
 load_dotenv()
 
 
+generation_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
 
+evaluation_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
 
 
 def retrieval_node(state: RAGState, retriever):
@@ -24,22 +25,63 @@ def retrieval_node(state: RAGState, retriever):
 
 def generation_node(state: RAGState):
 
+    prompt = f"""
+Answer the question using only the provided context.
+
+Rules:
+- Return only the answer.
+- Do not explain.
+- Do not provide reasoning.
+- Do not write a complete sentence.
+- Keep the answer as short as possible.
+
+Question:
+{state["question"]}
+
+Context:
+{state["context"]}
+
+Answer:
+"""
+
+    response = generation_llm.invoke(prompt)
+
+    return {"answer": response.content.strip()}
+
+
+def semantic_evaluation(question, reference_answer, predicted_answer):
 
     prompt = f"""
-    Answer the question using the provided context.
+You are evaluating a question answering system.
 
-    Question:
-    {state["question"]}
+Determine whether the predicted answer is semantically correct compared to the reference answer.
 
-    Context:
-    {state["context"]}
+Consider:
+- Different word order is acceptable.
+- Different capitalization is acceptable.
+- Shorter answers are acceptable only if they contain the complete required meaning.
+- Do not require exact wording.
 
-    Answer:
-    """
+Question:
+{question}
 
-    response = llm.invoke(prompt)
+Reference answer:
+{reference_answer}
 
-    return {"answer": response.content}
+Predicted answer:
+{predicted_answer}
+
+Return only one word:
+correct
+or
+incorrect
+"""
+
+    response = evaluation_llm.invoke(prompt)
+
+    result = response.content.strip().lower()
+
+    return result == "correct"
 
 
 def build_baseline_graph(retriever):
@@ -59,9 +101,7 @@ def build_baseline_graph(retriever):
     return graph.compile()
 
 
-
-
-def run_baseline(question: str):
+def run_baseline(question: str, reference_answer: str):
 
     vector_store = load_vector_store()
 
@@ -70,12 +110,17 @@ def run_baseline(question: str):
     graph = build_baseline_graph(retriever)
 
     result = graph.invoke(
-        {
-            "question": question,
-            "retrieved_documents": [],
-            "context": "",
-            "answer": ""
-        }
+        {"question": question, "retrieved_documents": [], "context": "", "answer": ""}
     )
+
+    predicted_answer = result["answer"]
+
+    semantic_score = semantic_evaluation(question, reference_answer, predicted_answer)
+
+    result["evaluation"] = {
+        "reference_answer": reference_answer,
+        "predicted_answer": predicted_answer,
+        "semantic_correct": semantic_score,
+    }
 
     return result

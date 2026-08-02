@@ -1,6 +1,23 @@
 import json
+import re
 
 from .pipeline.baseline_rag import run_baseline
+
+
+def normalize_answer(answer):
+    answer = answer.lower()
+    answer = re.sub(r"[^a-z0-9\s]", "", answer)
+    answer = answer.strip()
+
+    return answer
+
+
+def evaluate_answer(prediction, ground_truth):
+
+    prediction = normalize_answer(prediction)
+    ground_truth = normalize_answer(ground_truth)
+
+    return prediction == ground_truth
 
 
 def main():
@@ -10,39 +27,48 @@ def main():
 
     results = []
 
-    for trace in traces[:1]:
+    for trace in traces[:15]:  # Limit to first 10 traces for testing
 
-        result = run_baseline(trace["question"])
+        result = run_baseline(trace["question"], trace["canonical_answer"])
 
         trace["final_answer"] = result["answer"]
-        
+
+        trace["evaluation"] = {
+            "predicted_answer": normalize_answer(result["answer"]),
+            "ground_truth": normalize_answer(trace["canonical_answer"]),
+            "exact_match": evaluate_answer(result["answer"], trace["canonical_answer"]),
+            "semantic_correct": result["evaluation"]["semantic_correct"],
+        }
+
         trace["answer_claims"] = [
-            {
-                "claim": result["answer"],
-                "source": "llm_generation"
-            }
+            {"claim": result["answer"], "source": "llm_generation"}
         ]
 
         trace["verification"] = {
             "support": 0.0,
             "completeness": 0.0,
             "conflict": 0.0,
-            "decision": "not_evaluated"
+            "decision": "not_evaluated",
         }
 
         trace["retrieval_events"] = [
             {
                 "title": doc.metadata.get("title"),
                 "passage_id": doc.metadata.get("passage_id"),
-                'rank': doc.metadata.get("rank"),
+                "rank": index + 1,
+                "text": doc.page_content,
             }
-            for doc in result["retrieved_documents"]
+            for index, doc in enumerate(result["retrieved_documents"])
         ]
 
         results.append(trace)
 
     with open("data/processed/pilot_baseline_results.json", "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2, ensure_ascii=False)
+
+    print(
+        "Baseline evaluation completed. Results saved to 'data/processed/pilot_baseline_results.json'."
+    )
 
 
 if __name__ == "__main__":

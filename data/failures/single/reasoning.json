@@ -4,7 +4,7 @@
     "question_id": "5a8b57f25542995d1e6f1371",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_reasoning_failure",
     "dataset_metadata": {
       "type": "comparison",
       "level": "hard"
@@ -150,7 +150,9 @@
     },
     "final_answer": "Yes",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "G"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -162,14 +164,15 @@
       "ground_truth": "yes",
       "exact_match": true,
       "semantic_correct": true
-    }
+    },
+    "reasoning_constraint": "Do not perform multi-hop reasoning"
   },
   {
     "trace_id": "cdd61cf8-27ca-4f1c-8142-8b01b8969335",
     "question_id": "5a8c7595554299585d9e36b6",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_reasoning_failure",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -315,7 +318,9 @@
     },
     "final_answer": "None",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "G"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -327,14 +332,15 @@
       "ground_truth": "chief of protocol",
       "exact_match": false,
       "semantic_correct": false
-    }
+    },
+    "reasoning_constraint": "Do not perform multi-hop reasoning"
   },
   {
     "trace_id": "cf1a4900-a921-49ef-b371-c89e99cc96d5",
     "question_id": "5a85ea095542994775f606a8",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_reasoning_failure",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -480,7 +486,9 @@
     },
     "final_answer": "Animorphs",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "G"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -492,14 +500,15 @@
       "ground_truth": "animorphs",
       "exact_match": true,
       "semantic_correct": true
-    }
+    },
+    "reasoning_constraint": "Do not perform multi-hop reasoning"
   },
   {
     "trace_id": "97067020-3e39-4487-8502-a0553a8522f7",
     "question_id": "5adbf0a255429947ff17385a",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_reasoning_failure",
     "dataset_metadata": {
       "type": "comparison",
       "level": "hard"
@@ -645,7 +654,9 @@
     },
     "final_answer": "No",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "G"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -657,14 +668,15 @@
       "ground_truth": "no",
       "exact_match": true,
       "semantic_correct": true
-    }
+    },
+    "reasoning_constraint": "Do not perform multi-hop reasoning"
   },
   {
     "trace_id": "e8d0b210-9314-42da-844c-c37d1f69215a",
     "question_id": "5a8e3ea95542995a26add48d",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_reasoning_failure",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -810,7 +822,9 @@
     },
     "final_answer": "New York City",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "G"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -822,14 +836,15 @@
       "ground_truth": "greenwich village new york city",
       "exact_match": false,
       "semantic_correct": true
-    }
+    },
+    "reasoning_constraint": "Do not perform multi-hop reasoning"
   },
   {
     "trace_id": "de286ca4-c6dd-4dbd-b7c6-62d161b51281",
     "question_id": "5abd94525542992ac4f382d2",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_reasoning_failure",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -975,7 +990,9 @@
     },
     "final_answer": "YG Entertainment",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "G"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -987,14 +1004,15 @@
       "ground_truth": "yg entertainment",
       "exact_match": true,
       "semantic_correct": true
-    }
+    },
+    "reasoning_constraint": "Do not perform multi-hop reasoning"
   },
   {
     "trace_id": "a02c6843-8af3-49b2-8368-9b7d03e5228a",
     "question_id": "5a85b2d95542997b5ce40028",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_reasoning_failure",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -1140,7 +1158,9 @@
     },
     "final_answer": "Eenasul Fateh",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "G"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -1152,14 +1172,15 @@
       "ground_truth": "eenasul fateh",
       "exact_match": true,
       "semantic_correct": true
-    }
+    },
+    "reasoning_constraint": "Do not perform multi-hop reasoning"
   },
   {
     "trace_id": "8cf339d8-c019-428f-97aa-10edc440f3ce",
     "question_id": "5a87ab905542996e4f3088c1",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_reasoning_failure",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -1305,7 +1326,9 @@
     },
     "final_answer": "3,677",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "G"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -1317,14 +1340,15 @@
       "ground_truth": "3677 seated",
       "exact_match": false,
       "semantic_correct": true
-    }
+    },
+    "reasoning_constraint": "Do not perform multi-hop reasoning"
   },
   {
     "trace_id": "b3c83dce-c3d6-41ce-bd4f-743c69b84d85",
     "question_id": "5a7bbb64554299042af8f7cc",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_reasoning_failure",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -1470,7 +1494,9 @@
     },
     "final_answer": "Terry Richardson",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "G"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -1482,14 +1508,15 @@
       "ground_truth": "terry richardson",
       "exact_match": true,
       "semantic_correct": true
-    }
+    },
+    "reasoning_constraint": "Do not perform multi-hop reasoning"
   },
   {
     "trace_id": "16521d05-09d2-46d6-86c0-24369376ee10",
     "question_id": "5a8db19d5542994ba4e3dd00",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_reasoning_failure",
     "dataset_metadata": {
       "type": "comparison",
       "level": "hard"
@@ -1635,7 +1662,9 @@
     },
     "final_answer": "Yes",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "G"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -1647,14 +1676,15 @@
       "ground_truth": "yes",
       "exact_match": true,
       "semantic_correct": true
-    }
+    },
+    "reasoning_constraint": "Do not perform multi-hop reasoning"
   },
   {
     "trace_id": "e3c714af-e21b-418a-9adc-0baac9b609ba",
     "question_id": "5a7166395542994082a3e814",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_reasoning_failure",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -1800,7 +1830,9 @@
     },
     "final_answer": "Kansas Song (We’re From Kansas)",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "G"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -1812,14 +1844,15 @@
       "ground_truth": "kansas song",
       "exact_match": false,
       "semantic_correct": true
-    }
+    },
+    "reasoning_constraint": "Do not perform multi-hop reasoning"
   },
   {
     "trace_id": "43561580-2368-4ead-9354-185537816c9a",
     "question_id": "5a877e5d5542993e715abf7d",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_reasoning_failure",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -1965,7 +1998,9 @@
     },
     "final_answer": "David Weissman",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "G"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -1977,14 +2012,15 @@
       "ground_truth": "david weissman",
       "exact_match": true,
       "semantic_correct": true
-    }
+    },
+    "reasoning_constraint": "Do not perform multi-hop reasoning"
   },
   {
     "trace_id": "497eac9a-045e-4f95-9717-a06955cd6b9b",
     "question_id": "5ab3b0bf5542992ade7c6e39",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_reasoning_failure",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -2130,7 +2166,9 @@
     },
     "final_answer": "1999",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "G"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -2142,14 +2180,15 @@
       "ground_truth": "1999",
       "exact_match": true,
       "semantic_correct": true
-    }
+    },
+    "reasoning_constraint": "Do not perform multi-hop reasoning"
   },
   {
     "trace_id": "112f9858-28bc-434a-b264-2ff31024df35",
     "question_id": "5ab56e32554299637185c594",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_reasoning_failure",
     "dataset_metadata": {
       "type": "comparison",
       "level": "hard"
@@ -2295,7 +2334,9 @@
     },
     "final_answer": "Yes",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "G"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -2307,14 +2348,15 @@
       "ground_truth": "no",
       "exact_match": false,
       "semantic_correct": false
-    }
+    },
+    "reasoning_constraint": "Do not perform multi-hop reasoning"
   },
   {
     "trace_id": "79e202bf-e028-447d-b0bb-6a3fe43d91c9",
     "question_id": "5ab6d09255429954757d337d",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_reasoning_failure",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -2460,7 +2502,9 @@
     },
     "final_answer": "1986 to 2013",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "G"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -2472,6 +2516,7 @@
       "ground_truth": "from 1986 to 2013",
       "exact_match": false,
       "semantic_correct": true
-    }
+    },
+    "reasoning_constraint": "Do not perform multi-hop reasoning"
   }
 ]

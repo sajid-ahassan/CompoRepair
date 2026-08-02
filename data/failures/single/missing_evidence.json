@@ -4,7 +4,7 @@
     "question_id": "5a8b57f25542995d1e6f1371",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_missing_evidence",
     "dataset_metadata": {
       "type": "comparison",
       "level": "hard"
@@ -13,12 +13,6 @@
     "canonical_answer": "yes",
     "answer_aliases": [],
     "retrieval_events": [
-      {
-        "title": "Scott Derrickson",
-        "passage_id": "5a8b57f25542995d1e6f1371_p_1",
-        "rank": 1,
-        "text": "Scott Derrickson (born July 16, 1966) is an American director, screenwriter and producer.  He lives in Los Angeles, California.  He is best known for directing horror films such as \"Sinister\", \"The Exorcism of Emily Rose\", and \"Deliver Us From Evil\", as well as the 2016 Marvel Cinematic Universe installment, \"Doctor Strange.\""
-      },
       {
         "title": "Ed Wood (film)",
         "passage_id": "5a8b57f25542995d1e6f1371_p_0",
@@ -30,12 +24,6 @@
         "passage_id": "5a8b57f25542995d1e6f1371_p_7",
         "rank": 3,
         "text": "Sinister is a 2012 supernatural horror film directed by Scott Derrickson and written by Derrickson and C. Robert Cargill.  It stars Ethan Hawke as fictional true-crime writer Ellison Oswalt who discovers a box of home movies in his attic that puts his family in danger."
-      },
-      {
-        "title": "Ed Wood",
-        "passage_id": "5a8b57f25542995d1e6f1371_p_4",
-        "rank": 4,
-        "text": "Edward Davis Wood Jr. (October 10, 1924 – December 10, 1978) was an American filmmaker, actor, writer, producer, and director."
       },
       {
         "title": "Deliver Us from Evil (2014 film)",
@@ -150,7 +138,9 @@
     },
     "final_answer": "Yes",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "M"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -169,7 +159,7 @@
     "question_id": "5a8c7595554299585d9e36b6",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_missing_evidence",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -178,12 +168,6 @@
     "canonical_answer": "Chief of Protocol",
     "answer_aliases": [],
     "retrieval_events": [
-      {
-        "title": "Kiss and Tell (1945 film)",
-        "passage_id": "5a8c7595554299585d9e36b6_p_6",
-        "rank": 1,
-        "text": "Kiss and Tell is a 1945 American comedy film starring then 17-year-old Shirley Temple as Corliss Archer.  In the film, two teenage girls cause their respective parents much concern when they start to become interested in boys.  The parents' bickering about which girl is the worse influence causes more problems than it solves."
-      },
       {
         "title": "A Kiss for Corliss",
         "passage_id": "5a8c7595554299585d9e36b6_p_5",
@@ -315,7 +299,9 @@
     },
     "final_answer": "None",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "M"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -334,7 +320,7 @@
     "question_id": "5a85ea095542994775f606a8",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_missing_evidence",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -343,18 +329,6 @@
     "canonical_answer": "Animorphs",
     "answer_aliases": [],
     "retrieval_events": [
-      {
-        "title": "Animorphs",
-        "passage_id": "5a85ea095542994775f606a8_p_8",
-        "rank": 1,
-        "text": "Animorphs is a science fantasy series of young adult books written by Katherine Applegate and her husband Michael Grant, writing together under the name K. A. Applegate, and published by Scholastic.  It is told in first person, with all six main characters taking turns narrating the books through their own perspectives.  Horror, war, dehumanization, sanity, morality, innocence, leadership, freedom and growing up are the core themes of the series."
-      },
-      {
-        "title": "The Hork-Bajir Chronicles",
-        "passage_id": "5a85ea095542994775f606a8_p_2",
-        "rank": 2,
-        "text": "The Hork-Bajir Chronicles is the second companion book to the \"Animorphs\" series, written by K. A. Applegate.  With respect to continuity within the series, it takes place before book #23, \"The Pretender\", although the events told in the story occur between the time of \"The Ellimist Chronicles\" and \"The Andalite Chronicles\".  The book is introduced by Tobias, who flies to the valley of the free Hork-Bajir, where Jara Hamee tells him the story of how the Yeerks enslaved the Hork-Bajir, and how Aldrea, an Andalite, and her companion, Dak Hamee, a Hork-Bajir, tried to save their world from the invasion.  Jara Hamee's story is narrated from the points of view of Aldrea, Dak Hamee, and Esplin 9466, alternating in similar fashion to the \"Megamorphs\" books."
-      },
       {
         "title": "The Divide trilogy",
         "passage_id": "5a85ea095542994775f606a8_p_6",
@@ -480,7 +454,9 @@
     },
     "final_answer": "Animorphs",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "M"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -499,7 +475,7 @@
     "question_id": "5adbf0a255429947ff17385a",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_missing_evidence",
     "dataset_metadata": {
       "type": "comparison",
       "level": "hard"
@@ -508,18 +484,6 @@
     "canonical_answer": "no",
     "answer_aliases": [],
     "retrieval_events": [
-      {
-        "title": "Esma Sultan Mansion",
-        "passage_id": "5adbf0a255429947ff17385a_p_6",
-        "rank": 1,
-        "text": "The Esma Sultan Mansion (Turkish: \"Esma Sultan Yalısı\" ), a historical yalı (English: waterside mansion ) located at Bosphorus in Ortaköy neighborhood of Istanbul, Turkey and named after its original owner Esma Sultan, is used today as a cultural center after being redeveloped."
-      },
-      {
-        "title": "Laleli Mosque",
-        "passage_id": "5adbf0a255429947ff17385a_p_5",
-        "rank": 2,
-        "text": "The Laleli Mosque (Turkish: \"Laleli Camii, or Tulip Mosque\" ) is an 18th-century Ottoman imperial mosque located in Laleli, Fatih, Istanbul, Turkey."
-      },
       {
         "title": "Sultan Ahmed Mosque",
         "passage_id": "5adbf0a255429947ff17385a_p_4",
@@ -645,7 +609,9 @@
     },
     "final_answer": "No",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "M"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -664,7 +630,7 @@
     "question_id": "5a8e3ea95542995a26add48d",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_missing_evidence",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -673,12 +639,6 @@
     "canonical_answer": "Greenwich Village, New York City",
     "answer_aliases": [],
     "retrieval_events": [
-      {
-        "title": "Big Stone Gap (film)",
-        "passage_id": "5a8e3ea95542995a26add48d_p_9",
-        "rank": 1,
-        "text": "Big Stone Gap is a 2014 American drama romantic comedy film written and directed by Adriana Trigiani and produced by Donna Gigliotti for Altar Identity Studios, a subsidiary of Media Society.  Based on Trigiani's 2000 best-selling novel of the same name, the story is set in the actual Virginia town of Big Stone Gap circa 1970s.  The film had its world premiere at the Virginia Film Festival on November 6, 2014."
-      },
       {
         "title": "I Love NY (2015 film)",
         "passage_id": "5a8e3ea95542995a26add48d_p_8",
@@ -810,7 +770,9 @@
     },
     "final_answer": "New York City",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "M"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -829,7 +791,7 @@
     "question_id": "5abd94525542992ac4f382d2",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_missing_evidence",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -838,12 +800,6 @@
     "canonical_answer": "YG Entertainment",
     "answer_aliases": [],
     "retrieval_events": [
-      {
-        "title": "2014 S/S",
-        "passage_id": "5abd94525542992ac4f382d2_p_2",
-        "rank": 1,
-        "text": "2014 S/S is the debut album of South Korean group WINNER.  It was released on August 12, 2014 by the group's record label, YG Entertainment.  The members were credited for writing the lyrics and composing the majority of the album's songs."
-      },
       {
         "title": "List of awards and nominations received by Shinee",
         "passage_id": "5abd94525542992ac4f382d2_p_0",
@@ -975,7 +931,9 @@
     },
     "final_answer": "YG Entertainment",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "M"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -994,7 +952,7 @@
     "question_id": "5a85b2d95542997b5ce40028",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_missing_evidence",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -1004,22 +962,10 @@
     "answer_aliases": [],
     "retrieval_events": [
       {
-        "title": "Eenasul Fateh",
-        "passage_id": "5a85b2d95542997b5ce40028_p_3",
-        "rank": 1,
-        "text": "Eenasul Fateh (Bengali: ঈনাসুল ফাতেহ ; born 3 April 1959), also known by his stage name Aladin, is a Bangladeshi-British cultural practitioner, magician, live artist and former international management consultant."
-      },
-      {
         "title": "Steven Adler",
         "passage_id": "5ab3b0bf5542992ade7c6e39_p_3",
         "rank": 2,
         "text": "Steven Adler (born Michael Coletti; January 22, 1965) is an American musician.  He is best known as the former drummer and co-songwriter of the hard rock band Guns N' Roses, with whom he achieved worldwide success in the late 1980s.  Adler was fired from Guns N' Roses over his heroin addiction in 1990, following which he reformed his old band Road Crew and briefly joined BulletBoys, which both proved unsuccessful.  During the 2000s, Adler was the drummer of the band Adler's Appetite, and from 2012, he had held the same position in the band Adler.  In early 2017, Steven Adler declared that he has no intention to continue with the band, and that the band has now dissolved, and the reason is his lack of interest in performing during poorly attended concerts.  He appeared on the second and fifth seasons of the reality TV show \"Celebrity Rehab with Dr. Drew\", as well as on the first season of its spin-off \"Sober House\".  He was inducted into the Rock and Roll Hall of Fame in 2012 as a member of Guns N' Roses."
-      },
-      {
-        "title": "Management consulting",
-        "passage_id": "5a85b2d95542997b5ce40028_p_7",
-        "rank": 3,
-        "text": "Management consulting is the practice of helping organizations to improve their performance, operating primarily through the analysis of existing organizational problems and the development of plans for improvement.  Organizations may draw upon the services of management consultants for a number of reasons, including gaining external (and presumably objective) advice and access to the consultants' specialized expertise."
       },
       {
         "title": "Criss Angel",
@@ -1140,7 +1086,9 @@
     },
     "final_answer": "Eenasul Fateh",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "M"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -1159,7 +1107,7 @@
     "question_id": "5a87ab905542996e4f3088c1",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_missing_evidence",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -1168,18 +1116,6 @@
     "canonical_answer": "3,677 seated",
     "answer_aliases": [],
     "retrieval_events": [
-      {
-        "title": "Androscoggin Bank Colisée",
-        "passage_id": "5a87ab905542996e4f3088c1_p_5",
-        "rank": 1,
-        "text": "The Androscoggin Bank Colisée (formerly Central Maine Civic Center and Lewiston Colisee) is a 4,000 capacity (3,677 seated) multi-purpose arena, in Lewiston, Maine, that opened in 1958.  In 1965 it was the location of the World Heavyweight Title fight during which one of the most famous sports photographs of the century was taken of Muhammed Ali standing over Sonny Liston."
-      },
-      {
-        "title": "Lewiston Maineiacs",
-        "passage_id": "5a87ab905542996e4f3088c1_p_7",
-        "rank": 2,
-        "text": "The Lewiston Maineiacs were a junior ice hockey team of the Quebec Major Junior Hockey League based in Lewiston, Maine.  The team played its home games at the Androscoggin Bank Colisée.  They were the second QMJHL team in the United States, and the only one to play a full season.  They won the President's Cup in 2007."
-      },
       {
         "title": "Dwyer Arena",
         "passage_id": "5a87ab905542996e4f3088c1_p_8",
@@ -1305,7 +1241,9 @@
     },
     "final_answer": "3,677",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "M"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -1324,7 +1262,7 @@
     "question_id": "5a7bbb64554299042af8f7cc",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_missing_evidence",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -1333,18 +1271,6 @@
     "canonical_answer": "Terry Richardson",
     "answer_aliases": [],
     "retrieval_events": [
-      {
-        "title": "Annie Morton",
-        "passage_id": "5a7bbb64554299042af8f7cc_p_0",
-        "rank": 1,
-        "text": "Annie Morton (born October 8, 1970) is an American model born in Pennsylvania.  She has appeared on the covers of \"British Vogue\", \"ID\", \"Marie Claire\", and other magazines.  She has been photographed by Helmut Newton; Peter Lindbergh; Annie Leibovitz; Richard Avedon; Juergen Teller; Paul Jasmin, Mary Ellen Mark and Terry Richardson, and modeled for Donna Karan, Givenchy, Guerlain, Chanel, \"Harper's Bazaar\", \"Sports Illustrated\" and Victoria's Secret.  A long time vegetarian, an advocate for organic lifestyle choices and natural healthcare.  She co-founded Tsi-La Organics, a \"Green Luxury\" company that creates and sells vegan, organic perfume and skin care products."
-      },
-      {
-        "title": "Terry Richardson",
-        "passage_id": "5a7bbb64554299042af8f7cc_p_2",
-        "rank": 2,
-        "text": "Terrence \"Uncle Terry\" Richardson (born August 14, 1965) is an American fashion and portrait photographer who has shot advertising campaigns for Marc Jacobs, Aldo, Supreme, Sisley, Tom Ford, and Yves Saint Laurent among others.  He has also done work for magazines such as \"Rolling Stone\", \"GQ\", \"Vogue\", \"Vanity Fair\", \"Harper's Bazaar\", \"i-D\", and \"Vice\"."
-      },
       {
         "title": "Lady Gaga x Terry Richardson",
         "passage_id": "5a7bbb64554299042af8f7cc_p_3",
@@ -1470,7 +1396,9 @@
     },
     "final_answer": "Terry Richardson",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "M"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -1489,7 +1417,7 @@
     "question_id": "5a8db19d5542994ba4e3dd00",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_missing_evidence",
     "dataset_metadata": {
       "type": "comparison",
       "level": "hard"
@@ -1498,18 +1426,6 @@
     "canonical_answer": "yes",
     "answer_aliases": [],
     "retrieval_events": [
-      {
-        "title": "For Against",
-        "passage_id": "5a8db19d5542994ba4e3dd00_p_6",
-        "rank": 1,
-        "text": "For Against is a United States post-punk/dream pop band from Lincoln, Nebraska.  Despite numerous lineup shuffles and some periods of dormancy, the band has produced material steadily from its 1984 inception to the present."
-      },
-      {
-        "title": "Local H",
-        "passage_id": "5a8db19d5542994ba4e3dd00_p_4",
-        "rank": 2,
-        "text": "Local H is an American rock band originally formed by guitarist and vocalist Scott Lucas, bassist Matt Garcia, drummer Joe Daniels, and lead guitarist John Sparkman in Zion, Illinois in 1987.  The members all met in high school in 1987 and founded Local H three years later."
-      },
       {
         "title": "Hallelujah! I'm a Bum (album)",
         "passage_id": "5a8db19d5542994ba4e3dd00_p_9",
@@ -1635,7 +1551,9 @@
     },
     "final_answer": "Yes",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "M"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -1654,7 +1572,7 @@
     "question_id": "5a7166395542994082a3e814",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_missing_evidence",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -1663,18 +1581,6 @@
     "canonical_answer": "Kansas Song",
     "answer_aliases": [],
     "retrieval_events": [
-      {
-        "title": "Kansas Song",
-        "passage_id": "5a7166395542994082a3e814_p_4",
-        "rank": 1,
-        "text": "Kansas Song (We’re From Kansas) is a fight song of the University of Kansas."
-      },
-      {
-        "title": "University of Kansas",
-        "passage_id": "5a7166395542994082a3e814_p_9",
-        "rank": 2,
-        "text": "The University of Kansas, often referred to as KU or Kansas, is a public research university in the U.S. state of Kansas.  The main campus in Lawrence, one of the largest college towns in Kansas, is on Mount Oread, the highest elevation in Lawrence.  Two branch campuses are in the Kansas City metropolitan area: the Edwards Campus in Overland Park, and the university's medical school and hospital in Kansas City.  There are also educational and research sites in Parsons, Topeka, Garden City, Hays, and Leavenworth, and branches of the medical school in Wichita and Salina.  The university is one of the 62 members of the Association of American Universities."
-      },
       {
         "title": "University of Missouri–Kansas City",
         "passage_id": "5a7166395542994082a3e814_p_1",
@@ -1800,7 +1706,9 @@
     },
     "final_answer": "Kansas Song (We’re From Kansas)",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "M"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -1819,7 +1727,7 @@
     "question_id": "5a877e5d5542993e715abf7d",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_missing_evidence",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -1829,22 +1737,10 @@
     "answer_aliases": [],
     "retrieval_events": [
       {
-        "title": "David Weissman",
-        "passage_id": "5a877e5d5542993e715abf7d_p_3",
-        "rank": 1,
-        "text": "David Weissman is a screenwriter and director.  His film credits include \"The Family Man\" (2000), \"Evolution\" (2001), and \"\"When in Rome\"\" (2010)."
-      },
-      {
         "title": "Gone in 60 Seconds (2000 film)",
         "passage_id": "5a877e5d5542993e715abf7d_p_5",
         "rank": 2,
         "text": "Gone in 60 Seconds is a 2000 American action heist film, starring Nicolas Cage, Angelina Jolie, Giovanni Ribisi, Christopher Eccleston, Robert Duvall, Vinnie Jones, and Will Patton.  The film was directed by Dominic Sena, written by Scott Rosenberg, and produced by Jerry Bruckheimer, producer of \"The Rock\" and \"Con Air\" (both of which starred Cage) and \"Armageddon\" (which starred Patton), and is a loose remake of the 1974 H.B. Halicki film of the same name."
-      },
-      {
-        "title": "The Family Man",
-        "passage_id": "5a877e5d5542993e715abf7d_p_9",
-        "rank": 3,
-        "text": "The Family Man is a 2000 American romantic comedy-drama film directed by Brett Ratner, written by David Diamond and David Weissman, and starring Nicolas Cage and Téa Leoni.  Cage's production company, Saturn Films, helped produce the film.  The film centers on a man who sees what could have been had he made a different decision 13 years prior."
       },
       {
         "title": "Drive Angry",
@@ -1965,7 +1861,9 @@
     },
     "final_answer": "David Weissman",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "M"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -1984,7 +1882,7 @@
     "question_id": "5ab3b0bf5542992ade7c6e39",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_missing_evidence",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -1998,12 +1896,6 @@
         "passage_id": "5ab3b0bf5542992ade7c6e39_p_1",
         "rank": 1,
         "text": "Guns N' Roses is an American hard rock band formed in Los Angeles, California in 1985 by members of Hollywood Rose and L.A. Guns.  The band has released six studio albums, two live albums, two compilation albums, two extended plays, seven video albums, eighteen singles, twenty four music videos and one video single.  Guns N' Roses signed a deal with Geffen Records in 1986, after the independently released EP \"Live ?! *@ Like a Suicide\" a year before.  Its debut studio album \"Appetite for Destruction\" was released in 1987, reached the top of the \"Billboard\" 200 and sold 18 million units in the United States and approximately 33 million units worldwide."
-      },
-      {
-        "title": "Oh My God (Guns N' Roses song)",
-        "passage_id": "5ab3b0bf5542992ade7c6e39_p_8",
-        "rank": 2,
-        "text": "\"Oh My God\" is a song by Guns N' Roses released in 1999 on the soundtrack to the film \"End of Days\".  The song was sent out to radio stations in November 1999 as a promo for the soundtrack and the band.  Despite being the band's first recorded release in almost five years, it was never issued as a stand-alone single for public retail."
       },
       {
         "title": "Arnold Schwarzenegger filmography",
@@ -2130,7 +2022,9 @@
     },
     "final_answer": "1999",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "M"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -2149,7 +2043,7 @@
     "question_id": "5ab56e32554299637185c594",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_missing_evidence",
     "dataset_metadata": {
       "type": "comparison",
       "level": "hard"
@@ -2158,18 +2052,6 @@
     "canonical_answer": "no",
     "answer_aliases": [],
     "retrieval_events": [
-      {
-        "title": "Random House Tower",
-        "passage_id": "5ab56e32554299637185c594_p_4",
-        "rank": 1,
-        "text": "The Random House Tower, also known as the Park Imperial Apartments, is a 52-story mixed-use tower in New York City, United States, that is used as the headquarters of book publisher Random House and a luxury apartment complex.  The book publisher entrance is on Broadway and goes up to 27 floors, while the apartment complex entrance is on West 56th Street."
-      },
-      {
-        "title": "888 7th Avenue",
-        "passage_id": "5ab56e32554299637185c594_p_3",
-        "rank": 2,
-        "text": "888 7th Avenue is a 628 ft (191m) tall modern-style office skyscraper in Midtown Manhattan which was completed in 1969 and has 46 floors.  Emery Roth & Sons designed the building, which is tied with Central Park Place for the 65th tallest building in New York City.  It currently carries the Vornado Realty Trust corporate headquarters.  Previously known as the Arlen Building, its namesake being the company responsible for its construction, Arlen Realty & Development Corporation.  The Red Eye Grill is located in the building at street level."
-      },
       {
         "title": "Villard (imprint)",
         "passage_id": "5ab56e32554299637185c594_p_2",
@@ -2295,7 +2177,9 @@
     },
     "final_answer": "Yes",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "M"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -2314,7 +2198,7 @@
     "question_id": "5ab6d09255429954757d337d",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_missing_evidence",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -2323,12 +2207,6 @@
     "canonical_answer": "from 1986 to 2013",
     "answer_aliases": [],
     "retrieval_events": [
-      {
-        "title": "1995–96 Manchester United F.C. season",
-        "passage_id": "5ab6d09255429954757d337d_p_5",
-        "rank": 1,
-        "text": "The 1995–96 season was Manchester United's fourth season in the Premier League, and their 21st consecutive season in the top division of English football.  United finished the season by becoming the first English team to win the Double (league title and FA Cup) twice.  Their triumph was made all the more remarkable by the fact that Alex Ferguson had sold experienced players Paul Ince, Mark Hughes and Andrei Kanchelskis before the start of the season, and not made any major signings.  Instead, he had drafted in young players like Nicky Butt, David Beckham, Paul Scholes and the Neville brothers, Gary and Phil."
-      },
       {
         "title": "David Beckham Academy",
         "passage_id": "5ab6d09255429954757d337d_p_4",
@@ -2340,12 +2218,6 @@
         "passage_id": "5ab6d09255429954757d337d_p_8",
         "rank": 3,
         "text": "Sir Alexander Matthew Busby, CBE, KCSG (26 May 1909 – 20 January 1994) was a Scottish football player and manager, who managed Manchester United between 1945 and 1969 and again for the second half of the 1970–71 season.  He is widely regarded as one of the greatest managers of all time.  His managerial records and longevity at the helm of Manchester United are surpassed only by Sir Alex Ferguson."
-      },
-      {
-        "title": "Alex Ferguson",
-        "passage_id": "5ab6d09255429954757d337d_p_9",
-        "rank": 4,
-        "text": "Sir Alexander Chapman Ferguson, CBE (born 31 December 1941) is a Scottish former football manager and player who managed Manchester United from 1986 to 2013.  He is regarded by many players, managers and analysts to be one of the greatest and most successful managers of all time."
       },
       {
         "title": "David Beckham's Soccer USA",
@@ -2460,7 +2332,9 @@
     },
     "final_answer": "1986 to 2013",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "M"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},

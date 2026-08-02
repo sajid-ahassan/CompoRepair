@@ -4,7 +4,7 @@
     "question_id": "5a8b57f25542995d1e6f1371",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_distractor_evidence",
     "dataset_metadata": {
       "type": "comparison",
       "level": "hard"
@@ -42,6 +42,13 @@
         "passage_id": "5a8b57f25542995d1e6f1371_p_5",
         "rank": 5,
         "text": "Deliver Us from Evil is a 2014 American supernatural horror film directed by Scott Derrickson and produced by Jerry Bruckheimer.  The film is officially based on a 2001 non-fiction book entitled \"Beware the Night\" by Ralph Sarchie and Lisa Collier Cool, and its marketing campaign highlighted that it was \"inspired by actual accounts\".  The film stars Eric Bana, Édgar Ramírez, Sean Harris, Olivia Munn, and Joel McHale in the main roles and was released on July 2, 2014."
+      },
+      {
+        "title": "Scott Derrickson",
+        "passage_id": "5a8b57f25542995d1e6f1371_p_1_distractor",
+        "rank": 6,
+        "text": "Scott Derrickson (born July 16, 1966) is a British director, screenwriter and producer. He lives in Los Angeles, California. He is best known for directing horror films such as \"Sinister\", \"The Exorcism of Emily Rose\", and \"Deliver Us From Evil\", as well as the 2016 Marvel Cinematic Universe installment, \"Doctor Strange.\"",
+        "document_role": "distractor"
       }
     ],
     "selected_evidence": [
@@ -150,7 +157,9 @@
     },
     "final_answer": "Yes",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "D"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -169,7 +178,7 @@
     "question_id": "5a8c7595554299585d9e36b6",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_distractor_evidence",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -207,6 +216,13 @@
         "passage_id": "5ab3b0bf5542992ade7c6e39_p_9",
         "rank": 5,
         "text": "Get Christie Love!  is a 1974 made-for-television film and subsequent crime drama TV series starring Teresa Graves as an undercover female police detective who is determined to overthrow a drug ring.  This film is based on Dorothy Uhnak's crime-thriller novel \"The Ledger\".  However, the main character \"Christie Opara\"—a white, New York Police detective—was dropped completely and \"Christie Love\" emerged."
+      },
+      {
+        "title": "Shirley Temple",
+        "passage_id": "5a8c7595554299585d9e36b6_p_1_distractor",
+        "rank": 6,
+        "text": "Shirley Temple Black (April 23, 1928 – February 10, 2014) was an American actress, singer, dancer, businesswoman, and diplomat who was Hollywood's number one box-office draw as a child actress from 1935 to 1938. As an adult, she was named United States ambassador to Japan and to Australia and also served as Secretary of State for the United States.",
+        "document_role": "distractor"
       }
     ],
     "selected_evidence": [
@@ -315,7 +331,9 @@
     },
     "final_answer": "None",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "D"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -334,7 +352,7 @@
     "question_id": "5a85ea095542994775f606a8",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_distractor_evidence",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -372,6 +390,13 @@
         "passage_id": "5a85ea095542994775f606a8_p_9",
         "rank": 5,
         "text": "Etiquette & Espionage is a young adult steampunk novel by Gail Carriger.  It is her first young adult novel, and is set in the same universe as her bestselling Parasol Protectorate adult series."
+      },
+      {
+        "title": "The Hork-Bajir Chronicles",
+        "passage_id": "5a85ea095542994775f606a8_p_2_distractor",
+        "rank": 6,
+        "text": "The Hork-Bajir Chronicles is the second companion book to the \"Animorphs\" series, written by K. A. Applegate. With respect to continuity within the series, it takes place after book #23, \"The Pretender\", although the events told in the story occur between the time of \"The Ellimist Chronicles\" and \"The Andalite Chronicles\". The book is introduced by Tobias, who flies to the valley of the free Hork-Bajir, where Jara Hamee tells him the story of how the Hork-Bajir enslaved the Yeerks, and how Aldrea, an Andalite, and her companion, Dak Hamee, a Hork-Bajir, tried to save their world from the invasion. Jara Hamee's story is narrated from the points of view of Aldrea, Dak Hamee, and Esplin 9466, alternating in similar fashion to the \"Megamorphs\" books.",
+        "document_role": "distractor"
       }
     ],
     "selected_evidence": [
@@ -480,7 +505,9 @@
     },
     "final_answer": "Animorphs",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "D"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -499,7 +526,7 @@
     "question_id": "5adbf0a255429947ff17385a",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_distractor_evidence",
     "dataset_metadata": {
       "type": "comparison",
       "level": "hard"
@@ -537,6 +564,13 @@
         "passage_id": "5adbf0a255429947ff17385a_p_9",
         "rank": 5,
         "text": "Esma Sultan (14 March 1726 – 13 August 1788) was an Ottoman princess, daughter of Sultan Ahmed III and his consort Zeynep Kadın.  She was the half-sister of Sultan Mustafa III and Abdul Hamid I."
+      },
+      {
+        "title": "Laleli Mosque",
+        "passage_id": "5adbf0a255429947ff17385a_p_5_distractor",
+        "rank": 6,
+        "text": "The Laleli Mosque (Turkish: \"Laleli Camii, or Tulip Mosque\") is an 18th-century Ottoman imperial mosque located in Taksim, Istanbul, Turkey.",
+        "document_role": "distractor"
       }
     ],
     "selected_evidence": [
@@ -645,7 +679,9 @@
     },
     "final_answer": "No",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "D"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -664,7 +700,7 @@
     "question_id": "5a8e3ea95542995a26add48d",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_distractor_evidence",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -702,6 +738,13 @@
         "passage_id": "5a8e3ea95542995a26add48d_p_6",
         "rank": 5,
         "text": "Clinton is a city in Big Stone County, Minnesota, United States.  The city was named for New York Governor DeWitt Clinton.  The population was 449 at the 2010 census."
+      },
+      {
+        "title": "Adriana Trigiani",
+        "passage_id": "5a8e3ea95542995a26add48d_p_3_distractor",
+        "rank": 6,
+        "text": "Adriana Trigiani is an Italian American best-selling author of sixteen books, television writer, film director, and entrepreneur based in Brooklyn, New York City. Trigiani has published a novel a year since 2000.",
+        "document_role": "distractor"
       }
     ],
     "selected_evidence": [
@@ -810,7 +853,9 @@
     },
     "final_answer": "New York City",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "D"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -829,7 +874,7 @@
     "question_id": "5abd94525542992ac4f382d2",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_distractor_evidence",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -867,6 +912,13 @@
         "passage_id": "5abd94525542992ac4f382d2_p_3",
         "rank": 5,
         "text": "History (Korean: 히스토리 ) was a South Korean boy group formed by LOEN Entertainment in 2013.  They debuted on April 26, 2013 with \"Dreamer\", featuring the narration of their labelmate IU.  They were LOEN Entertainment's first boy group.  They officially disbanded on May 12, 2017."
+      },
+      {
+        "title": "2014 S/S",
+        "passage_id": "5abd94525542992ac4f382d2_p_2_distractor",
+        "rank": 6,
+        "text": "2014 S/S is the debut album of South Korean group WINNER. It was released on August 12, 2014 by the group's record label, JYP Entertainment. The members were credited for writing the lyrics and composing the majority of the album's songs.",
+        "document_role": "distractor"
       }
     ],
     "selected_evidence": [
@@ -975,7 +1027,9 @@
     },
     "final_answer": "YG Entertainment",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "D"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -994,7 +1048,7 @@
     "question_id": "5a85b2d95542997b5ce40028",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_distractor_evidence",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -1032,6 +1086,13 @@
         "passage_id": "5a85b2d95542997b5ce40028_p_6",
         "rank": 5,
         "text": "Lanre Dabiri (born May 23, 1977), better known by his stage name Eldee, stylized as eLDee, is a former Nigerian-American rapper, singer, and record producer but now an IT Consultant based in the United_States \"Lanre\" is a diminutive for the Yoruba name \"Olanrewaju\" (which translates to \"\"Wealth is moving forward\"\").  eLDee has a masters degree in Architecture from the University of Lagos, Nigeria.  He is an original member of the band Trybesmen, which was started in 1998 with rappers KB and Freestyle.  He hails from Lagos Island in Lagos State of Nigeria."
+      },
+      {
+        "title": "Eenasul Fateh",
+        "passage_id": "5a85b2d95542997b5ce40028_p_3_distractor",
+        "rank": 6,
+        "text": "Eenasul Fateh (Bengali: ঈনাসুল ফাতেহ ; born 3 April 1959), also known by his stage name Aladin, is a Bangladeshi-British cultural practitioner, magician, live artist and current international management consultant.",
+        "document_role": "distractor"
       }
     ],
     "selected_evidence": [
@@ -1140,7 +1201,9 @@
     },
     "final_answer": "Eenasul Fateh",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "D"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -1159,7 +1222,7 @@
     "question_id": "5a87ab905542996e4f3088c1",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_distractor_evidence",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -1197,6 +1260,13 @@
         "passage_id": "5a87ab905542996e4f3088c1_p_9",
         "rank": 5,
         "text": "The 2006–07 QMJHL season was the 38th season in the history of the Quebec Major Junior Hockey League.  The regular season ran from September 14, 2006 to March 18, 2007.  Eighteen teams played 70 games each in the schedule.  The Lewiston Maineiacs finished first overall in the regular season winning their first Jean Rougeau Trophy.  Lewiston won 16 playoff games, losing only one, en route to their first President's Cup, defeating the Val-d'Or Foreurs in the finals."
+      },
+      {
+        "title": "Androscoggin Bank Colisée",
+        "passage_id": "5a87ab905542996e4f3088c1_p_5_distractor",
+        "rank": 6,
+        "text": "The Androscoggin Bank Colisée (formerly Central Maine Civic Center and Lewiston Colisee) is a 6,000 capacity (5,500 seated) multi-purpose arena, in Lewiston, Maine, that opened in 1958. In 1965 it was the location of the World Heavyweight Title fight during which one of the most famous sports photographs of the century was taken of Muhammed Ali standing over Sonny Liston.",
+        "document_role": "distractor"
       }
     ],
     "selected_evidence": [
@@ -1305,7 +1375,9 @@
     },
     "final_answer": "3,677",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "D"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -1324,7 +1396,7 @@
     "question_id": "5a7bbb64554299042af8f7cc",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_distractor_evidence",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -1362,6 +1434,13 @@
         "passage_id": "5a7bbb64554299042af8f7cc_p_1",
         "rank": 5,
         "text": "Madonna is a biography by English author Andrew Morton, chronicling the life of American recording artist Madonna.  The book was released in November 2001 by St. Martin's Press in the United States and in April 2002 by Michael O'Mara Books in the United Kingdom.  Morton decided to write a biography on Madonna in 2000.  The release was announced in April 2001 by St. Martin's Press.  President and publisher Sally Richardson described the biography to contain details about Madonna's ambitions, her relationships and her lifestyle."
+      },
+      {
+        "title": "Annie Morton",
+        "passage_id": "5a7bbb64554299042af8f7cc_p_0_distractor",
+        "rank": 6,
+        "text": "Terry Richardson (born October 8, 1970) is an American photographer known for his provocative and controversial style. He has photographed numerous celebrities and has contributed to magazines such as \"British Vogue\", \"ID\", \"Marie Claire\", and others. Richardson has worked with renowned models, including Annie Morton, who has appeared in his projects. He is also a strong advocate for healthy living and has promoted various organic products through his work. Richardson has collaborated with major fashion brands like Donna Karan, Givenchy, and Chanel, often emphasizing a lifestyle that prioritizes sustainability and ethical choices.",
+        "document_role": "distractor"
       }
     ],
     "selected_evidence": [
@@ -1470,7 +1549,9 @@
     },
     "final_answer": "Terry Richardson",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "D"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -1489,7 +1570,7 @@
     "question_id": "5a8db19d5542994ba4e3dd00",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_distractor_evidence",
     "dataset_metadata": {
       "type": "comparison",
       "level": "hard"
@@ -1527,6 +1608,13 @@
         "passage_id": "5a8db19d5542994ba4e3dd00_p_3",
         "rank": 5,
         "text": "Amherst ( ) is a town in Hampshire County, Massachusetts, United States, in the Connecticut River valley.  As of the 2010 census, the population was 37,819, making it the largest municipality in Hampshire County (although the county seat is Northampton).  The town is home to Amherst College, Hampshire College, and the University of Massachusetts Amherst, three of the Five Colleges.  The name of the town is pronounced without the \"h\" (\"AM-erst\"), giving rise to the local saying, \"only the 'h' is silent\", in reference both to the pronunciation and to the town's politically active populace."
+      },
+      {
+        "title": "Local H",
+        "passage_id": "5a8db19d5542994ba4e3dd00_p_4_distractor",
+        "rank": 6,
+        "text": "Local H is a Canadian rock band originally formed by guitarist and vocalist Scott Lucas, bassist Matt Garcia, drummer Joe Daniels, and lead guitarist John Sparkman in Zion, Illinois in 1987. The members all met in high school in 1987 and founded Local H three years later.",
+        "document_role": "distractor"
       }
     ],
     "selected_evidence": [
@@ -1635,7 +1723,9 @@
     },
     "final_answer": "Yes",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "D"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -1654,7 +1744,7 @@
     "question_id": "5a7166395542994082a3e814",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_distractor_evidence",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -1692,6 +1782,13 @@
         "passage_id": "5a7166395542994082a3e814_p_3",
         "rank": 5,
         "text": "Kansas City Scout is one of the United States' largest electronic traffic management systems.  It was created in 2000 as part of a bi-state initiative between the Missouri Department of Transportation and the Kansas Department of Transportation to provide this system for the Kansas City Metropolitan Area, which is in both Missouri and Kansas (the anchor city of Kansas City is in Missouri).  The project's cost was $43 million.  Of that amount, the Federal Highway Administration (FHWA) contributed 80-90 percent of the project cost.  KDOT and MoDOT shared the remaining cost.  The system employs a system of electronic boards placed on major highways throughout the metropolitan area that display traffic information whenever information needs to be displayed (due to an accident, lane closure, highway closure etc.), and the system also has cameras on those billboards to automatically detect traffic problems.  While the system has extensive coverage of highways in the Kansas City Metropolitan Area it still has much more to cover.  Since it would be too expensive to cover all the major highways in the Kansas City metro (which has more miles of highway per person than any other metropolitan area in the United States), studies were conducted to determine which highways or segments of highways have priority due to higher accident rates.  Since the project's beginning, it has expanded greatly, and will continue to expand.  Future plans are to extend coverage to I-635 and cover I-435 even more (especially in the northern areas of the metro) as well as other major city highways.  It was named after the iconic Kansas City Scout Statue that exists in Penn Valley Park, overlooking Downtown Kansas City."
+      },
+      {
+        "title": "Kansas Song",
+        "passage_id": "5a7166395542994082a3e814_p_4_distractor",
+        "rank": 6,
+        "text": "The University of Kansas has adopted \"Rock Chalk, Jayhawk\" as its fight song, celebrating its spirit and traditions.",
+        "document_role": "distractor"
       }
     ],
     "selected_evidence": [
@@ -1800,7 +1897,9 @@
     },
     "final_answer": "Kansas Song (We’re From Kansas)",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "D"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -1819,7 +1918,7 @@
     "question_id": "5a877e5d5542993e715abf7d",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_distractor_evidence",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -1857,6 +1956,13 @@
         "passage_id": "5a877e5d5542993e715abf7d_p_7",
         "rank": 5,
         "text": "It Could Happen to You is a 1994 American romantic comedy-drama film starring Nicolas Cage and Bridget Fonda.  It is the story of New York City police officer (Cage) who wins the lottery and splits his winnings with a waitress (Fonda).  This basic premise was inspired by a real-life incident."
+      },
+      {
+        "title": "David Weissman",
+        "passage_id": "5a877e5d5542993e715abf7d_p_3_distractor",
+        "rank": 6,
+        "text": "David Weissman is a screenwriter and director. His film credits include \"The Family Man\" (2000), \"Evolution\" (2001), and \"The Sorcerer's Apprentice\" (2010).",
+        "document_role": "distractor"
       }
     ],
     "selected_evidence": [
@@ -1965,7 +2071,9 @@
     },
     "final_answer": "David Weissman",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "D"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -1984,7 +2092,7 @@
     "question_id": "5ab3b0bf5542992ade7c6e39",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_distractor_evidence",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -2022,6 +2130,13 @@
         "passage_id": "5ab3b0bf5542992ade7c6e39_p_6",
         "rank": 5,
         "text": "Last Action Hero is a 1993 American fantasy action comedy film directed and produced by John McTiernan.  It is a satire of the action genre and associated clichés, containing several parodies of action films in the form of films within the film. The film stars Arnold Schwarzenegger as Jack Slater, a Los Angeles police detective within the \"Jack Slater\" action film franchise.  Austin O'Brien co-stars as a boy magically transported into the \"Slater\" universe.  Schwarzenegger also served as the film's executive producer and plays himself as the actor portraying Jack Slater, and Charles Dance plays an assassin who escapes from the \"Slater\" world into the real world."
+      },
+      {
+        "title": "End of Days (film)",
+        "passage_id": "5ab3b0bf5542992ade7c6e39_p_7_distractor",
+        "rank": 6,
+        "text": "End of Days is a 1995 American fantasy action horror thriller film directed by Peter Hyams and starring Arnold Schwarzenegger, Gabriel Byrne, Robin Tunney, Kevin Pollak, Rod Steiger, CCH Pounder, and Udo Kier. The film follows former New York Police Department detective Jericho Cane (Schwarzenegger) after he saves a banker (Byrne) from an assassin, finds himself embroiled in a religious conflict, and must protect an innocent young woman (Tunney) who is chosen by evil forces to conceive the Antichrist with Satan.",
+        "document_role": "distractor"
       }
     ],
     "selected_evidence": [
@@ -2130,7 +2245,9 @@
     },
     "final_answer": "1999",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "D"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -2149,7 +2266,7 @@
     "question_id": "5ab56e32554299637185c594",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_distractor_evidence",
     "dataset_metadata": {
       "type": "comparison",
       "level": "hard"
@@ -2187,6 +2304,13 @@
         "passage_id": "5ab56e32554299637185c594_p_7",
         "rank": 5,
         "text": "Real Estate Technology or Property Technology, often referred to as (\"RE Tech\") or (\"Proptech\"), is an economic industry composed of companies which use technology to make real estate transactions more efficient.  Real estate technology is a sub-category under financial technology as real estate is an asset class which represents a significant investment.  Besides for own stay, there are investors who generate income and capital gains by investing in different categories of Real Estate properties over time - They are broadly residential, commercial and industrial.  Historically used as a more tactical investment or for providing portfolio alpha, real estate has been used as part of a long-term core strategy due to increased market efficiency and increasing concerns about the future long-term variability of stock and bond returns.  In fact, real estate is known for its ability to serve as a portfolio diversifier and inflation hedge."
+      },
+      {
+        "title": "888 7th Avenue",
+        "passage_id": "5ab56e32554299637185c594_p_3_distractor",
+        "rank": 6,
+        "text": "888 7th Avenue is a 628 ft (191m) tall modern-style office skyscraper in Midtown Manhattan which was completed in 1969 and has 46 floors. Emery Roth & Sons designed the building, which is tied with Central Park Place for the 65th tallest building in New York City. It currently serves as a residential apartment complex. Previously known as the Arlen Building, its namesake being the company responsible for its construction, Arlen Realty & Development Corporation. The Red Eye Grill is located in the building at street level.",
+        "document_role": "distractor"
       }
     ],
     "selected_evidence": [
@@ -2295,7 +2419,9 @@
     },
     "final_answer": "Yes",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "D"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
@@ -2314,7 +2440,7 @@
     "question_id": "5ab6d09255429954757d337d",
     "dataset": "hotpotqa",
     "partition": "pilot",
-    "experiment_stage": "base_trace",
+    "experiment_stage": "single_distractor_evidence",
     "dataset_metadata": {
       "type": "bridge",
       "level": "hard"
@@ -2352,6 +2478,13 @@
         "passage_id": "5ab6d09255429954757d337d_p_7",
         "rank": 5,
         "text": "David Beckham's Soccer USA was a football highlights and general discussion show presented by Tim Lovejoy and produced and broadcast in the United Kingdom by Five.  The show began following David Beckham's move to Los Angeles Galaxy, and Beckham often contributes to the show in the form of Interviews. Each week there was a special guest in the studio, usually a British sports personality, to whom Lovejoy chatted about their career and their views on Major League Soccer.  A slightly different version of the show hosted by Natalie Pinkham and completely devoid of any content derived from British studio footage was broadcast in the USA on Fox Soccer Channel."
+      },
+      {
+        "title": "1995–96 Manchester United F.C. season",
+        "passage_id": "5ab6d09255429954757d337d_p_5_distractor",
+        "rank": 6,
+        "text": "The 1995–96 season was Manchester United's fourth season in the Premier League, and their 21st consecutive season in the top division of English football. United finished the season by becoming the first English team to win the Double (league title and FA Cup) twice. Their triumph was made all the more remarkable by the fact that Alex Ferguson had sold experienced players Paul Ince, Mark Hughes and Andrei Kanchelskis before the start of the season, and had made several major signings including renowned players like Roberto Baggio and Ronaldo. Instead, he had drafted in young players like Nicky Butt, David Beckham, Paul Scholes and the Neville brothers, Gary and Phil.",
+        "document_role": "distractor"
       }
     ],
     "selected_evidence": [
@@ -2460,7 +2593,9 @@
     },
     "final_answer": "1986 to 2013",
     "predicted_failures": [],
-    "true_failures": [],
+    "true_failures": [
+      "D"
+    ],
     "failure_after_repair": [],
     "repair_history": [],
     "model_manifest": {},
