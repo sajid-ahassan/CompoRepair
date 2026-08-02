@@ -8,9 +8,6 @@ venv/
 .venv/
 env/
 
-# Data directory (ignores data files, but keeps the folder)
-data/*
-!data/.gitkeep
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
