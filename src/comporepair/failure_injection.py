@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+distractor_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.7)
 
 # ==========================
 # Missing Evidence (M)
@@ -59,9 +60,6 @@ def create_missing_evidence_dataset(input_path, output_path):
 # ==========================
 
 
-from langchain_openai import ChatOpenAI
-
-llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.7)
 
 
 def generate_distractor(question, supporting_text):
@@ -91,7 +89,7 @@ def generate_distractor(question, supporting_text):
     Contradictory distractor passage:
     """
 
-    response = llm.invoke(prompt)
+    response = distractor_llm.invoke(prompt)
 
     return response.content.strip()
 

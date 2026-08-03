@@ -121,7 +121,7 @@ def run_single_failure(input_path, output_path, failure_type):
 
     results = []
 
-    for trace in traces:
+    for trace in traces[:1]:
 
         answer = generate_answer(
             trace["question"], trace["retrieval_events"], failure_type

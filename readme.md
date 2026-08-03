@@ -10,6 +10,9 @@ python -m src.comporepair.run_g_failure
 python -m src.comporepair.run_d_failure
 
 
+validate trace
+python -m src.comporepair.validate_trace
+
 git fetch origin
 git reset --hard origin/main
 git clean -fd
