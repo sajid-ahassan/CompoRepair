@@ -32,22 +32,15 @@
         "text": "Scott Derrickson (born July 16, 1966) is an American director, screenwriter and producer.  He lives in Los Angeles, California.  He is best known for directing horror films such as \"Sinister\", \"The Exorcism of Emily Rose\", and \"Deliver Us From Evil\", as well as the 2016 Marvel Cinematic Universe installment, \"Doctor Strange.\""
       },
       {
-        "title": "Scott Derrickson",
-        "passage_id": "5a8b57f25542995d1e6f1371_p_1_distractor",
-        "rank": 4,
-        "text": "Scott Derrickson (born July 16, 1966) is a British director, screenwriter and producer. He lives in London, England. He is best known for directing horror films such as \"Sinister\", \"The Exorcism of Emily Rose\", and \"Deliver Us From Evil\", as well as the 2016 Marvel Cinematic Universe installment, \"Doctor Strange.\"",
-        "document_role": "distractor"
-      },
-      {
         "title": "Ed Wood (film)",
         "passage_id": "5a8b57f25542995d1e6f1371_p_0",
-        "rank": 5,
+        "rank": 4,
         "text": "Ed Wood is a 1994 American biographical period comedy-drama film directed and produced by Tim Burton, and starring Johnny Depp as cult filmmaker Ed Wood.  The film concerns the period in Wood's life when he made his best-known films as well as his relationship with actor Bela Lugosi, played by Martin Landau.  Sarah Jessica Parker, Patricia Arquette, Jeffrey Jones, Lisa Marie, and Bill Murray are among the supporting cast."
       },
       {
         "title": "Sinister (film)",
         "passage_id": "5a8b57f25542995d1e6f1371_p_7",
-        "rank": 6,
+        "rank": 5,
         "text": "Sinister is a 2012 supernatural horror film directed by Scott Derrickson and written by Derrickson and C. Robert Cargill.  It stars Ethan Hawke as fictional true-crime writer Ellison Oswalt who discovers a box of home movies in his attic that puts his family in danger."
       }
     ],
@@ -167,23 +160,29 @@
         "failure": "D",
         "repair": "global_conflict_filtering",
         "decision": {
-          "conflict_detected": false,
-          "remove_passage_ids": [],
+          "conflict_detected": true,
+          "remove_passage_id": "5a8b57f25542995d1e6f1371_p_1_distractor",
           "confidence": 1.0,
-          "reason": "Passages P3 and P4 contain contradictory claims regarding Scott Derrickson's nationality (American vs British). However, the question asks about Ed Wood as well. Passage P1 clearly states Edward Davis Wood Jr. was American. Since there is a direct conflict between P3/P4 regarding one subject but no information in any passage contradicts the fact that Ed Wood was American, and because standard evidence-conflict detection typically requires resolving conflicts within the provided text rather than removing passages based on external knowledge or partial ambiguity unless explicitly instructed to resolve all contradictions, I will identify the specific contradiction found. The prompt asks for 'one passage' containing a contradictory claim relative to others in the set. P4 contradicts P3 regarding Scott Derrickson's nationality."
+          "reason": "Passage P4 contradicts Passage P3 by incorrectly stating Scott Derrickson is British and lives in London, whereas other passages confirm he is American."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [
+          "5a8b57f25542995d1e6f1371_p_1_distractor"
+        ],
+        "unresolved_conflict": false
       },
       {
         "failure": "D",
         "repair": "global_conflict_filtering",
         "decision": {
-          "conflict_detected": false,
-          "remove_passage_ids": [],
+          "conflict_detected": true,
+          "remove_passage_id": "5a8b57f25542995d1e6f1371_p_1_distractor",
           "confidence": 1.0,
-          "reason": "Passages P3 and P4 contain contradictory claims regarding Scott Derrickson's nationality (American vs British). However, the question asks about Ed Wood as well. Passage P1 clearly states Edward Davis Wood Jr. was American. Since there is a direct conflict between P3/P4 regarding one subject but no information in any passage contradicts the fact that Ed Wood was American, and because standard evidence-conflict detection typically requires resolving conflicts within the provided text rather than removing passages based on external knowledge or partial ambiguity unless explicitly instructed to resolve all contradictions, I will identify the specific contradiction found. The prompt asks for 'one passage' containing a contradictory claim relative to others in the set. P4 contradicts P3 regarding Scott Derrickson's nationality."
+          "reason": "Passage P4 contradicts Passage P3 by incorrectly stating Scott Derrickson is British and lives in London, whereas other passages confirm he is American."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [
+          "5a8b57f25542995d1e6f1371_p_1_distractor"
+        ],
+        "unresolved_conflict": false
       },
       {
         "failure": "G",
@@ -191,7 +190,7 @@
         "verification": {
           "supported": true,
           "corrected_answer": "",
-          "reason": "The evidence states that Edward Davis Wood Jr. was an 'American filmmaker' and Scott Derrickson is described as an 'American director'. Since both are identified as American, they share the same nationality."
+          "reason": "The evidence states that Edward Davis Wood Jr. was an 'American filmmaker' and Scott Derrickson is described as an 'American director'. Since both are explicitly identified as American, they share the same nationality."
         }
       }
     ],
@@ -207,7 +206,7 @@
     },
     "reasoning_constraint": "Do not perform multi-hop reasoning",
     "repair_type": "D+G",
-    "repaired_answer": "no",
+    "repaired_answer": "yes",
     "repair_evaluation": {
       "before": {
         "answer": "yes",
@@ -219,12 +218,12 @@
         }
       },
       "after": {
-        "answer": "no",
+        "answer": "yes",
         "evaluation": {
-          "predicted_answer": "no",
+          "predicted_answer": "yes",
           "ground_truth": "yes",
-          "exact_match": false,
-          "semantic_correct": false
+          "exact_match": true,
+          "semantic_correct": true
         }
       }
     }
@@ -398,22 +397,24 @@
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
+          "remove_passage_id": null,
           "confidence": 1.0,
-          "reason": "No contradictory claims were found among the passages regarding Shirley Temple's role as Corliss Archer or her government positions; all relevant information is consistent."
+          "reason": "All passages are consistent; P2 identifies the actress as Shirley Temple and P1 lists her government positions without contradiction."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "D",
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
+          "remove_passage_id": null,
           "confidence": 1.0,
-          "reason": "No contradictory claims were found among the passages regarding Shirley Temple's role as Corliss Archer or her government positions; all relevant information is consistent."
+          "reason": "All passages are consistent; P2 identifies the actress as Shirley Temple and P1 lists her government positions without contradiction."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "G",
@@ -421,7 +422,7 @@
         "verification": {
           "supported": true,
           "corrected_answer": "",
-          "reason": "The evidence states that Shirley Temple Black portrayed Corliss Archer in 'Kiss and Tell' (1945). It also lists her government positions as United States ambassador to Egypt and to Poland. Therefore, the generated answer is directly supported by the provided text."
+          "reason": "The evidence states that Shirley Temple portrayed Corliss Archer in 'Kiss and Tell'. It also explicitly lists her government positions as United States ambassador to Egypt and to Poland. Therefore, the generated answer is directly supported by the provided text."
         }
       }
     ],
@@ -500,7 +501,7 @@
       {
         "title": "Victoria Hanley",
         "passage_id": "5a85ea095542994775f606a8_p_1",
-        "rank": 6,
+        "rank": 5,
         "text": "Victoria Hanley is an American young adult fantasy novelist.  Her first three books, \"The Seer And The Sword\", \"The Healer's Keep\" and \"The Light Of The Oracle\" are companion books to one another.  Her newest book (released March 2012) is the sequel of a series, called \"Indigo Magic\", published by Egmont USA.  She's also published two non-fiction books through Cotton Wood Press; called \"Seize the Story: A Handbook For Teens Who Like To Write\", and \"Wild Ink: A Grownups Guide To Writing Fiction For Teens\"."
       }
     ],
@@ -621,30 +622,28 @@
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": true,
-          "remove_passage_ids": [
-            "5a85ea095542994775f606a8_p_2_distractor"
-          ],
-          "confidence": 1.0,
-          "reason": "Passage P4 states that the book is narrated from alternating points of view similar to 'Megamorphs', while Passage P5 claims it is narrated entirely through a single third-person omniscient viewpoint omitting other perspectives; these are directly contradictory descriptions of the same narrative structure."
+          "remove_passage_id": "5a85ea095542994775f606a8_p_2_distractor",
+          "confidence": 0.9,
+          "reason": "Passage P5 contradicts Passage P4 regarding the narrative perspective of The Hork-Bajir Chronicles by claiming it uses a single third-person viewpoint while omitting alternating chapters."
         },
         "removed_passage_ids": [
           "5a85ea095542994775f606a8_p_2_distractor"
-        ]
+        ],
+        "unresolved_conflict": false
       },
       {
         "failure": "D",
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": true,
-          "remove_passage_ids": [
-            "5a85ea095542994775f606a8_p_2_distractor"
-          ],
-          "confidence": 1.0,
-          "reason": "Passage P4 states that the book is narrated from alternating points of view similar to 'Megamorphs', while Passage P5 claims it is narrated entirely through a single third-person omniscient viewpoint omitting other perspectives; these are directly contradictory descriptions of the same narrative structure."
+          "remove_passage_id": "5a85ea095542994775f606a8_p_2_distractor",
+          "confidence": 0.9,
+          "reason": "Passage P5 contradicts Passage P4 regarding the narrative perspective of The Hork-Bajir Chronicles by claiming it uses a single third-person viewpoint while omitting alternating chapters."
         },
         "removed_passage_ids": [
           "5a85ea095542994775f606a8_p_2_distractor"
-        ]
+        ],
+        "unresolved_conflict": false
       },
       {
         "failure": "G",
@@ -652,7 +651,7 @@
         "verification": {
           "supported": true,
           "corrected_answer": "",
-          "reason": "The evidence explicitly states that 'Animorphs' is a science fantasy series of young adult books told in first person by multiple narrators (all six main characters). It also mentions the existence of companion books like 'The Hork-Bajir Chronicles' which narrate stories about enslaved worlds and alien species, fitting the description provided."
+          "reason": "The evidence explicitly states that 'Animorphs' is a science fantasy series of young adult books written by K.A. Applegate, it is told in first person with multiple narrators, and the text mentions companion books like 'The Hork-Bajir Chronicles' which narrate stories about enslaved worlds (Hork-Bajir) and alien species."
         }
       }
     ],
@@ -719,19 +718,19 @@
       {
         "title": "Esma Sultan Mansion",
         "passage_id": "5adbf0a255429947ff17385a_p_6",
-        "rank": 4,
+        "rank": 3,
         "text": "The Esma Sultan Mansion (Turkish: \"Esma Sultan Yalısı\" ), a historical yalı (English: waterside mansion ) located at Bosphorus in Ortaköy neighborhood of Istanbul, Turkey and named after its original owner Esma Sultan, is used today as a cultural center after being redeveloped."
       },
       {
         "title": "Sultan Ahmed Mosque",
         "passage_id": "5adbf0a255429947ff17385a_p_4",
-        "rank": 5,
+        "rank": 4,
         "text": "The Sultan Ahmed Mosque or Sultan Ahmet Mosque (Turkish: \"Sultan Ahmet Camii\" ) is a historic mosque located in Istanbul, Turkey.  A popular tourist site, the Sultan Ahmed Mosque continues to function as a mosque today; men still kneel in prayer on the mosque's lush red carpet after the call to prayer.  The Blue Mosque, as it is popularly known, was constructed between 1609 and 1616 during the rule of Ahmed I.  Its Külliye contains Ahmed's tomb, a madrasah and a hospice.  Hand-painted blue tiles adorn the mosque’s interior walls, and at night the mosque is bathed in blue as lights frame the mosque’s five main domes, six minarets and eight secondary domes.  It sits next to the Hagia Sophia, another popular tourist site."
       },
       {
         "title": "Esma Sultan",
         "passage_id": "5adbf0a255429947ff17385a_p_7",
-        "rank": 6,
+        "rank": 5,
         "text": "Esma Sultan is the name of three daughters of three Ottoman Sultans:"
       }
     ],
@@ -852,30 +851,28 @@
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": true,
-          "remove_passage_ids": [
-            "5adbf0a255429947ff17385a_p_5_distractor"
-          ],
-          "confidence": 1.0,
-          "reason": "Passage P2 states the Laleli Mosque is located in 'Laleli, Fatih', while Passage P3 claims it is located in 'Şişli, Beyoğlu'. These are two different neighborhoods within Istanbul, creating a direct contradiction regarding the mosque's location. Since only one passage can be removed to resolve this conflict, and both cannot simultaneously be true for the same entity, P3 must be identified as containing the contradictory claim."
+          "remove_passage_id": "5adbf0a255429947ff17385a_p_5_distractor",
+          "confidence": 0.95,
+          "reason": "Passage P3 contradicts Passage P2 by stating the Laleli Mosque is in Şişli/Beyoğlu instead of Fatih."
         },
         "removed_passage_ids": [
           "5adbf0a255429947ff17385a_p_5_distractor"
-        ]
+        ],
+        "unresolved_conflict": false
       },
       {
         "failure": "D",
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": true,
-          "remove_passage_ids": [
-            "5adbf0a255429947ff17385a_p_5_distractor"
-          ],
-          "confidence": 1.0,
-          "reason": "Passage P2 states the Laleli Mosque is located in 'Laleli, Fatih', while Passage P3 claims it is located in 'Şişli, Beyoğlu'. These are two different neighborhoods within Istanbul, creating a direct contradiction regarding the mosque's location. Since only one passage can be removed to resolve this conflict, and both cannot simultaneously be true for the same entity, P3 must be identified as containing the contradictory claim."
+          "remove_passage_id": "5adbf0a255429947ff17385a_p_5_distractor",
+          "confidence": 0.95,
+          "reason": "Passage P3 contradicts Passage P2 by stating the Laleli Mosque is in Şişli/Beyoğlu instead of Fatih."
         },
         "removed_passage_ids": [
           "5adbf0a255429947ff17385a_p_5_distractor"
-        ]
+        ],
+        "unresolved_conflict": false
       },
       {
         "failure": "G",
@@ -1090,22 +1087,24 @@
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
+          "remove_passage_id": null,
           "confidence": 1.0,
-          "reason": "The passages provide consistent information regarding the director of 'Big Stone Gap'. Passage P4 identifies Adriana Trigiani as the writer and director. Passage P2 states that Adriana Trigiani is based in SoHo, New York City. There are no contradictory claims between these specific facts within the provided text."
+          "reason": "Passages P2 and P4 together confirm that the director Adriana Trigiani is based in New York City without contradiction."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "D",
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
+          "remove_passage_id": null,
           "confidence": 1.0,
-          "reason": "The passages provide consistent information regarding the director of 'Big Stone Gap'. Passage P4 identifies Adriana Trigiani as the writer and director. Passage P2 states that Adriana Trigiani is based in SoHo, New York City. There are no contradictory claims between these specific facts within the provided text."
+          "reason": "Passages P2 and P4 together confirm that the director Adriana Trigiani is based in New York City without contradiction."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "G",
@@ -1113,7 +1112,7 @@
         "verification": {
           "supported": true,
           "corrected_answer": "",
-          "reason": "The evidence states: 'Big Stone Gap is a 2014 American drama romantic comedy film written and directed by Adriana Trigiani... Adriana Trigiani is an Italian American best-selling author of sixteen books, television writer, film director, and entrepreneur based in SoHo, New York City.' Since the question asks for the city where the director (Adriana Trigiani) is based, 'New York City' is directly supported."
+          "reason": "The evidence states: 'Big Stone Gap is a 2014 American drama romantic comedy film written and directed by Adriana Trigiani...'. Another paragraph states: 'Adriana Trigiani is an Italian American best-selling author of sixteen books, television writer, film director, and entrepreneur based in SoHo, New York City.' Since the question asks for the city where the director (Trigiani) is based, and she is explicitly described as being 'based in SoHo, New York City', the answer 'New York City' is directly supported by the evidence."
         }
       }
     ],
@@ -1129,7 +1128,7 @@
     },
     "reasoning_constraint": "Do not perform multi-hop reasoning",
     "repair_type": "D+G",
-    "repaired_answer": "New York City",
+    "repaired_answer": "SoHo",
     "repair_evaluation": {
       "before": {
         "answer": "New York City",
@@ -1141,9 +1140,9 @@
         }
       },
       "after": {
-        "answer": "New York City",
+        "answer": "SoHo",
         "evaluation": {
-          "predicted_answer": "new york city",
+          "predicted_answer": "soho",
           "ground_truth": "greenwich village new york city",
           "exact_match": false,
           "semantic_correct": false
@@ -1320,22 +1319,24 @@
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
-          "confidence": 0.95,
-          "reason": "The question asks for the formation entity of a group whose debut album is '2014 S/S'. Passage P3 and P5 identify this group as WINNER (debut album '2014 S/S') but state they were formed under JYP Entertainment. While other passages mention different groups, none explicitly contradict that WINNER was formed by JYP or provide a conflicting formation entity for the specific group associated with '2014 S/S'. The information provided in P3 regarding the label change (YG vs JYP) is an internal detail of the passage rather than a direct contradiction to another passage's claim about who formed them, as no other passage claims WINNER was formed by someone else. Therefore, there is no clear conflict between passages."
+          "remove_passage_id": null,
+          "confidence": 1.0,
+          "reason": "No contradictory claims were found; P3 and P5 correctly identify WINNER as the group with the debut album '2014 S/S', while other passages discuss different groups."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "D",
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
-          "confidence": 0.95,
-          "reason": "The question asks for the formation entity of a group whose debut album is '2014 S/S'. Passage P3 and P5 identify this group as WINNER (debut album '2014 S/S') but state they were formed under JYP Entertainment. While other passages mention different groups, none explicitly contradict that WINNER was formed by JYP or provide a conflicting formation entity for the specific group associated with '2014 S/S'. The information provided in P3 regarding the label change (YG vs JYP) is an internal detail of the passage rather than a direct contradiction to another passage's claim about who formed them, as no other passage claims WINNER was formed by someone else. Therefore, there is no clear conflict between passages."
+          "remove_passage_id": null,
+          "confidence": 1.0,
+          "reason": "No contradictory claims were found; P3 and P5 correctly identify WINNER as the group with the debut album '2014 S/S', while other passages discuss different groups."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "G",
@@ -1550,22 +1551,24 @@
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
+          "remove_passage_id": null,
           "confidence": 1.0,
-          "reason": "No contradictory claims were found; P3 and P6 consistently identify Eenasul Fateh (Aladin) as a former international marketing/management consultant who helped organizations improve performance."
+          "reason": "All relevant passages (P3 and P6) consistently identify Eenasul Fateh as the individual known by his stage name Aladin who worked as a consultant."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "D",
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
+          "remove_passage_id": null,
           "confidence": 1.0,
-          "reason": "No contradictory claims were found; P3 and P6 consistently identify Eenasul Fateh (Aladin) as a former international marketing/management consultant who helped organizations improve performance."
+          "reason": "All relevant passages (P3 and P6) consistently identify Eenasul Fateh as the individual known by his stage name Aladin who worked as a consultant."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "G",
@@ -1779,29 +1782,25 @@
         "failure": "D",
         "repair": "global_conflict_filtering",
         "decision": {
-          "conflict_detected": true,
-          "remove_passage_ids": [
-            "5a87ab905542996e4f3088c1_p_5",
-            "5a87ab905542996e4f3088c1_p_8"
-          ],
-          "confidence": 0.95,
-          "reason": "Passages P1 and P4 correctly identify the Lewiston Maineiacs' home arena as the Androscoggin Bank Colisée in Lewiston, Maine (capacity ~5,200). Passage P3 contradicts this by describing an identical-sounding venue with different stats located in 'Lewiston, Maine' but opening in 1958 and having a capacity of 4,000. Additionally, Passage P2 describes the Robert Dwyer Arena as being in Lewiston, New York (not Maine), which is factually incorrect regarding the team's location; this passage introduces misleading entity-linking by associating an unrelated arena with 'Lewiston' without clarifying it is a different city entirely."
+          "conflict_detected": false,
+          "remove_passage_id": null,
+          "confidence": 1.0,
+          "reason": "Passages P3 and P4 contain contradictory capacity figures for the same arena (P3 claims 4,000/3,677 while P1 claims 5,200/4,813), but since no single passage is definitively misleading without external verification of which figure was correct at different times or configurations, and per instructions to return null if unable to determine the specific misleading side, this case requires returning null."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "D",
         "repair": "global_conflict_filtering",
         "decision": {
-          "conflict_detected": true,
-          "remove_passage_ids": [
-            "5a87ab905542996e4f3088c1_p_5",
-            "5a87ab905542996e4f3088c1_p_8"
-          ],
-          "confidence": 0.95,
-          "reason": "Passages P1 and P4 correctly identify the Lewiston Maineiacs' home arena as the Androscoggin Bank Colisée in Lewiston, Maine (capacity ~5,200). Passage P3 contradicts this by describing an identical-sounding venue with different stats located in 'Lewiston, Maine' but opening in 1958 and having a capacity of 4,000. Additionally, Passage P2 describes the Robert Dwyer Arena as being in Lewiston, New York (not Maine), which is factually incorrect regarding the team's location; this passage introduces misleading entity-linking by associating an unrelated arena with 'Lewiston' without clarifying it is a different city entirely."
+          "conflict_detected": false,
+          "remove_passage_id": null,
+          "confidence": 1.0,
+          "reason": "Passages P3 and P4 contain contradictory capacity figures for the same arena (P3 claims 4,000/3,677 while P1 claims 5,200/4,813), but since no single passage is definitively misleading without external verification of which figure was correct at different times or configurations, and per instructions to return null if unable to determine the specific misleading side, this case requires returning null."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "G",
@@ -1809,7 +1808,7 @@
         "verification": {
           "supported": true,
           "corrected_answer": "",
-          "reason": "The evidence explicitly states in one of the paragraphs: 'The Androscoggin Bank Colisée... is a 5,200 capacity (4,813 seated) multi-purpose arena...' and later confirms that 'The Lewiston Maineiacs were a junior ice hockey team... The team played its home games at the Androscoggin Bank Colisée.' Therefore, the answer '4,813 seated' is directly supported by the evidence."
+          "reason": "The evidence explicitly states in one of the paragraphs: 'The Androscoggin Bank Colisée... is a 5,200 capacity (4,813 seated) multi-purpose arena'. It also confirms that the Lewiston Maineiacs played their home games at this specific arena. Therefore, the answer '4,813 seated' is directly supported by the provided text."
         }
       }
     ],
@@ -2015,29 +2014,25 @@
         "failure": "D",
         "repair": "global_conflict_filtering",
         "decision": {
-          "conflict_detected": true,
-          "remove_passage_ids": [
-            "5a7bbb64554299042af8f7cc_p_9",
-            "5a7bbb64554299042af8f7cc_p_2"
-          ],
-          "confidence": 0.8,
-          "reason": "Passages P1 and P3/P4 refer to Terry Richardson as a photographer who collaborated with Lady Gaga in 2011 (implying an adult age). Passage P2 describes 'Kenton Terry Richardson' born in 1999 as a footballer. While these are likely different people, the name collision creates ambiguity about which 'Terry Richardson' is relevant to Annie Morton's biography context found in P3/P4. However, looking closer at the specific question 'Who is older', Passage P5 states Terry Richardson was born August 14, 1965. Passages P3 and P4 state he was born January 15, 1968. These are contradictory birth dates for the same named entity (the photographer associated with Annie Morton). Therefore, passages providing conflicting biographical data for the specific Terry Richardson mentioned in relation to Annie Morton must be flagged as containing misleading/contradictory claims relative to each other."
+          "conflict_detected": false,
+          "remove_passage_id": null,
+          "confidence": 1.0,
+          "reason": "Passages P3 and P5 provide consistent birth dates for Terry Richardson (one lists a footballer born in 1999 who is irrelevant to the fashion context, while others list photographers born in 1968 or 1965), but no single passage contains a contradictory claim that invalidates the answer; Annie Morton was born in 1970 and Terry Richardson (the photographer) was born before her."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "D",
         "repair": "global_conflict_filtering",
         "decision": {
-          "conflict_detected": true,
-          "remove_passage_ids": [
-            "5a7bbb64554299042af8f7cc_p_9",
-            "5a7bbb64554299042af8f7cc_p_2"
-          ],
-          "confidence": 0.8,
-          "reason": "Passages P1 and P3/P4 refer to Terry Richardson as a photographer who collaborated with Lady Gaga in 2011 (implying an adult age). Passage P2 describes 'Kenton Terry Richardson' born in 1999 as a footballer. While these are likely different people, the name collision creates ambiguity about which 'Terry Richardson' is relevant to Annie Morton's biography context found in P3/P4. However, looking closer at the specific question 'Who is older', Passage P5 states Terry Richardson was born August 14, 1965. Passages P3 and P4 state he was born January 15, 1968. These are contradictory birth dates for the same named entity (the photographer associated with Annie Morton). Therefore, passages providing conflicting biographical data for the specific Terry Richardson mentioned in relation to Annie Morton must be flagged as containing misleading/contradictory claims relative to each other."
+          "conflict_detected": false,
+          "remove_passage_id": null,
+          "confidence": 1.0,
+          "reason": "Passages P3 and P5 provide consistent birth dates for Terry Richardson (one lists a footballer born in 1999 who is irrelevant to the fashion context, while others list photographers born in 1968 or 1965), but no single passage contains a contradictory claim that invalidates the answer; Annie Morton was born in 1970 and Terry Richardson (the photographer) was born before her."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "G",
@@ -2045,7 +2040,7 @@
         "verification": {
           "supported": true,
           "corrected_answer": "",
-          "reason": "The evidence states Annie Morton was born on October 8, 1970, and Terry Richardson (the photographer associated with her) was born on January 15, 1968. Since 1968 is earlier than 1970, Terry Richardson is older. The answer 'yes' correctly affirms that he is older."
+          "reason": "The evidence states Annie Morton was born on October 8, 1970, and Terry Richardson (the photographer mentioned in relation to her) was born on January 15, 1968. Since 1968 is earlier than 1970, Terry Richardson is older. The generated answer 'yes' correctly affirms that he is older."
         }
       }
     ],
@@ -2252,22 +2247,24 @@
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
+          "remove_passage_id": null,
           "confidence": 1.0,
-          "reason": "Passages P2 and P3 contain a contradiction regarding the formation location of Local H (Zion, Illinois vs London, England), but this does not affect the answer to whether both bands are from the United States; all passages agree For Against is US-based and imply or state Local H is American. The conflict in origin city for Local H cannot be resolved without external knowledge, so per rules, nothing is removed."
+          "reason": "P2 and P3 contradict each other regarding the formation location of Local H (Illinois vs England), but neither passage contradicts the claim that For Against is from the United States found in P6."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "D",
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
+          "remove_passage_id": null,
           "confidence": 1.0,
-          "reason": "Passages P2 and P3 contain a contradiction regarding the formation location of Local H (Zion, Illinois vs London, England), but this does not affect the answer to whether both bands are from the United States; all passages agree For Against is US-based and imply or state Local H is American. The conflict in origin city for Local H cannot be resolved without external knowledge, so per rules, nothing is removed."
+          "reason": "P2 and P3 contradict each other regarding the formation location of Local H (Illinois vs England), but neither passage contradicts the claim that For Against is from the United States found in P6."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "G",
@@ -2482,22 +2479,24 @@
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
+          "remove_passage_id": null,
           "confidence": 1.0,
-          "reason": "All passages are consistent regarding the university in question (University of Kansas) having its main campus in Lawrence and branch campuses in the Kansas City metropolitan area. P1 identifies 'Kansas Song' as a fight song, while P5 identifies 'Kansas Fight Hymn (The Jayhawk March)' as the official battle cry; these refer to different songs or titles for similar functions rather than contradicting facts about the university's location."
+          "reason": "All passages consistently identify the University of Kansas as having a main campus in Lawrence and branch campuses in the Kansas City metropolitan area without contradiction."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "D",
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
+          "remove_passage_id": null,
           "confidence": 1.0,
-          "reason": "All passages are consistent regarding the university in question (University of Kansas) having its main campus in Lawrence and branch campuses in the Kansas City metropolitan area. P1 identifies 'Kansas Song' as a fight song, while P5 identifies 'Kansas Fight Hymn (The Jayhawk March)' as the official battle cry; these refer to different songs or titles for similar functions rather than contradicting facts about the university's location."
+          "reason": "All passages consistently identify the University of Kansas as having a main campus in Lawrence and branch campuses in the Kansas City metropolitan area without contradiction."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "G",
@@ -2505,7 +2504,7 @@
         "verification": {
           "supported": true,
           "corrected_answer": "",
-          "reason": "The evidence explicitly states in two separate paragraphs: 'Kansas Song (We're From Kansas) is a fight song of the University of Kansas' and 'Kansas Fight Hymn (The Jayhawk March) serves as the official battle cry for the University of Kansas, which operates its primary campus in Lawrence...'. The question asks for the name of the fight song. Both titles are mentioned, but 'Kansas Fight Hymn (The Jayhawk March)' is described with terms like 'official battle cry' and appears directly before a sentence confirming the university's location details matching the prompt. Therefore, the generated answer is supported by the text."
+          "reason": "The evidence explicitly states in two separate paragraphs: 'Kansas Song (We're From Kansas) is a fight song of the University of Kansas' and 'Kansas Fight Hymn (The Jayhawk March) serves as the official battle cry for the University of Kansas, which operates its primary campus in Lawrence...'. The question asks for the name of the fight song. Both titles are mentioned as such songs/hymns/battle cries for KU. Therefore, the generated answer 'Kansas Fight Hymn (The Jayhawk March)' is directly supported by the evidence."
         }
       }
     ],
@@ -2712,22 +2711,24 @@
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
+          "remove_passage_id": null,
           "confidence": 1.0,
-          "reason": "Passages P2 and P6 both identify David Weissman as the screenwriter with credits for 'Evolution'. Passage P4 identifies him (alongside David Diamond) as a co-writer of 'The Family Man', which stars Nicolas Cage and Téa Leoni. While P3 mentions Scott Rosenberg wrote 'Gone in 60 Seconds' (another film starring Cage), there is no contradiction regarding the specific question about Weissman, Evolution, and The Family Man; all relevant passages are consistent."
+          "reason": "Passages P2 and P6 correctly identify David Weissman as the screenwriter for 'Evolution' who co-wrote 'The Family Man', which stars Nicolas Cage and Téa Leoni; Passage P3 describes a different film ('Gone in 60 Seconds') written by Scott Rosenberg, so there is no contradiction regarding the specific question."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "D",
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
+          "remove_passage_id": null,
           "confidence": 1.0,
-          "reason": "Passages P2 and P6 both identify David Weissman as the screenwriter with credits for 'Evolution'. Passage P4 identifies him (alongside David Diamond) as a co-writer of 'The Family Man', which stars Nicolas Cage and Téa Leoni. While P3 mentions Scott Rosenberg wrote 'Gone in 60 Seconds' (another film starring Cage), there is no contradiction regarding the specific question about Weissman, Evolution, and The Family Man; all relevant passages are consistent."
+          "reason": "Passages P2 and P6 correctly identify David Weissman as the screenwriter for 'Evolution' who co-wrote 'The Family Man', which stars Nicolas Cage and Téa Leoni; Passage P3 describes a different film ('Gone in 60 Seconds') written by Scott Rosenberg, so there is no contradiction regarding the specific question."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "G",
@@ -2942,22 +2943,24 @@
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
+          "remove_passage_id": null,
           "confidence": 1.0,
-          "reason": "The passages do not contradict each other; they provide complementary information about the movie 'End of Days' (P1), its soundtrack song by Guns N Roses released in 1999 for promotion (P3), and details about Arnold Schwarzenegger's roles (P2). There is no conflicting claim regarding the year or event."
+          "reason": "All passages are consistent; P3 correctly identifies the movie as 'End of Days' (P1) and confirms Guns N Roses performed a promo for it in 1999."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "D",
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
+          "remove_passage_id": null,
           "confidence": 1.0,
-          "reason": "The passages do not contradict each other; they provide complementary information about the movie 'End of Days' (P1), its soundtrack song by Guns N Roses released in 1999 for promotion (P3), and details about Arnold Schwarzenegger's roles (P2). There is no conflicting claim regarding the year or event."
+          "reason": "All passages are consistent; P3 correctly identifies the movie as 'End of Days' (P1) and confirms Guns N Roses performed a promo for it in 1999."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "G",
@@ -2965,7 +2968,7 @@
         "verification": {
           "supported": true,
           "corrected_answer": "",
-          "reason": "The evidence states that 'Oh My God' is a song by Guns N' Roses released in 1999 on the soundtrack to the film 'End of Days'. The text describes End of Days as starring Arnold Schwarzenegger and featuring him as a former New York Police Department detective. It also mentions the song was sent out for promo purposes. Therefore, the year 1999 is directly supported by the evidence."
+          "reason": "The evidence states that 'Oh My God' is a song by Guns N' Roses released in 1999 on the soundtrack to the film 'End of Days'. The text describes End of Days as starring Arnold Schwarzenegger and featuring him as a former New York Police Department detective. It also mentions the song was sent out as a promo for the soundtrack and band, linking the year 1999 directly to the movie promotion."
         }
       }
     ],
@@ -3172,22 +3175,24 @@
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
-          "confidence": 0.95,
-          "reason": "There is no clear contradiction between the passages regarding whether both buildings are used for real estate. P1 and P3 state that Random House Tower (Park Imperial Apartments) has a luxury apartment complex as its primary use or mixed-use function. P6 states Pershing Square Capital Management is located at 888 7th Avenue; while P5 mentions Vornado Realty Trust headquarters there, the presence of an investment firm in one building and residential/commercial uses in both does not constitute a contradiction regarding their classification under 'real estate' usage (residential apartments vs. commercial office/investment). The slight discrepancy between P1/P2 calling 888 7th Avenue an 'office skyscraper' versus the specific tenant details is descriptive rather than contradictory to the core question of real estate use."
+          "remove_passage_id": null,
+          "confidence": 1.0,
+          "reason": "Passages P3 and P5 describe the same building (888 7th Avenue) with different current uses ('residential condominium complex' vs 'Vornado Realty Trust corporate headquarters'), but both passages also state it was previously known as the Arlen Building or carries mixed-use elements, meaning neither is strictly contradictory regarding its real estate usage; P1 and P5 differ on the primary use description which might be a factual update rather than a logical contradiction in the context of 'used for real estate'."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "D",
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
-          "confidence": 0.95,
-          "reason": "There is no clear contradiction between the passages regarding whether both buildings are used for real estate. P1 and P3 state that Random House Tower (Park Imperial Apartments) has a luxury apartment complex as its primary use or mixed-use function. P6 states Pershing Square Capital Management is located at 888 7th Avenue; while P5 mentions Vornado Realty Trust headquarters there, the presence of an investment firm in one building and residential/commercial uses in both does not constitute a contradiction regarding their classification under 'real estate' usage (residential apartments vs. commercial office/investment). The slight discrepancy between P1/P2 calling 888 7th Avenue an 'office skyscraper' versus the specific tenant details is descriptive rather than contradictory to the core question of real estate use."
+          "remove_passage_id": null,
+          "confidence": 1.0,
+          "reason": "Passages P3 and P5 describe the same building (888 7th Avenue) with different current uses ('residential condominium complex' vs 'Vornado Realty Trust corporate headquarters'), but both passages also state it was previously known as the Arlen Building or carries mixed-use elements, meaning neither is strictly contradictory regarding its real estate usage; P1 and P5 differ on the primary use description which might be a factual update rather than a logical contradiction in the context of 'used for real estate'."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "G",
@@ -3195,7 +3200,7 @@
         "verification": {
           "supported": false,
           "corrected_answer": "no",
-          "reason": "The evidence states that 888 7th Avenue 'currently carries a residential condominium complex as its primary use' and is tied with Central Park Place for the tallest building status (implying office/residential mix), while Random House Tower is explicitly described as being used as the headquarters of book publisher Random House and a luxury apartment complex. Neither description identifies them primarily or exclusively as 'used for real estate' in the sense of an industry classification like RE Tech, nor does it support the claim that they are both specifically designated buildings *for* real estate (as opposed to office/residential mixed-use). The question asks if they are 'both used for real estate'. While 888 7th Avenue has a residential component and Random House Tower is an apartment complex, the term 'used for real estate' usually implies investment/transaction focus or specific designation. However, looking closer at the text: 888 7th Ave carries a *residential condominium* (real property) but its primary use listed in one snippet is office/residential mix and later says it holds Vornado Realty Trust HQ. Random House Tower is an apartment complex AND publisher HQ. The question likely implies 'Are they both real estate properties?' or 'Is their function related to the real estate industry?'. Given the ambiguity, let's re-evaluate based on strict evidence. 888 7th Ave: Office skyscraper with residential condos. Random House Tower: Mixed-use (Publisher HQ + Apartments). Neither is described as being used *for* the business of 'real estate' (like a brokerage or developer office), but rather they are real estate assets themselves. If the question means 'Are they both buildings containing real estate properties?', then yes. But usually, such questions look for specific functional labels found in text. The text says 888 7th Ave is an 'office skyscraper' (primary use) with condos. Random House Tower is a 'mixed-use tower'. There is no evidence stating they are used *for* real estate as their primary function or industry label, unlike the paragraph defining RE Tech. Therefore, claiming they are both 'used for real estate' is not directly supported by the text which defines them by office/residential/publisher functions."
+          "reason": "The evidence states that 888 7th Avenue currently carries a residential condominium complex as its primary use (and later mentions Vornado Realty Trust), while the Random House Tower is used for both book publishing and luxury apartments. Neither building's description explicitly identifies them primarily or exclusively as 'used for real estate' in the sense of being commercial real estate properties managed by an REIT, though they contain residential units. However, the question asks if they are *both* used for real estate. The term 'real estate' usually refers to land and buildings themselves or businesses dealing with them (like Vornado Realty Trust). While 888 7th Avenue houses a condo complex, it is described as an office skyscraper that carries residential units. Random House Tower is mixed-use (publisher HQ + apartments). Neither is explicitly defined solely by the industry of 'real estate' in the text provided; rather, one hosts real estate assets and the other publishes books and rents/sells apartments. The most accurate answer based strictly on the text's focus is that they are not primarily described as entities *used for* the business of real estate (like a brokerage or developer), but rather as buildings containing residential units. A stricter reading suggests 'no' because neither is defined by its function in the real estate industry, but simply contains residential space."
         }
       }
     ],
@@ -3402,22 +3407,24 @@
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
+          "remove_passage_id": null,
           "confidence": 1.0,
-          "reason": "The passages do not contain a contradiction regarding the timeframe of Manchester United's manager who recruited David Beckham. P2 and P3 identify Alex Ferguson as the manager during the season Beckham joined (1995-96). While P4 states Ferguson managed until 2013 and P3 contains an odd phrase 'from 1986 to 2024', this is likely a typo or future projection in the text rather than a direct factual contradiction with P4's statement of his tenure ending in 2013. Since both passages refer to Ferguson, there is no conflict between different managers' timeframes that would require removing a passage."
+          "reason": "Passages P2 and P3 correctly identify Alex Ferguson as the manager who recruited David Beckham (P4 states he managed from 1986 to 2013), while P1 describes a different manager with no conflict regarding Beckham's recruitment."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "D",
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
+          "remove_passage_id": null,
           "confidence": 1.0,
-          "reason": "The passages do not contain a contradiction regarding the timeframe of Manchester United's manager who recruited David Beckham. P2 and P3 identify Alex Ferguson as the manager during the season Beckham joined (1995-96). While P4 states Ferguson managed until 2013 and P3 contains an odd phrase 'from 1986 to 2024', this is likely a typo or future projection in the text rather than a direct factual contradiction with P4's statement of his tenure ending in 2013. Since both passages refer to Ferguson, there is no conflict between different managers' timeframes that would require removing a passage."
+          "reason": "Passages P2 and P3 correctly identify Alex Ferguson as the manager who recruited David Beckham (P4 states he managed from 1986 to 2013), while P1 describes a different manager with no conflict regarding Beckham's recruitment."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "G",
@@ -3632,22 +3639,24 @@
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
+          "remove_passage_id": null,
           "confidence": 1.0,
-          "reason": "The passages provide conflicting information regarding the location of 'Brown State Fishing Lake' (P1 states it is in Colorado, while P3 states it is in Kansas). However, neither passage contains a claim about the population of the country containing the lake; both identify the location as being within the United States. Since there is no contradictory or misleading claim specifically regarding the *population* data requested by the question (as that information is absent from all passages), no passage needs to be removed based on an answer-related conflict."
+          "reason": "The passages provide conflicting locations for Brown State Fishing Lake (Colorado vs Kansas), but neither provides the total population of its country."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "D",
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
+          "remove_passage_id": null,
           "confidence": 1.0,
-          "reason": "The passages provide conflicting information regarding the location of 'Brown State Fishing Lake' (P1 states it is in Colorado, while P3 states it is in Kansas). However, neither passage contains a claim about the population of the country containing the lake; both identify the location as being within the United States. Since there is no contradictory or misleading claim specifically regarding the *population* data requested by the question (as that information is absent from all passages), no passage needs to be removed based on an answer-related conflict."
+          "reason": "The passages provide conflicting locations for Brown State Fishing Lake (Colorado vs Kansas), but neither provides the total population of its country."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "G",
@@ -3862,22 +3871,24 @@
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
+          "remove_passage_id": null,
           "confidence": 1.0,
-          "reason": "All passages are consistent regarding the team's conference (America East) and Passage P2 correctly states that this conference was known as the North Atlantic Conference from 1988 to 2005, which answers the question without contradiction."
+          "reason": "All passages are consistent; P2 states the conference was known as the North Atlantic Conference from 1988 to 2005, which answers the question without contradiction."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "D",
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
+          "remove_passage_id": null,
           "confidence": 1.0,
-          "reason": "All passages are consistent regarding the team's conference (America East) and Passage P2 correctly states that this conference was known as the North Atlantic Conference from 1988 to 2005, which answers the question without contradiction."
+          "reason": "All passages are consistent; P2 states the conference was known as the North Atlantic Conference from 1988 to 2005, which answers the question without contradiction."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "G",
@@ -3885,7 +3896,7 @@
         "verification": {
           "supported": true,
           "corrected_answer": "",
-          "reason": "The evidence explicitly states: 'The conference was known as... the North Atlantic Conference from 1988 to **2005**.' The question asks for the name of the conference formerly used from 1988 to 1996. Since the team competes in this conference (America East), and its predecessor during that specific timeframe was indeed the North Atlantic Conference, the answer is supported."
+          "reason": "The evidence explicitly states: 'The conference was known as... the North Atlantic Conference from 1988 to **2005**.' The question asks for the name of the conference (which includes soccer teams like Vermont) formerly used during that specific timeframe. Since all sports at UVM mentioned in the text compete in this same conference structure, and the text confirms the America East was known as the North Atlantic Conference from 1988 to 2005, the answer 'North Atlantic Conference' is directly supported."
         }
       }
     ],
@@ -3958,13 +3969,13 @@
       {
         "title": "Ferdinando Provesi",
         "passage_id": "5ab29c24554299449642c932_p_7",
-        "rank": 5,
+        "rank": 4,
         "text": "Ferdinando Angelo Maria Provesi (1770 – 1833) was a native of Parma, Italy.  He was regarded as one of the greatest Italian opera composers of the era .  Provesi is best known as being an early tutor of Giuseppe Verdi when he was the \"Maestro di cappella\" (master of music) at the St. Bartolomeo cathedral in Busseto (the town very close to Le Roncole, the village where Verdi was born.)  Provesi was also director of the municipal music school and local Philharmonic Society.  He began teaching Verdi in 1824 when the future composer was 11 years old."
       },
       {
         "title": "Giuseppe Verdi (film)",
         "passage_id": "5ab29c24554299449642c932_p_1",
-        "rank": 6,
+        "rank": 5,
         "text": "Giuseppe Verdi is a 1938 Italian biographical film directed by Carmine Gallone and starring Fosco Giachetti, Gaby Morlay and Germana Paolieri.  The film portrays the life of the composer Giuseppe Verdi (1813-1901).  The casting of Giachetti as Verdi was intended to emphasise the composer's patriotism, as he had recently played patriotic roles in films such as \"The White Squadron\".  The film was made at the Cinecittà Studios in Rome.  The film is also known by the alternative title The Life of Giuseppe Verdi."
       }
     ],
@@ -4085,30 +4096,28 @@
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": true,
-          "remove_passage_ids": [
-            "5ab29c24554299449642c932_p_3_distractor"
-          ],
+          "remove_passage_id": "5ab29c24554299449642c932_p_3_distractor",
           "confidence": 1.0,
-          "reason": "Passage P3 correctly identifies Giuseppe Verdi as an 'Italian opera composer', while Passage P4 falsely claims he was a 'French symphony conductor'. This is a direct contradiction regarding his profession and nationality."
+          "reason": "Passage P4 falsely claims Giuseppe Verdi was a French symphony conductor, directly contradicting Passage P3 which correctly identifies him as an Italian opera composer."
         },
         "removed_passage_ids": [
           "5ab29c24554299449642c932_p_3_distractor"
-        ]
+        ],
+        "unresolved_conflict": false
       },
       {
         "failure": "D",
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": true,
-          "remove_passage_ids": [
-            "5ab29c24554299449642c932_p_3_distractor"
-          ],
+          "remove_passage_id": "5ab29c24554299449642c932_p_3_distractor",
           "confidence": 1.0,
-          "reason": "Passage P3 correctly identifies Giuseppe Verdi as an 'Italian opera composer', while Passage P4 falsely claims he was a 'French symphony conductor'. This is a direct contradiction regarding his profession and nationality."
+          "reason": "Passage P4 falsely claims Giuseppe Verdi was a French symphony conductor, directly contradicting Passage P3 which correctly identifies him as an Italian opera composer."
         },
         "removed_passage_ids": [
           "5ab29c24554299449642c932_p_3_distractor"
-        ]
+        ],
+        "unresolved_conflict": false
       },
       {
         "failure": "G",
@@ -4116,7 +4125,7 @@
         "verification": {
           "supported": true,
           "corrected_answer": "",
-          "reason": "The evidence explicitly states in one sentence that Ambroise Thomas was a composer 'best known for his operas' and in another sentence that Giuseppe Verdi was an 'Italian opera composer'. Therefore, the answer 'yes' is directly supported by the text."
+          "reason": "The evidence explicitly states that Ambroise Thomas was a composer 'best known for his operas' and Giuseppe Verdi is described as an 'Italian opera composer'. Therefore, the answer 'yes' is directly supported by the text."
         }
       }
     ],
@@ -4323,22 +4332,24 @@
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
+          "remove_passage_id": null,
           "confidence": 1.0,
-          "reason": "The passages do not contradict each other; P4 correctly identifies Roger O. Egeberg served under the Nixon administration (which P3 confirms was from 1965 to 1970), and no conflicting information regarding his tenure or the president's years is present in any passage."
+          "reason": "Passages P3 and P4 together consistently identify the relevant president as Nixon (serving from 1965 to 1970), with no contradictory claims found in the provided text."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "D",
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
+          "remove_passage_id": null,
           "confidence": 1.0,
-          "reason": "The passages do not contradict each other; P4 correctly identifies Roger O. Egeberg served under the Nixon administration (which P3 confirms was from 1965 to 1970), and no conflicting information regarding his tenure or the president's years is present in any passage."
+          "reason": "Passages P3 and P4 together consistently identify the relevant president as Nixon (serving from 1965 to 1970), with no contradictory claims found in the provided text."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "G",
@@ -4346,7 +4357,7 @@
         "verification": {
           "supported": false,
           "corrected_answer": "1969-1974",
-          "reason": "The evidence states Roger O. Egeberg served during the Nixon administration but does not specify the exact years of that presidency (only stating he resigned in 1970). The provided text for Richard Milhous Nixon incorrectly claims his term was 'from 1965 until 1970', whereas historical fact and standard knowledge confirm he took office on January 20, 1969. Therefore, the answer is not directly supported by the specific evidence regarding dates in the provided text without external correction of the Nixon start date."
+          "reason": "The evidence states Roger O. Egeberg served during the Nixon administration but does not specify the exact years of that presidency (only mentioning he resigned in 1970). The provided text for Richard Milhous Nixon incorrectly claims his term was 'from 1965 until 1970', whereas historical fact and standard knowledge confirm he took office on January 20, 1969. Therefore, the answer is not directly supported by the specific evidence provided without external correction of the date error in the text."
         }
       }
     ],
@@ -4553,22 +4564,24 @@
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
+          "remove_passage_id": null,
           "confidence": 1.0,
-          "reason": "The passages collectively clarify that Henry Roth was British-born (P1) but American by career/citizenship context (P2), while Robert Erskine Childers is explicitly identified as a 'British writer' in P4 and the son of a 'British Orientalist scholar'. There is no direct contradiction regarding who was from England; rather, they provide complementary details about nationality vs. birthplace or profession."
+          "reason": "P3 and P4 confirm Robert Erskine Childers was British (England), while the passages about Henry Roth describe him as either American or British-born but not explicitly stating he is from England in a way that contradicts the question's premise for 'from England' without further context; however, strictly based on provided text, there is no direct contradiction regarding who fits the description of being 'from England' between the two options presented in the prompt relative to each other."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "D",
         "repair": "global_conflict_filtering",
         "decision": {
           "conflict_detected": false,
-          "remove_passage_ids": [],
+          "remove_passage_id": null,
           "confidence": 1.0,
-          "reason": "The passages collectively clarify that Henry Roth was British-born (P1) but American by career/citizenship context (P2), while Robert Erskine Childers is explicitly identified as a 'British writer' in P4 and the son of a 'British Orientalist scholar'. There is no direct contradiction regarding who was from England; rather, they provide complementary details about nationality vs. birthplace or profession."
+          "reason": "P3 and P4 confirm Robert Erskine Childers was British (England), while the passages about Henry Roth describe him as either American or British-born but not explicitly stating he is from England in a way that contradicts the question's premise for 'from England' without further context; however, strictly based on provided text, there is no direct contradiction regarding who fits the description of being 'from England' between the two options presented in the prompt relative to each other."
         },
-        "removed_passage_ids": []
+        "removed_passage_ids": [],
+        "unresolved_conflict": false
       },
       {
         "failure": "G",
@@ -4576,7 +4589,7 @@
         "verification": {
           "supported": false,
           "corrected_answer": "Robert Erskine Childers",
-          "reason": "The evidence states that Henry Roth was 'British-born' (born in England) but spent his career there before moving to the US. Robert Erskine Childers is explicitly described as a 'British writer'. Since both were from Britain/England, the question implies identifying which one fits the description of being an English/British writer based on their primary identity or birthplace context provided. However, Henry Roth was born in England (London) and moved to the US later, while Robert Erskine Childers was also British. The generated answer 'Robert Erskine Childers' is partially correct as he was a British writer, but Henry Roth was also from England by birth. If forced to choose based on the text's explicit labeling: Henry Roth is called 'British-born', Robert Erskine Childers is called a 'British writer'. Both are valid answers for 'from England/Britain' depending on interpretation (birth vs nationality). However, looking closely at the prompt 'Which writer was from England...', Henry Roth fits perfectly as he was born in London. The generated answer chose Robert Erksine Childers who was also British but his father's side is emphasized with Irish connections later. Actually, re-reading: Henry Roth was born in London (England). Robert Erskine Childers was the son of a British scholar and an Irish woman; he lived in Britain. Both are technically 'from England' by birth or nationality. But usually, if one must be chosen for 'from England', Henry Roth is explicitly 'British-born'. Wait, let's re-evaluate the generated answer vs evidence. Evidence says: Henry Roth = British-born novelist... spent career in England before moving to US. Robert Erskine Childers = British writer. Both are from Britain/England. The question asks 'Which writer was from England...'. If both were born there or considered English, the question might be flawed or looking for a specific distinction not fully clear without external knowledge (e.g., Henry Roth is often associated with American literature despite being born in London). However, strictly based on evidence: Henry Roth = British-born. Robert Erskine Childers = British writer. The generated answer says 'Robert Erskine Childers'. Is this supported? Yes, he was a British writer from England (born in Dublin? No, text doesn't say where Robert Erksine Childers was born, only his father's nationality and that he is a British writer). Wait, historical fact: Robert Erskine Childers was born in Dublin. Henry Roth was born in London. Therefore, 'from England' applies to Henry Roth (born there), not Robert Erskine Childers (born in Ireland). The evidence says Robert Caesar Childers (father) was British Orientalist. It doesn't explicitly state Robert Erksine Childer's birthplace is Dublin, but it calls him a 'British writer'. However, if the question implies native English origin or birth, Henry Roth fits better as he was 'British-born' and spent career in England before moving to US (implying American identity later). If the answer key expects Robert Erskine Childers because of his British nationality despite Irish birth? Or does it expect Henry Roth? Let's look at the generated answer: 'Robert Erksine Childers'. Is this supported by evidence saying he was from England? The text says he is a 'British writer'. It doesn't explicitly say where he was born, but implies British identity. However, Henry Roth is explicitly 'British-born' and spent career in England. If the question means 'born in England', only Henry Roth fits (based on general knowledge + 'British-born'). If it means nationality, both fit. Given the ambiguity, let's assume the strict evidence: Text says Henry Roth was 'British-born'. Text says Robert Erksine Childers is a 'British writer'. It does not explicitly state Robert Erskine Childer was born in England (could be Ireland). Thus, claiming he was 'from England' might be less directly supported than Henry Roth who is 'British-born' and spent career there. But wait, the generated answer chose Robert Erksine Childers. Is that correct? If Robert Erskine Childers was born in Dublin, then saying he was 'from England' is factually incorrect regarding birthplace, though nationality-wise British. The question asks 'Which writer was from England'. Usually implies origin/birth. Henry Roth fits best (born London). So the generated answer 'Robert Erksine Childers' is likely unsupported or incorrect because Robert Erskine Childer's birthplace isn't stated as England in evidence and historically he was Irish-born. Therefore, supported=false. Corrected answer should be Henry Roth."
+          "reason": "The evidence states that Henry Roth was 'British-born' (born in England) but spent his career there before moving to the US. Robert Erskine Childers is explicitly described as a 'British writer'. Since both were from Britain/England, the question implies choosing between them based on their primary association or birthplace context provided. However, Henry Roth was born in London and moved to America later, while Robert Erksine Childers remained British until his death. The generated answer selects Robert Erskine Childers. Given that Henry Roth is described as 'British-born' but the question asks who was from England (implying origin), both technically fit, but often such questions look for the one whose entire life or primary identity is tied to England without emigration if not specified otherwise, OR it's a trick where only one fits. Wait, let's re-read carefully: Henry Roth 'British-born... spent his career in England before moving'. Robert Erskine Childers was a 'British writer' executed by Irish Free State (he died in Ireland). Both are from Britain/England. However, the generated answer is just 'Robert Erskine Childers'. Is this supported? The evidence says he was a British writer. Henry Roth was also born in England. If the question implies current residence or primary identity at death, it's ambiguous. But usually, if someone moved to US later, they might be considered American now. Robert Erskine Childers died as a Briton (executed by Irish state). So 'Robert Erskine Childers' is a valid answer for who was from England in the sense of nationality at death or primary identity without emigrating permanently like Roth did to US career focus? Actually, the prompt asks 'Which writer was from England'. Both were born there. But Henry Roth moved to US and became an American novelist (second sentence says 'American novelist'). Robert Erskine Childers is called a 'British writer' throughout. Therefore, only Robert Erskine Childers fits the description of being consistently identified as British/English in his career without becoming primarily American by choice/move for career focus mentioned in text? The evidence explicitly calls Henry Roth an 'American novelist' in one sentence and notes he moved to US later. It calls Robert Erskine Childers a 'British writer'. Thus, the answer 'Robert Erksine Childers' is supported because he remained British/English while Henry Roth became American."
         }
       }
     ],
