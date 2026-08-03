@@ -26,14 +26,20 @@ def retrieval_node(state: RAGState, retriever):
 def generation_node(state: RAGState):
 
     prompt = f"""
-Answer the question using only the provided context.
+Answer the question using only the provided evidence.
 
 Rules:
-- Return only the answer.
+- Do not use outside knowledge.
+- Do not use your memory.
+- Return only the core answer.
 - Do not explain.
 - Do not provide reasoning.
-- Do not write a complete sentence.
-- Keep the answer as short as possible.
+- Do not add extra words.
+
+Answer format:
+- For yes/no questions, return only yes or no.
+- For names, locations, dates, organizations, or titles, return only that value.
+- For other questions, return only the core answer.
 
 Question:
 {state["question"]}

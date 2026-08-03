@@ -120,7 +120,7 @@ def run_compound_failure(input_path, output_path):
 
     results = []
 
-    for trace in traces[:5]:
+    for trace in traces:
 
         answer = generate_from_compound_context(
             trace["question"], trace["retrieval_events"], trace["true_failures"]

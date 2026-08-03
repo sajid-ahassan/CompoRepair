@@ -71,15 +71,17 @@ def generate_distractor(question, supporting_text):
 
     Given the question and the correct evidence, generate a misleading passage.
 
-    Rules:
-    - Keep the same entity and topic.
-    - Change only the key fact needed to create a contradiction.
-    - Keep all other details as close as possible to the original evidence.
-    - Do not introduce new entities.
+    Roles:
+    - Keep the same person/entity.
+    - Keep the same topic and surrounding facts.
+    - Modify only the key fact required to answer the question.
+    - Do not introduce unrelated positions or events.
+    - Make the false information plausible.
     - Do not add extra background information.
     - Do not explain that it is a distractor.
     - Write it like a real retrieved document.
-
+    - The distractor should look like a near-correct passage, not a different biography.
+    
     Question:
     {question}
 
@@ -196,9 +198,6 @@ def create_reasoning_dataset(input_path, output_path):
 # Compound Failures
 # ==========================
 
-# ==========================
-# Compound Failures
-# ==========================
 
 
 def inject_compound_failure(trace, failures):

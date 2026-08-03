@@ -1,0 +1,49 @@
+{
+  "baseline": {
+    "total": 15,
+    "exact_match_accuracy": 0.6,
+    "semantic_accuracy": 0.8666666666666667
+  },
+  "M": {
+    "total": 15,
+    "exact_match_accuracy": 0.26666666666666666,
+    "semantic_accuracy": 0.3333333333333333,
+    "em_drop": 0.3333333333333333,
+    "semantic_drop": 0.5333333333333334
+  },
+  "D": {
+    "total": 15,
+    "exact_match_accuracy": 0.6,
+    "semantic_accuracy": 0.6666666666666666,
+    "em_drop": 0.0,
+    "semantic_drop": 0.20000000000000007
+  },
+  "G": {
+    "total": 15,
+    "exact_match_accuracy": 0.6,
+    "semantic_accuracy": 0.8,
+    "em_drop": 0.0,
+    "semantic_drop": 0.06666666666666665
+  },
+  "M_D": {
+    "total": 15,
+    "exact_match_accuracy": 0.3333333333333333,
+    "semantic_accuracy": 0.3333333333333333,
+    "em_drop": 0.26666666666666666,
+    "semantic_drop": 0.5333333333333334
+  },
+  "M_G": {
+    "total": 15,
+    "exact_match_accuracy": 0.2,
+    "semantic_accuracy": 0.26666666666666666,
+    "em_drop": 0.39999999999999997,
+    "semantic_drop": 0.6000000000000001
+  },
+  "D_G": {
+    "total": 15,
+    "exact_match_accuracy": 0.5333333333333333,
+    "semantic_accuracy": 0.6,
+    "em_drop": 0.06666666666666665,
+    "semantic_drop": 0.2666666666666667
+  }
+}
