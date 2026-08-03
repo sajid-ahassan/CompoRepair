@@ -10,7 +10,7 @@ load_dotenv()
 
 def main():
     dataset = load_dataset("hotpotqa/hotpot_qa", "distractor", split="validation")
-    pilot_items = dataset.select(range(15))
+    pilot_items = dataset.select(range(20))
 
     print("2. Normalizing data into the required trace schema...")
     traces = []

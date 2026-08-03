@@ -4,13 +4,12 @@ from copy import deepcopy
 
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
+from ..pipeline.baseline_rag import generation_llm
 
 load_dotenv()
 
-judge_llm = ChatOpenAI(
-    model="gpt-4o-mini",
-    temperature=0,
-)
+judge_llm = generation_llm
+
 
 
 def format_evidence(documents):
@@ -28,40 +27,49 @@ def format_evidence(documents):
     return "\n\n".join(passages), id_map
 
 
-def parse_response(response):
+def parse_response(response_content):
+    default = {
+        "conflict_detected": False,
+        "remove_passage_id": None,
+        "confidence": 0.0,
+        "reason": "Parsing failed",
+    }
+
+    if not isinstance(response_content, str) or not response_content.strip():
+        return default
+
     try:
         cleaned = re.sub(
             r"```(?:json)?|```",
             "",
-            response,
+            response_content,
             flags=re.IGNORECASE,
         ).strip()
 
         start = cleaned.find("{")
         end = cleaned.rfind("}")
 
+        if start == -1 or end == -1:
+            return default
+
         result = json.loads(cleaned[start : end + 1])
 
+        passage_id = result.get("remove_passage_id")
+
+        if passage_id is not None:
+            passage_id = str(passage_id).strip()
+
         return {
-            "conflict_detected": result.get(
-                "conflict_detected",
-                False,
+            "conflict_detected": bool(
+                result.get("conflict_detected", False)
             ),
-            "remove_passage_ids": result.get(
-                "remove_passage_ids",
-                [],
-            ),
+            "remove_passage_id": passage_id,
             "confidence": float(result.get("confidence", 0.0)),
-            "reason": result.get("reason", ""),
+            "reason": str(result.get("reason", "")),
         }
 
-    except Exception:
-        return {
-            "conflict_detected": False,
-            "remove_passage_ids": [],
-            "confidence": 0.0,
-            "reason": "Parsing failed",
-        }
+    except (ValueError, TypeError, json.JSONDecodeError):
+        return default
 
 
 def detect_distractor(question, documents):
@@ -78,23 +86,24 @@ Question:
 Passages:
 {evidence}
 
-Identify one passage that contains a clearly contradictory or
+Identify at most ONE passage containing a clearly contradictory or
 misleading answer-related claim.
 
 Rules:
 - Analyze all passages together.
+- Never select both sides of a contradiction.
 - Preserve bridge and entity-linking evidence.
-- Do not remove a passage only because it does not directly answer
-  the question.
-- If the conflict cannot be resolved, remove nothing.
-- Select at most one passage.
-- Use only neutral IDs such as P1 or P2.
+- Do not remove a passage merely because it is irrelevant.
+- If you cannot determine which single passage is misleading,
+  return null.
+- Use only neutral IDs such as P1, P2, or null.
+- Keep the reason to one short sentence.
 
-Return only valid JSON:
+Return valid JSON only:
 
 {{
   "conflict_detected": true,
-  "remove_passage_ids": ["P1"],
+  "remove_passage_id": "P1",
   "confidence": 0.0,
   "reason": "short explanation"
 }}
@@ -103,49 +112,51 @@ Return only valid JSON:
     response = judge_llm.invoke(prompt)
     decision = parse_response(response.content)
 
-    decision["remove_passage_ids"] = [
-        id_map[neutral_id]
-        for neutral_id in decision["remove_passage_ids"]
+    neutral_id = decision["remove_passage_id"]
+
+    decision["remove_passage_id"] = (
+        id_map.get(neutral_id)
         if neutral_id in id_map
-    ]
+        else None
+    )
 
     return decision
-
 
 def repair_distractor(trace):
     repaired_trace = deepcopy(trace)
 
-    documents = repaired_trace.get(
-        "retrieval_events",
-        [],
-    )
+    documents = repaired_trace.get("retrieval_events", [])
 
     decision = detect_distractor(
         repaired_trace["question"],
         documents,
     )
 
-    valid_ids = {str(document.get("passage_id", "")) for document in documents}
+    valid_ids = {
+        str(document.get("passage_id", ""))
+        for document in documents
+    }
 
-    requested_ids = [
-        passage_id
-        for passage_id in decision["remove_passage_ids"]
-        if passage_id in valid_ids
-    ]
+    requested_id = decision.get("remove_passage_id")
 
     should_remove = (
-        decision["conflict_detected"]
-        and decision["confidence"] >= 0.70
-        and len(requested_ids) == 1
+        decision.get("conflict_detected", False)
+        and decision.get("confidence", 0.0) >= 0.70
+        and requested_id is not None
+        and requested_id in valid_ids
     )
 
-    remove_ids = set(requested_ids) if should_remove else set()
+    remove_ids = {requested_id} if should_remove else set()
 
     filtered_documents = [
         document
         for document in documents
         if str(document.get("passage_id", "")) not in remove_ids
     ]
+
+    # Reset ranking after removal
+    for rank, document in enumerate(filtered_documents, start=1):
+        document["rank"] = rank
 
     repaired_trace["retrieval_events"] = filtered_documents
 
@@ -157,6 +168,10 @@ def repair_distractor(trace):
             "repair": "global_conflict_filtering",
             "decision": decision,
             "removed_passage_ids": list(remove_ids),
+            "unresolved_conflict": (
+                decision.get("conflict_detected", False)
+                and not should_remove
+            ),
         }
     )
 

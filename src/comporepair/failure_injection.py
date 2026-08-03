@@ -3,11 +3,12 @@ import os
 import random
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
+from .models.local_llm import get_local_ollama_llm
 
 load_dotenv()
 
-llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
-distractor_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.7)
+llm = get_local_ollama_llm()
+distractor_llm = get_local_ollama_llm(temperature=0)
 
 # ==========================
 # Missing Evidence (M)
@@ -140,10 +141,11 @@ def create_distractor_dataset(input_path, output_path):
         traces = json.load(f)
 
     corrupted = []
-
+    i = 0
     for trace in traces:
         corrupted.append(inject_distractor_evidence(trace))
-
+        print(f"Distractor injected for trace {i+1}")
+        i += 1
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
     with open(output_path, "w", encoding="utf-8") as f:
@@ -226,9 +228,11 @@ def create_compound_dataset(input_path, output_path, failures):
         traces = json.load(f)
 
     corrupted = []
-
+    i = 0
     for trace in traces:
         corrupted.append(inject_compound_failure(trace, failures))
+        print(f"Failures {failures} injected for trace {i+1}")
+        i += 1
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
@@ -246,13 +250,13 @@ if __name__ == "__main__":
 
     input_file = "data/processed/pilot_baseline_results.json"
 
-    # create_missing_evidence_dataset(
-    #     input_file, "data/failures/single/missing_evidence.json"
-    # )
+    create_missing_evidence_dataset(
+        input_file, "data/failures/single/missing_evidence.json"
+    )
 
-    # create_distractor_dataset(input_file, "data/failures/single/distractor.json")
+    create_distractor_dataset(input_file, "data/failures/single/distractor.json")
 
-    # create_reasoning_dataset(input_file, "data/failures/single/reasoning.json")
+    create_reasoning_dataset(input_file, "data/failures/single/reasoning.json")
     
     # for compound failures
     

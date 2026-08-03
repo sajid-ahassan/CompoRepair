@@ -3,9 +3,9 @@ import os
 
 from langchain_core.prompts import ChatPromptTemplate
 from .run_baseline import evaluate_answer, normalize_answer
-from .pipeline.baseline_rag import semantic_evaluation, generation_llm
-
-generation_llm = generation_llm
+from .pipeline.baseline_rag import semantic_evaluation
+from .models.local_llm import get_local_ollama_llm
+generation_llm = get_local_ollama_llm()
 
 STANDARD_PROMPT = ChatPromptTemplate.from_messages(
     [
@@ -119,12 +119,14 @@ def run_compound_failure(input_path, output_path):
         traces = json.load(f)
 
     results = []
-
-    for trace in traces[:1]:
+    i = 0
+    for trace in traces:
 
         answer = generate_from_compound_context(
             trace["question"], trace["retrieval_events"], trace["true_failures"]
         )
+        
+        print(f"Processed trace: {trace['question']}")
 
         trace["final_answer"] = answer
 
@@ -140,6 +142,8 @@ def run_compound_failure(input_path, output_path):
         }
 
         results.append(trace)
+        print(f"Compound failure processed trace {i+1}")
+        i += 1
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
 

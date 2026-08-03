@@ -16,3 +16,13 @@ jupyter
 langchain-openai
 chromadb 
 langchain-chroma 
+
+
+# local model requirements
+# sentencepiece
+# transformers 
+# accelerate 
+# bitsandbytes 
+# langchain-huggingface
+# torch 
+# torchvision --index-url https://download.pytorch.org/whl/cu121

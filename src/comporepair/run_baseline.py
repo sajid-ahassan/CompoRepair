@@ -5,6 +5,8 @@ from .pipeline.baseline_rag import run_baseline
 
 
 def normalize_answer(answer):
+    if answer is None:
+        return ""
     answer = answer.lower()
     answer = re.sub(r"[^a-z0-9\s]", "", answer)
     answer = answer.strip()
@@ -26,8 +28,8 @@ def main():
         traces = json.load(f)
 
     results = []
-
-    for trace in traces[:15]:  # Limit to first 10 traces for testing
+    i = 0
+    for trace in traces:  # Limit to first 10 traces for testing
 
         result = run_baseline(trace["question"], trace["canonical_answer"])
 
@@ -62,6 +64,8 @@ def main():
         ]
 
         results.append(trace)
+        print(f"Baseline processed trace {i+1}")
+        i += 1
 
     with open("data/processed/pilot_baseline_results.json", "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2, ensure_ascii=False)

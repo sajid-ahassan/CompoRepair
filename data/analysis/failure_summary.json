@@ -1,111 +1,111 @@
 {
   "baseline": {
-    "total": 15,
-    "exact_match_count": 9,
-    "semantic_correct_count": 13,
-    "exact_match_accuracy": 0.6,
-    "semantic_accuracy": 0.8666666666666667
+    "total": 20,
+    "exact_match_count": 10,
+    "semantic_correct_count": 14,
+    "exact_match_accuracy": 0.5,
+    "semantic_accuracy": 0.7
   },
   "M": {
-    "total": 15,
-    "exact_match_count": 4,
-    "semantic_correct_count": 5,
-    "exact_match_accuracy": 0.26666666666666666,
-    "semantic_accuracy": 0.3333333333333333,
-    "em_drop": 0.3333333333333333,
-    "semantic_drop": 0.5333333333333334,
+    "total": 20,
+    "exact_match_count": 3,
+    "semantic_correct_count": 4,
+    "exact_match_accuracy": 0.15,
+    "semantic_accuracy": 0.2,
+    "em_drop": 0.35,
+    "semantic_drop": 0.49999999999999994,
     "transitions": {
-      "correct_to_wrong": 9,
+      "correct_to_wrong": 11,
       "wrong_to_correct": 1,
-      "stayed_correct": 4,
-      "stayed_wrong": 1,
-      "matched_traces": 15
+      "stayed_correct": 3,
+      "stayed_wrong": 5,
+      "matched_traces": 20
     }
   },
   "D": {
-    "total": 15,
-    "exact_match_count": 9,
+    "total": 20,
+    "exact_match_count": 5,
     "semantic_correct_count": 10,
-    "exact_match_accuracy": 0.6,
-    "semantic_accuracy": 0.6666666666666666,
-    "em_drop": 0.0,
-    "semantic_drop": 0.20000000000000007,
+    "exact_match_accuracy": 0.25,
+    "semantic_accuracy": 0.5,
+    "em_drop": 0.25,
+    "semantic_drop": 0.19999999999999996,
     "transitions": {
-      "correct_to_wrong": 3,
-      "wrong_to_correct": 0,
-      "stayed_correct": 10,
-      "stayed_wrong": 2,
-      "matched_traces": 15
+      "correct_to_wrong": 5,
+      "wrong_to_correct": 1,
+      "stayed_correct": 9,
+      "stayed_wrong": 5,
+      "matched_traces": 20
     }
   },
   "G": {
-    "total": 15,
-    "exact_match_count": 9,
-    "semantic_correct_count": 12,
-    "exact_match_accuracy": 0.6,
-    "semantic_accuracy": 0.8,
-    "em_drop": 0.0,
-    "semantic_drop": 0.06666666666666665,
+    "total": 20,
+    "exact_match_count": 11,
+    "semantic_correct_count": 15,
+    "exact_match_accuracy": 0.55,
+    "semantic_accuracy": 0.75,
+    "em_drop": -0.050000000000000044,
+    "semantic_drop": -0.050000000000000044,
     "transitions": {
-      "correct_to_wrong": 1,
-      "wrong_to_correct": 0,
-      "stayed_correct": 12,
-      "stayed_wrong": 2,
-      "matched_traces": 15
+      "correct_to_wrong": 0,
+      "wrong_to_correct": 1,
+      "stayed_correct": 14,
+      "stayed_wrong": 5,
+      "matched_traces": 20
     }
   },
   "M_D": {
-    "total": 15,
-    "exact_match_count": 5,
-    "semantic_correct_count": 5,
-    "exact_match_accuracy": 0.3333333333333333,
-    "semantic_accuracy": 0.3333333333333333,
-    "em_drop": 0.26666666666666666,
-    "semantic_drop": 0.5333333333333334,
+    "total": 20,
+    "exact_match_count": 6,
+    "semantic_correct_count": 7,
+    "exact_match_accuracy": 0.3,
+    "semantic_accuracy": 0.35,
+    "em_drop": 0.2,
+    "semantic_drop": 0.35,
     "transitions": {
       "correct_to_wrong": 9,
-      "wrong_to_correct": 1,
-      "stayed_correct": 4,
-      "stayed_wrong": 1,
-      "matched_traces": 15
+      "wrong_to_correct": 2,
+      "stayed_correct": 5,
+      "stayed_wrong": 4,
+      "matched_traces": 20
     },
-    "extra_semantic_drop_vs_strongest_single": 0.0,
-    "extra_em_drop_vs_strongest_single": -0.06666666666666665
+    "extra_semantic_drop_vs_strongest_single": -0.14999999999999997,
+    "extra_em_drop_vs_strongest_single": -0.14999999999999997
   },
   "M_G": {
-    "total": 15,
+    "total": 20,
     "exact_match_count": 3,
-    "semantic_correct_count": 4,
-    "exact_match_accuracy": 0.2,
-    "semantic_accuracy": 0.26666666666666666,
-    "em_drop": 0.39999999999999997,
-    "semantic_drop": 0.6000000000000001,
+    "semantic_correct_count": 3,
+    "exact_match_accuracy": 0.15,
+    "semantic_accuracy": 0.15,
+    "em_drop": 0.35,
+    "semantic_drop": 0.5499999999999999,
     "transitions": {
-      "correct_to_wrong": 9,
-      "wrong_to_correct": 0,
-      "stayed_correct": 4,
-      "stayed_wrong": 2,
-      "matched_traces": 15
+      "correct_to_wrong": 12,
+      "wrong_to_correct": 1,
+      "stayed_correct": 2,
+      "stayed_wrong": 5,
+      "matched_traces": 20
     },
-    "extra_semantic_drop_vs_strongest_single": 0.06666666666666665,
-    "extra_em_drop_vs_strongest_single": 0.06666666666666665
+    "extra_semantic_drop_vs_strongest_single": 0.04999999999999999,
+    "extra_em_drop_vs_strongest_single": 0.0
   },
   "D_G": {
-    "total": 15,
+    "total": 20,
     "exact_match_count": 8,
-    "semantic_correct_count": 9,
-    "exact_match_accuracy": 0.5333333333333333,
+    "semantic_correct_count": 12,
+    "exact_match_accuracy": 0.4,
     "semantic_accuracy": 0.6,
-    "em_drop": 0.06666666666666665,
-    "semantic_drop": 0.2666666666666667,
+    "em_drop": 0.09999999999999998,
+    "semantic_drop": 0.09999999999999998,
     "transitions": {
       "correct_to_wrong": 4,
-      "wrong_to_correct": 0,
-      "stayed_correct": 9,
-      "stayed_wrong": 2,
-      "matched_traces": 15
+      "wrong_to_correct": 2,
+      "stayed_correct": 10,
+      "stayed_wrong": 4,
+      "matched_traces": 20
     },
-    "extra_semantic_drop_vs_strongest_single": 0.06666666666666665,
-    "extra_em_drop_vs_strongest_single": 0.06666666666666665
+    "extra_semantic_drop_vs_strongest_single": -0.09999999999999998,
+    "extra_em_drop_vs_strongest_single": -0.15000000000000002
   }
 }

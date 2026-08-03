@@ -4,7 +4,6 @@ import os
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 
-
 from .run_baseline import normalize_answer, evaluate_answer
 
 from .pipeline.baseline_rag import semantic_evaluation
@@ -20,8 +19,8 @@ from .repair.compound import repair_compound
 
 load_dotenv()
 
-
-llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+from .models.local_llm import get_local_ollama_llm
+llm = get_local_ollama_llm()
 
 
 # ==========================
@@ -112,8 +111,8 @@ def run_repair(input_path, output_path):
         traces = json.load(f)
 
     results = []
-
-    for trace in traces[:2]:
+    i = 0
+    for trace in traces:
 
         failures = trace.get("true_failures", [])
 
@@ -152,7 +151,9 @@ def run_repair(input_path, output_path):
         }
 
         results.append(repaired_trace)
-
+        print(f"Repair processed trace {i+1}")
+        i += 1
+        
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
     with open(output_path, "w", encoding="utf-8") as f:

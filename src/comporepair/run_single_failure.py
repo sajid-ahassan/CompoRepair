@@ -7,9 +7,8 @@ from .run_baseline import evaluate_answer, normalize_answer
 from .pipeline.baseline_rag import semantic_evaluation
 
 load_dotenv()
-
-generation_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
-
+from .models.local_llm import get_local_ollama_llm
+generation_llm = get_local_ollama_llm()
 
 # ==========================
 # Prompt Templates
@@ -120,8 +119,8 @@ def run_single_failure(input_path, output_path, failure_type):
         traces = json.load(f)
 
     results = []
-
-    for trace in traces[:1]:
+    i = 0
+    for trace in traces:
 
         answer = generate_answer(
             trace["question"], trace["retrieval_events"], failure_type
@@ -141,6 +140,8 @@ def run_single_failure(input_path, output_path, failure_type):
         }
 
         results.append(trace)
+        print(f"Single failure processed trace {i+1}")
+        i += 1
 
     with open(output_path, "w", encoding="utf-8") as f:
 

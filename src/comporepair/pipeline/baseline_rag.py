@@ -4,14 +4,13 @@ from langchain_openai import ChatOpenAI
 from .state import RAGState
 from ..retrieval.vector_store import load_vector_store, get_retriever
 
-from dotenv import load_dotenv
+from ..models.local_llm import get_local_ollama_llm
 
+from dotenv import load_dotenv
 load_dotenv()
 
-
-generation_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
-
-evaluation_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+generation_llm = get_local_ollama_llm()
+evaluation_llm = get_local_ollama_llm()
 
 
 def retrieval_node(state: RAGState, retriever):

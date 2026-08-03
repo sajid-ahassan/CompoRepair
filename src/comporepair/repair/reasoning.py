@@ -2,11 +2,11 @@ import json
 
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
-
+from ..pipeline.baseline_rag import generation_llm
 load_dotenv()
 
 
-reasoning_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+reasoning_llm = generation_llm
 
 
 def verify_answer(question, evidence, answer):
