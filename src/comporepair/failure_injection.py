@@ -193,6 +193,55 @@ def create_reasoning_dataset(input_path, output_path):
 
 
 # ==========================
+# Compound Failures
+# ==========================
+
+# ==========================
+# Compound Failures
+# ==========================
+
+
+def inject_compound_failure(trace, failures):
+
+    corrupted_trace = trace.copy()
+
+    # Apply failures sequentially
+
+    if "M" in failures:
+        corrupted_trace = inject_missing_evidence(corrupted_trace)
+
+    if "D" in failures:
+        corrupted_trace = inject_distractor_evidence(corrupted_trace)
+
+    if "G" in failures:
+        corrupted_trace = inject_reasoning_failure(corrupted_trace)
+
+    corrupted_trace["true_failures"] = failures
+
+    corrupted_trace["experiment_stage"] = "compound_" + "_".join(failures)
+
+    return corrupted_trace
+
+
+def create_compound_dataset(input_path, output_path, failures):
+
+    with open(input_path, "r", encoding="utf-8") as f:
+        traces = json.load(f)
+
+    corrupted = []
+
+    for trace in traces:
+        corrupted.append(inject_compound_failure(trace, failures))
+
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(corrupted, f, indent=2, ensure_ascii=False)
+
+    print(f"Compound dataset saved: {output_path}")
+
+
+# ==========================
 # Main
 # ==========================
 
@@ -206,4 +255,26 @@ if __name__ == "__main__":
 
     # create_distractor_dataset(input_file, "data/failures/single/distractor.json")
 
-    create_reasoning_dataset(input_file, "data/failures/single/reasoning.json")
+    # create_reasoning_dataset(input_file, "data/failures/single/reasoning.json")
+    
+    # for compound failures
+    
+    create_compound_dataset(
+        input_file,
+        "data/failures/compound/M_D.json",
+        ["M", "D"]
+    )
+
+
+    create_compound_dataset(
+        input_file,
+        "data/failures/compound/M_G.json",
+        ["M", "G"]
+    )
+
+
+    create_compound_dataset(
+        input_file,
+        "data/failures/compound/D_G.json",
+        ["D", "G"]
+    )

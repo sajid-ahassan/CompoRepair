@@ -126,7 +126,7 @@
     ],
     "answer_claims": [
       {
-        "claim": "unknown",
+        "claim": "yes",
         "source": "llm_generation"
       }
     ],
@@ -136,7 +136,7 @@
       "conflict": 0.0,
       "decision": "not_evaluated"
     },
-    "final_answer": "unknown",
+    "final_answer": "yes",
     "predicted_failures": [],
     "true_failures": [
       "M"
@@ -148,10 +148,10 @@
     "latency_ms": 0,
     "token_usage": {},
     "evaluation": {
-      "predicted_answer": "unknown",
+      "predicted_answer": "yes",
       "ground_truth": "yes",
-      "exact_match": false,
-      "semantic_correct": false
+      "exact_match": true,
+      "semantic_correct": true
     }
   }
 ]

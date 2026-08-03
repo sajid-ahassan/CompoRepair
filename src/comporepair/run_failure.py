@@ -21,8 +21,6 @@ def generate_from_failure_context(question, documents):
     - Do not use outside knowledge.
     - Do not use your memory.
     - Do not infer missing information.
-    - If the answer is not explicitly present in the context, return exactly:
-    unknown
 
     Output rules:
     - Return only the answer.
