@@ -1,33 +1,49 @@
+import os
+import shutil
+from functools import lru_cache
+
+from dotenv import load_dotenv
 from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
-from dotenv import load_dotenv
+
 load_dotenv()
+
+COLLECTION_NAME = "comporepair_pilot"
+PERSIST_DIRECTORY = "data/chroma_db"
+EMBEDDING_MODEL = "text-embedding-3-small"
+RETRIEVAL_K = 6
+REPAIR_CANDIDATE_K = 10
+
+
+def _embeddings():
+    return OpenAIEmbeddings(model=EMBEDDING_MODEL)
 
 
 def create_vector_store(documents):
-    embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
+    if os.path.isdir(PERSIST_DIRECTORY):
+        shutil.rmtree(PERSIST_DIRECTORY)
 
+    ids = [str(document.metadata["passage_id"]) for document in documents]
     vector_store = Chroma.from_documents(
         documents=documents,
-        embedding=embeddings,
-        collection_name="comporepair_pilot",
-        persist_directory="data/chroma_db",
+        ids=ids,
+        embedding=_embeddings(),
+        collection_name=COLLECTION_NAME,
+        persist_directory=PERSIST_DIRECTORY,
     )
-
+    load_vector_store.cache_clear()
     return vector_store
 
 
+@lru_cache(maxsize=1)
 def load_vector_store():
-    embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
-
-    vector_store = Chroma(
-        collection_name="comporepair_pilot",
-        embedding_function=embeddings,
-        persist_directory="data/chroma_db",
+    return Chroma(
+        collection_name=COLLECTION_NAME,
+        embedding_function=_embeddings(),
+        persist_directory=PERSIST_DIRECTORY,
     )
 
-    return vector_store
 
-
-def get_retriever(vector_store):
-    return vector_store.as_retriever(search_kwargs={"k": 5})
+def get_retriever(vector_store=None, k=RETRIEVAL_K):
+    store = vector_store or load_vector_store()
+    return store.as_retriever(search_kwargs={"k": int(k)})

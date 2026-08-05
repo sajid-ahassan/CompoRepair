@@ -1,99 +1,81 @@
 from copy import deepcopy
-from functools import lru_cache
+from typing import Any, Dict, List, Tuple
 
 from ..retrieval.vector_store import (
-    load_vector_store,
+    REPAIR_CANDIDATE_K,
+    RETRIEVAL_K,
     get_retriever,
 )
 
 
-@lru_cache(maxsize=1)
-def load_repair_retriever():
+def _candidate_to_dict(document) -> Dict[str, Any]:
+    metadata = document.metadata or {}
+    return {
+        "title": metadata.get("title", ""),
+        "passage_id": metadata.get("passage_id", ""),
+        "rank": 0,
+        "text": document.page_content,
+        "score": metadata.get("score", 0.0),
+        "is_supporting": bool(metadata.get("is_supporting", False)),
+        "document_role": metadata.get("document_role", "non_supporting"),
+    }
 
-    vector_store = load_vector_store()
 
-    return get_retriever(vector_store)
+def fill_to_context_size(
+    question: str,
+    documents: List[Dict[str, Any]],
+    target_size: int = RETRIEVAL_K,
+) -> Tuple[List[Dict[str, Any]], List[str]]:
+    selected = [deepcopy(document) for document in documents[:target_size]]
+    selected_ids = {
+        str(document.get("passage_id", ""))
+        for document in selected
+        if document.get("passage_id")
+    }
+    added_ids = []
+
+    if len(selected) < target_size:
+        candidates = get_retriever(k=REPAIR_CANDIDATE_K).invoke(question)
+        for candidate in candidates:
+            candidate_dict = _candidate_to_dict(candidate)
+            candidate_id = str(candidate_dict.get("passage_id", ""))
+            if not candidate_id or candidate_id in selected_ids:
+                continue
+
+            selected.append(candidate_dict)
+            selected_ids.add(candidate_id)
+            added_ids.append(candidate_id)
+            if len(selected) >= target_size:
+                break
+
+    for rank, document in enumerate(selected, start=1):
+        document["rank"] = rank
+
+    return selected, added_ids
 
 
-def repair_missing_evidence(trace: dict) -> dict:
-    repaired_trace = deepcopy(trace)
+def repair_missing_evidence(trace):
+    repaired = deepcopy(trace)
+    before_documents = repaired.get("retrieval_events", [])
+    before_count = len(before_documents)
 
-    retriever = load_repair_retriever()
-
-    docs = retriever.invoke(repaired_trace["question"])
-
-    recovered_documents = []
-
-    for index, doc in enumerate(docs, start=1):
-
-        passage_id = doc.metadata.get("passage_id")
-
-        if not passage_id:
-            continue
-
-        recovered_documents.append(
-            {
-                "title": doc.metadata.get(
-                    "title",
-                    "",
-                ),
-                "passage_id": passage_id,
-                "rank": index,
-                "text": doc.page_content,
-                "document_role": "repair_retrieval",
-            }
-        )
-
-    existing_documents = repaired_trace.get(
-        "retrieval_events",
-        [],
+    final_documents, added_ids = fill_to_context_size(
+        repaired["question"],
+        before_documents,
+        target_size=RETRIEVAL_K,
     )
+    repaired["retrieval_events"] = final_documents
 
-    merged_documents = {}
-
-    for document in recovered_documents:
-
-        passage_id = document.get("passage_id")
-
-        if passage_id:
-            merged_documents[passage_id] = document
-
-    # Preserve existing unique evidence, including distractors.
-    for document in existing_documents:
-
-        passage_id = document.get("passage_id")
-
-        if passage_id and passage_id not in merged_documents:
-            merged_documents[passage_id] = document
-
-    final_documents = list(merged_documents.values())
-
-    # Reset ranks after merging.
-    for index, document in enumerate(
-        final_documents,
-        start=1,
-    ):
-        document["rank"] = index
-
-    repaired_trace["retrieval_events"] = final_documents
-
-    repair_history = list(
-        repaired_trace.get(
-            "repair_history",
-            [],
-        )
-    )
-
-    repair_history.append(
+    history = list(repaired.get("repair_history", []))
+    history.append(
         {
             "failure": "M",
-            "repair": "retrieval_recovery",
-            "documents_before": len(existing_documents),
-            "retrieved_count": len(recovered_documents),
-            "documents_after": len(final_documents),
+            "repair": "expanded_reretrieval_fill",
+            "context_count_before": before_count,
+            "context_count_after": len(final_documents),
+            "recovered_passage_ids": added_ids,
+            "context_restored": len(final_documents) == RETRIEVAL_K,
         }
     )
-
-    repaired_trace["repair_history"] = repair_history
-
-    return repaired_trace
+    repaired["repair_history"] = history
+    return repaired

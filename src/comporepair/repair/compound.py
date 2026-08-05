@@ -1,41 +1,20 @@
-from .missing_evidence import repair_missing_evidence
+from copy import deepcopy
+
 from .distractor import repair_distractor
+from .missing_evidence import repair_missing_evidence
 from .reasoning import repair_reasoning
 
 
 def repair_compound(trace):
-
-    repaired_trace = trace.copy()
-
-    failures = trace.get("true_failures", [])
-
-    repair_history = []
-
-    # Order matters:
-    # 1. Recover evidence
-    # 2. Clean evidence
-    # 3. Improve reasoning
+    repaired = deepcopy(trace)
+    failures = repaired.get("true_failures", [])
 
     if "M" in failures:
-
-        repaired_trace = repair_missing_evidence(repaired_trace)
-
-        repair_history.extend(repaired_trace.get("repair_history", []))
-
+        repaired = repair_missing_evidence(repaired)
     if "D" in failures:
-
-        repaired_trace = repair_distractor(repaired_trace)
-
-        repair_history.extend(repaired_trace.get("repair_history", []))
-
+        repaired = repair_distractor(repaired)
     if "G" in failures:
+        repaired = repair_reasoning(repaired)
 
-        repaired_trace = repair_reasoning(repaired_trace)
-
-        repair_history.extend(repaired_trace.get("repair_history", []))
-
-    repaired_trace["repair_history"] = repair_history
-
-    repaired_trace["repair_type"] = "+".join(failures)
-
-    return repaired_trace
+    repaired["repair_type"] = "+".join(failures)
+    return repaired

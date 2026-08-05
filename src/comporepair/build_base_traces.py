@@ -1,78 +1,120 @@
 import json
-import uuid
-from datasets import load_dataset
-from .pipeline.state import CompoRepairTraceState, SelectedEvidence, VerificationState
+import os
 
+from datasets import load_dataset
 from dotenv import load_dotenv
 
+from .pipeline.state import (
+    CompoRepairTraceState,
+    SelectedEvidence,
+    VerificationState,
+)
+
 load_dotenv()
+
+SAMPLE_START = int(os.getenv("COMPOREPAIR_SAMPLE_START", "0"))
+SAMPLE_SIZE = int(os.getenv("COMPOREPAIR_SAMPLE_SIZE", "20"))
+PARTITION = os.getenv("COMPOREPAIR_PARTITION", "pilot")
+OUTPUT_PATH = "data/processed/pilot_base_traces.json"
 
 
 def main():
     dataset = load_dataset("hotpotqa/hotpot_qa", "distractor", split="validation")
-    pilot_items = dataset.select(range(20))
+    sample_end = min(SAMPLE_START + SAMPLE_SIZE, len(dataset))
+    pilot_items = dataset.select(range(SAMPLE_START, sample_end))
 
-    print("2. Normalizing data into the required trace schema...")
+    print("Normalizing HotpotQA traces...")
     traces = []
-    for item in pilot_items:
-        # Create a simple list to hold the evidence passages
+
+    for pilot_index, item in enumerate(pilot_items):
+        question_id = str(item["id"])
         evidence_list = []
-        titles = item["context"]["title"]
-        sentences = item["context"]["sentences"]
-        supporting_titles = item["supporting_facts"]["title"]
 
-        # Loop through the raw context and build our evidence blocks
-        for index, (title, sent_list) in enumerate(zip(titles, sentences)):
-            passage_text = " ".join(sent_list)
+        supporting_map = {}
+        for title, sent_id in zip(
+            item["supporting_facts"]["title"],
+            item["supporting_facts"]["sent_id"],
+        ):
+            supporting_map.setdefault(str(title).strip(), []).append(int(sent_id))
 
-            evidence = SelectedEvidence(
-                passage_id=f"{item['id']}_p_{index}",
-                rank=index + 1,
-                observable_signals={},
-                title=title,
-                text=passage_text,
-                is_supporting=title in supporting_titles,
-                document_role=(
-                    "supporting" if title in supporting_titles else "non_supporting"
-                ),
+        for index, (title, sentences) in enumerate(
+            zip(item["context"]["title"], item["context"]["sentences"])
+        ):
+            title = str(title).strip()
+            text = " ".join(
+                str(sentence).strip()
+                for sentence in sentences
+                if str(sentence).strip()
+            ).strip()
+            supporting_sentence_ids = supporting_map.get(title, [])
+            is_supporting = bool(supporting_sentence_ids)
+
+            evidence_list.append(
+                SelectedEvidence(
+                    passage_id=f"{question_id}_p_{index}",
+                    rank=index + 1,
+                    observable_signals={
+                        "supporting_sentence_ids": supporting_sentence_ids,
+                        "context_index": index,
+                    },
+                    title=title,
+                    text=text,
+                    is_supporting=is_supporting,
+                    document_role=(
+                        "supporting" if is_supporting else "non_supporting"
+                    ),
+                )
             )
-            evidence_list.append(evidence)
 
-        # Build the final trace state dictionary
-        trace = CompoRepairTraceState(
-            trace_id=str(uuid.uuid4()),
-            question_id=item["id"],
-            dataset="hotpotqa",
-            partition="pilot",
-            experiment_stage="base_trace",
-            dataset_metadata={"type": item["type"], "level": item["level"]},
-            question=item["question"],
-            canonical_answer=item["answer"],  # EVALUATION_ONLY[cite: 1]
-            answer_aliases=[],
-            retrieval_events=[],
-            selected_evidence=evidence_list,
-            answer_claims=[],
-            verification=VerificationState(
-                support=0.0, completeness=0.0, conflict=0.0, decision=""
-            ),
-            final_answer="",
-            predicted_failures=[],
-            true_failures=[],  # EVALUATION_ONLY[cite: 1]
-            failure_after_repair=[],  # EVALUATION_ONLY[cite: 1]
-            repair_history=[],
-            model_manifest={},
-            prompt_hashes={},
-            latency_ms=0,
-            token_usage={},
+        traces.append(
+            CompoRepairTraceState(
+                trace_id=f"hotpotqa_{question_id}",
+                question_id=question_id,
+                dataset="hotpotqa",
+                partition=PARTITION,
+                experiment_stage="base_trace",
+                dataset_metadata={
+                    "type": item["type"],
+                    "level": item["level"],
+                    "config": "distractor",
+                    "split": "validation",
+                    "sample_index": pilot_index,
+                    "dataset_index": SAMPLE_START + pilot_index,
+                },
+                question=str(item["question"]).strip(),
+                canonical_answer=str(item["answer"]).strip(),
+                answer_aliases=[],
+                retrieval_events=[],
+                selected_evidence=evidence_list,
+                answer_claims=[],
+                verification=VerificationState(
+                    support=0.0,
+                    completeness=0.0,
+                    conflict=0.0,
+                    decision="",
+                ),
+                baseline_answer="",
+                failure_answer="",
+                final_answer="",
+                predicted_failures=[],
+                true_failures=[],
+                failure_history=[],
+                failure_after_repair=[],
+                new_failures_after_repair=[],
+                regression_detected=False,
+                repair_history=[],
+                model_manifest={},
+                prompt_hashes={},
+                latency_ms=0,
+                token_usage={},
+            )
         )
-        traces.append(trace)
 
-    print("3. Saving processed traces to disk...")
-    # Save the normalized data as a JSON file
-    with open("data/processed/pilot_base_traces.json", "w", encoding="utf-8") as f:
-        json.dump(traces, f, indent=2)
+    os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
+    with open(OUTPUT_PATH, "w", encoding="utf-8") as file:
+        json.dump(traces, file, indent=2, ensure_ascii=False)
 
-    print("Done! Check 'data/processed/pilot_base_traces.json' to see your clean data.")
+    print(f"Created {len(traces)} traces: {OUTPUT_PATH}")
 
 
 if __name__ == "__main__":

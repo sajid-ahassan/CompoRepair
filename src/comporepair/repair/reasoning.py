@@ -1,106 +1,67 @@
-import json
-
-from langchain_openai import ChatOpenAI
-from dotenv import load_dotenv
-from ..pipeline.baseline_rag import generation_llm
-load_dotenv()
+from copy import deepcopy
+from typing import Any, Dict
 
 
-reasoning_llm = generation_llm
+def _find_step(plan: Dict[str, Any], step_id: str) -> Dict[str, Any]:
+    for step in plan.get("steps", []):
+        if str(step.get("id", "")) == step_id:
+            return step
+    return {}
 
 
-def verify_answer(question, evidence, answer):
+def repair_reasoning(trace: Dict[str, Any]) -> Dict[str, Any]:
+    """Remove the G intervention before normal answer regeneration.
 
-    prompt = f"""
-
-    Check whether the answer is supported by the evidence.
-
-    Question:
-    {question}
-
-
-    Evidence:
-    {evidence}
-
-
-    Generated Answer:
-    {answer}
-
-
-    Strictly Return ONLY valid JSON:
-
-    {{
-        "supported": true,
-        "corrected_answer": "",
-        "reason": ""
-    }}
-
-
-    Strictly Required Rules:
-
-    - supported=true if the answer is directly supported by evidence.
-    - supported=false if the answer is unsupported or incorrect.
-    - If unsupported, provide the best answer using only the evidence.
-            Answer format:
-            - For yes/no questions, return only: yes or no.
-            - For names, locations, dates, organizations, or titles, return only that value.
-            - For other questions, return only the core answer.
-    
+    G failure generation executes ``corrupted_reasoning_plan``. During repair,
+    the clean plan is restored only as an auditable repair action. The final
+    repaired answer is intentionally generated later by the normal generator
+    in ``run_repair.py`` for every failure condition.
     """
+    repaired = deepcopy(trace)
 
-    response = reasoning_llm.invoke(prompt)
+    clean_plan = repaired.get("reasoning_plan", {})
+    corrupted_plan = repaired.get("corrupted_reasoning_plan", {})
+    restored_step_id = str(repaired.get("g_corrupted_step_id", ""))
+    restored_dependency = str(repaired.get("g_removed_dependency", ""))
 
-    return parse_verification(response.content)
+    clean_step = _find_step(clean_plan, restored_step_id)
+    corrupted_step = _find_step(corrupted_plan, restored_step_id)
+    clean_dependencies = {
+        str(item) for item in clean_step.get("depends_on", [])
+    }
+    corrupted_dependencies = {
+        str(item) for item in corrupted_step.get("depends_on", [])
+    }
 
-
-def parse_verification(response):
-
-    try:
-
-        result = json.loads(response)
-
-        return {
-            "supported": result.get("supported", False),
-            "corrected_answer": result.get("corrected_answer", ""),
-            "reason": result.get("reason", ""),
-        }
-
-    except Exception:
-
-        return {"supported": False, "corrected_answer": "", "reason": "Parsing failed"}
-
-
-def repair_reasoning(trace):
-
-    repaired_trace = trace.copy()
-
-    context = "\n\n".join(doc["text"] for doc in trace["retrieval_events"])
-
-    # Existing answer from failed run
-
-    old_answer = trace.get("final_answer", "")
-
-    verification = verify_answer(trace["question"], context, old_answer)
-
-    if verification["supported"]:
-
-        repaired_answer = old_answer
-
-    else:
-
-        repaired_answer = verification["corrected_answer"]
-
-    repaired_trace["final_answer"] = repaired_answer
-
-    history = list(repaired_trace.get("repair_history", []))
-    history.append(
-        {
-            "failure": "G",
-            "repair": "answer_verification",
-            "verification": verification,
-        }
+    dependency_restored = bool(
+        restored_step_id
+        and restored_dependency
+        and restored_dependency in clean_dependencies
+        and restored_dependency not in corrupted_dependencies
     )
 
-    repaired_trace["repair_history"] = history
+    # Preserve the failure-stage planned outputs for audit, but do not leave
+    # them marked as outputs of the repaired normal-generation stage.
+    failure_outputs = deepcopy(repaired.get("reasoning_outputs", {}))
+    if failure_outputs:
+        repaired["failure_reasoning_outputs"] = failure_outputs
+    repaired["reasoning_outputs"] = {}
 
-    return repaired_trace
+    # Restore the clean plan only as auditable state. It is never passed to
+    # the repair-stage answer generator, which receives only question and
+    # repaired retrieval evidence.
+    repaired["repaired_reasoning_plan"] = deepcopy(clean_plan)
+    repaired["g_intervention_active"] = False
+
+    repaired.setdefault("repair_history", []).append(
+        {
+            "failure": "G",
+            "repair": "restore_reasoning_dependency",
+            "restored_step_id": restored_step_id,
+            "restored_dependency": restored_dependency,
+            "dependency_restored": dependency_restored,
+            "generation_mode": "normal",
+            "generation_pending": True,
+        }
+    )
+    return repaired

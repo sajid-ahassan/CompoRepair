@@ -1,171 +1,125 @@
 import json
-from langchain_openai import ChatOpenAI
-from dotenv import load_dotenv
-from langchain_core.prompts import ChatPromptTemplate
+import os
+from copy import deepcopy
 
-from .run_baseline import evaluate_answer, normalize_answer
-from .pipeline.baseline_rag import semantic_evaluation
-
-load_dotenv()
-from .models.local_llm import get_local_ollama_llm
-generation_llm = get_local_ollama_llm()
-
-# ==========================
-# Prompt Templates
-# ==========================
-
-BASE_PROMPT = ChatPromptTemplate.from_messages(
-    [
-        (
-            "system",
-            """
-
-Answer the question using only the provided evidence.
-
-Rules:
-- Do not use outside knowledge.
-- Do not use your memory.
-- Return only the core answer.
-- Do not explain.
-- Do not provide reasoning.
-- Do not add extra words.
-
-Answer format:
-- For yes/no questions, return only yes or no.
-- For names, locations, dates, organizations, or titles, return only that value.
-- For other questions, return only the core answer.
-""",
-        ),
-        (
-            "human",
-            """
-Question:
-{question}
-
-Evidence:
-{context}
-
-Answer:
-""",
-        ),
-    ]
+from .pipeline.baseline_rag import (
+    evaluate_prediction,
+    generate_answer,
+    generate_plan_final_answer,
+    generate_planned_answer,
+    model_manifest,
 )
 
-
-G_PROMPT = ChatPromptTemplate.from_messages(
-    [
-        (
-            "system",
-            """
-
-Answer the question using only the provided evidence.
-
-Rules:
-- Do not use outside knowledge.
-- Prefer directly stated information.
-- Avoid complex connections between separate passages.
-- Return only the core answer.
-- Do not explain.
-- Do not provide reasoning.
-- Do not add extra words.
-
-Answer format:
-- For yes/no questions, return only yes or no.
-- For names, locations, dates, organizations, or titles, return only that value.
-- For other questions, return only the core answer.
-""",
-        ),
-        (
-            "human",
-            """
-Question:
-{question}
-
-Evidence:
-{context}
-
-Answer:
-""",
-        ),
-    ]
-)
+EXPERIMENTS = [
+    (
+        "M",
+        "data/failures/single/missing_evidence.json",
+        "data/results/single/missing_evidence_results.json",
+    ),
+    (
+        "D",
+        "data/failures/single/distractor.json",
+        "data/results/single/distractor_results.json",
+    ),
+    (
+        "G",
+        "data/failures/single/reasoning.json",
+        "data/results/single/reasoning_results.json",
+    ),
+]
 
 
-def select_prompt(failure_type):
-
-    if failure_type == "G":
-        return G_PROMPT
-
-    return BASE_PROMPT
-
-
-def generate_answer(question, documents, failure_type):
-
-    context = "\n\n".join(doc["text"] for doc in documents)
-
-    prompt = select_prompt(failure_type)
-    
-
-    messages = prompt.invoke({"question": question, "context": context})
-    response = generation_llm.invoke(messages)
-
-    return response.content.strip()
-
-
-def run_single_failure(input_path, output_path, failure_type):
-
-    with open(input_path, "r", encoding="utf-8") as f:
-
-        traces = json.load(f)
+def run_single_failure(input_path: str, output_path: str, failure_type: str) -> None:
+    with open(input_path, "r", encoding="utf-8") as file:
+        traces = json.load(file)
 
     results = []
-    i = 0
-    for trace in traces:
+    for index, source_trace in enumerate(traces, start=1):
+        trace = deepcopy(source_trace)
 
-        answer = generate_answer(
-            trace["question"], trace["retrieval_events"], failure_type
+        clean_control = None
+        if failure_type == "G":
+            generation = generate_planned_answer(
+                trace["question"],
+                trace["retrieval_events"],
+                plan=trace["corrupted_reasoning_plan"],
+            )
+            clean_control = generate_plan_final_answer(
+                trace["question"],
+                trace["reasoning_plan"],
+                generation.get("reasoning_outputs", {}),
+            )
+        else:
+            generation = generate_answer(
+                trace["question"],
+                trace["retrieval_events"],
+            )
+
+        answer = generation["text"]
+        evaluation = evaluate_prediction(
+            trace["question"],
+            answer,
+            trace["canonical_answer"],
+            generation["generation_failed"],
         )
 
+        trace["experiment_stage"] = f"single_failure_result_{failure_type}"
+        trace["failure_answer"] = answer
         trace["final_answer"] = answer
-
-        trace["answer_claims"] = [{"claim": answer, "source": "llm_generation"}]
-
-        trace["evaluation"] = {
-            "predicted_answer": normalize_answer(answer),
-            "ground_truth": normalize_answer(trace["canonical_answer"]),
-            "exact_match": evaluate_answer(answer, trace["canonical_answer"]),
-            "semantic_correct": semantic_evaluation(
-                trace["question"], trace["canonical_answer"], answer
-            ),
-        }
+        trace["failure_evaluation"] = evaluation
+        trace["evaluation"] = evaluation
+        if failure_type == "G":
+            trace["reasoning_outputs"] = generation["reasoning_outputs"]
+            control_answer = str(clean_control.get("text", "") or "")
+            trace["g_clean_control_answer"] = control_answer
+            trace["g_clean_control_evaluation"] = evaluate_prediction(
+                trace["question"],
+                control_answer,
+                trace["canonical_answer"],
+                clean_control.get("generation_failed", False),
+            )
+            trace["g_clean_control_reused_reasoning_outputs"] = True
+            trace["g_clean_control_latency_ms"] = int(
+                clean_control.get("latency_ms", 0)
+            )
+            trace["g_clean_control_token_usage"] = clean_control.get(
+                "token_usage", {}
+            )
+        trace["answer_claims"] = [
+            {
+                "claim": answer,
+                "source": f"single_failure_{failure_type}",
+                "evidence_ids": [
+                    item.get("passage_id", "")
+                    for item in trace.get("retrieval_events", [])
+                ],
+            }
+        ]
+        trace["model_manifest"] = model_manifest()
+        prompt_hashes = dict(trace.get("prompt_hashes", {}))
+        prompt_hashes[f"failure_{failure_type}"] = generation["prompt_hash"]
+        if clean_control is not None:
+            prompt_hashes["g_clean_control"] = clean_control.get(
+                "prompt_hash", ""
+            )
+        trace["prompt_hashes"] = prompt_hashes
+        trace["latency_ms"] = int(generation["latency_ms"])
+        trace["token_usage"] = generation["token_usage"]
 
         results.append(trace)
-        print(f"Single failure processed trace {i+1}")
-        i += 1
+        print(f"{failure_type} processed trace {index}/{len(traces)}")
 
-    with open(output_path, "w", encoding="utf-8") as f:
-
-        json.dump(results, f, indent=2, ensure_ascii=False)
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    with open(output_path, "w", encoding="utf-8") as file:
+        json.dump(results, file, indent=2, ensure_ascii=False)
 
     print(f"Saved: {output_path}")
 
 
+def main():
+    for failure_type, input_path, output_path in EXPERIMENTS:
+        run_single_failure(input_path, output_path, failure_type)
+
+
 if __name__ == "__main__":
-
-    run_single_failure(
-        "data/failures/single/missing_evidence.json",
-        "data/results/single/missing_evidence_results.json",
-        "M",
-    )
-
-    run_single_failure(
-        "data/failures/single/distractor.json",
-        "data/results/single/distractor_results.json",
-        "D",
-    )
-
-    run_single_failure(
-        "data/failures/single/reasoning.json",
-        "data/results/single/reasoning_results.json",
-        "G",
-    )
+    main()

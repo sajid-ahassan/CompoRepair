@@ -1,168 +1,130 @@
 import json
 import os
+from copy import deepcopy
 
-from langchain_core.prompts import ChatPromptTemplate
-from .run_baseline import evaluate_answer, normalize_answer
-from .pipeline.baseline_rag import semantic_evaluation
-from .models.local_llm import get_local_ollama_llm
-generation_llm = get_local_ollama_llm()
-
-STANDARD_PROMPT = ChatPromptTemplate.from_messages(
-    [
-        (
-            "system",
-            """
-Answer the question using only the provided evidence.
-
-Rules:
-- Return only the final answer.
-- Return the shortest possible answer.
-- Do not explain.
-- Do not provide reasoning.
-- Do not write complete sentences.
-- Do not add phrases like "The answer is".
-
-Answer format:
-- For yes/no questions, return only: yes or no.
-- For names, locations, dates, organizations, or titles, return only that value.
-- For other questions, return only the core answer.
-""",
-        ),
-        (
-            "human",
-            """
-Question:
-{question}
-
-Evidence:
-{context}
-
-Answer:
-""",
-        ),
-    ]
+from .pipeline.baseline_rag import (
+    evaluate_prediction,
+    generate_answer,
+    generate_plan_final_answer,
+    generate_planned_answer,
+    model_manifest,
 )
 
-G_FAILURE_PROMPT = ChatPromptTemplate.from_messages(
-    [
-        (
-            "system",
-            """
-
-Answer the question using only the provided evidence.
-
-Rules:
-- Do not use outside knowledge.
-- Do not use your memory.
-- Prefer directly stated information.
-- Avoid complex connections between separate passages.
-- Return only the core answer.
-- Do not explain.
-- Do not provide reasoning.
-- Do not add extra words.
-
-
-Answer format:
-- For yes/no questions, return only: yes or no.
-- For names, locations, dates, organizations, or titles, return only that value.
-- For other questions, return only the core answer.
-""",
-        ),
-        (
-            "human",
-            """
-Question:
-{question}
-
-Evidence:
-{context}
-
-Answer:
-""",
-        ),
-    ]
-)
+EXPERIMENTS = [
+    (
+        ["M", "D"],
+        "data/failures/compound/M_D.json",
+        "data/results/compound/M_D_results.json",
+    ),
+    (
+        ["M", "G"],
+        "data/failures/compound/M_G.json",
+        "data/results/compound/M_G_results.json",
+    ),
+    (
+        ["D", "G"],
+        "data/failures/compound/D_G.json",
+        "data/results/compound/D_G_results.json",
+    ),
+]
 
 
-def select_prompt(failures: list[str]) -> ChatPromptTemplate:
-    if "G" in failures:
-        return G_FAILURE_PROMPT
+def run_compound_failure(
+    input_path: str,
+    output_path: str,
+    failures,
+) -> None:
+    with open(input_path, "r", encoding="utf-8") as file:
+        traces = json.load(file)
 
-    return STANDARD_PROMPT
-
-
-def generate_from_compound_context(
-    question: str,
-    documents: list[dict],
-    failures: list[str],
-) -> str:
-
-    context = "\n\n".join(document["text"] for document in documents)
-
-    prompt_template = select_prompt(failures)
-
-    messages = prompt_template.invoke(
-        {
-            "question": question,
-            "context": context,
-        }
-    )
-
-    response = generation_llm.invoke(messages)
-
-    return response.content.strip()
-
-
-def run_compound_failure(input_path, output_path):
-
-    with open(input_path, "r", encoding="utf-8") as f:
-        traces = json.load(f)
-
+    label = "_".join(failures)
     results = []
-    i = 0
-    for trace in traces:
+    for index, source_trace in enumerate(traces, start=1):
+        trace = deepcopy(source_trace)
 
-        answer = generate_from_compound_context(
-            trace["question"], trace["retrieval_events"], trace["true_failures"]
+        clean_control = None
+        if "G" in trace["true_failures"]:
+            generation = generate_planned_answer(
+                trace["question"],
+                trace["retrieval_events"],
+                plan=trace["corrupted_reasoning_plan"],
+            )
+            clean_control = generate_plan_final_answer(
+                trace["question"],
+                trace["reasoning_plan"],
+                generation.get("reasoning_outputs", {}),
+            )
+        else:
+            generation = generate_answer(
+                trace["question"],
+                trace["retrieval_events"],
+            )
+
+        answer = generation["text"]
+        evaluation = evaluate_prediction(
+            trace["question"],
+            answer,
+            trace["canonical_answer"],
+            generation["generation_failed"],
         )
-        
-        print(f"Processed trace: {trace['question']}")
 
+        trace["experiment_stage"] = f"compound_failure_result_{label}"
+        trace["failure_answer"] = answer
         trace["final_answer"] = answer
-
-        trace["answer_claims"] = [{"claim": answer, "source": "llm_generation"}]
-
-        trace["evaluation"] = {
-            "predicted_answer": normalize_answer(answer),
-            "ground_truth": normalize_answer(trace["canonical_answer"]),
-            "exact_match": evaluate_answer(answer, trace["canonical_answer"]),
-            "semantic_correct": semantic_evaluation(
-                trace["question"], trace["canonical_answer"], answer
-            ),
-        }
+        trace["failure_evaluation"] = evaluation
+        trace["evaluation"] = evaluation
+        if "G" in trace["true_failures"]:
+            trace["reasoning_outputs"] = generation["reasoning_outputs"]
+            control_answer = str(clean_control.get("text", "") or "")
+            trace["g_clean_control_answer"] = control_answer
+            trace["g_clean_control_evaluation"] = evaluate_prediction(
+                trace["question"],
+                control_answer,
+                trace["canonical_answer"],
+                clean_control.get("generation_failed", False),
+            )
+            trace["g_clean_control_reused_reasoning_outputs"] = True
+            trace["g_clean_control_latency_ms"] = int(
+                clean_control.get("latency_ms", 0)
+            )
+            trace["g_clean_control_token_usage"] = clean_control.get(
+                "token_usage", {}
+            )
+        trace["answer_claims"] = [
+            {
+                "claim": answer,
+                "source": f"compound_failure_{label}",
+                "evidence_ids": [
+                    item.get("passage_id", "")
+                    for item in trace.get("retrieval_events", [])
+                ],
+            }
+        ]
+        trace["model_manifest"] = model_manifest()
+        prompt_hashes = dict(trace.get("prompt_hashes", {}))
+        prompt_hashes[f"failure_{label}"] = generation["prompt_hash"]
+        if clean_control is not None:
+            prompt_hashes["g_clean_control"] = clean_control.get(
+                "prompt_hash", ""
+            )
+        trace["prompt_hashes"] = prompt_hashes
+        trace["latency_ms"] = int(generation["latency_ms"])
+        trace["token_usage"] = generation["token_usage"]
 
         results.append(trace)
-        print(f"Compound failure processed trace {i+1}")
-        i += 1
+        print(f"{label} processed trace {index}/{len(traces)}")
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    with open(output_path, "w", encoding="utf-8") as file:
+        json.dump(results, file, indent=2, ensure_ascii=False)
 
-    with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(results, f, indent=2, ensure_ascii=False)
+    print(f"Saved: {output_path}")
 
-    print(f"Compound results saved: {output_path}")
+
+def main():
+    for failures, input_path, output_path in EXPERIMENTS:
+        run_compound_failure(input_path, output_path, failures)
 
 
 if __name__ == "__main__":
-
-    run_compound_failure(
-        "data/failures/compound/M_D.json", "data/results/compound/M_D_results.json"
-    )
-
-    run_compound_failure(
-        "data/failures/compound/M_G.json", "data/results/compound/M_G_results.json"
-    )
-
-    run_compound_failure(
-        "data/failures/compound/D_G.json", "data/results/compound/D_G_results.json"
-    )
+    main()
