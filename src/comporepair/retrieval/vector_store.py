@@ -5,18 +5,20 @@ from functools import lru_cache
 from dotenv import load_dotenv
 from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
+from langchain_ollama import OllamaEmbeddings
 
 load_dotenv()
 
 COLLECTION_NAME = "comporepair_pilot"
 PERSIST_DIRECTORY = "data/chroma_db"
 EMBEDDING_MODEL = "text-embedding-3-small"
-RETRIEVAL_K = 6
-REPAIR_CANDIDATE_K = 10
+RETRIEVAL_K = 12
+REPAIR_CANDIDATE_K = 20
 
 
 def _embeddings():
     return OpenAIEmbeddings(model=EMBEDDING_MODEL)
+    # return OllamaEmbeddings(model=EMBEDDING_MODEL,dimensions=2560)
 
 
 def create_vector_store(documents):

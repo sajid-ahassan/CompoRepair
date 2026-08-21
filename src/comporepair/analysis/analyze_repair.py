@@ -11,16 +11,64 @@ BOOTSTRAP_SEED = 42
 EXPERIMENTS = {
     "M": "data/repaired_result/M_repair_results.json",
     "D": "data/repaired_result/D_repair_results.json",
-    "G": "data/repaired_result/G_repair_results.json",
-    "M_D": "data/repaired_result/M_D_repair_results.json",
-    "M_G": "data/repaired_result/M_G_repair_results.json",
-    "D_G": "data/repaired_result/D_G_repair_results.json",
+    "L": "data/repaired_result/L_repair_results.json",
+    "M_D_fixed": "data/repaired_result/M_D_repair_results.json",
+    "M_D_reverse": "data/repaired_result/M_D_reverse_repair_results.json",
+    "M_D_safe": "data/repaired_result/M_D_safe_repair_results.json",
+    "M_L_fixed": "data/repaired_result/M_L_repair_results.json",
+    "M_L_reverse": "data/repaired_result/M_L_reverse_repair_results.json",
+    "M_L_safe": "data/repaired_result/M_L_safe_repair_results.json",
+    "D_L_fixed": "data/repaired_result/D_L_repair_results.json",
+    "D_L_reverse": "data/repaired_result/D_L_reverse_repair_results.json",
+    "D_L_safe": "data/repaired_result/D_L_safe_repair_results.json",
+    "M_D_L_fixed": "data/repaired_result/M_D_L_repair_results.json",
+    "M_D_L_reverse": "data/repaired_result/M_D_L_reverse_repair_results.json",
+    "M_D_L_safe": "data/repaired_result/M_D_L_safe_repair_results.json",
+    "M_D_b2": "data/repaired_result/M_D_b2_repair_results.json",
+    "M_D_b3": "data/repaired_result/M_D_b3_repair_results.json",
+    "M_L_b2": "data/repaired_result/M_L_b2_repair_results.json",
+    "M_L_b3": "data/repaired_result/M_L_b3_repair_results.json",
+    "D_L_b2": "data/repaired_result/D_L_b2_repair_results.json",
+    "D_L_b3": "data/repaired_result/D_L_b3_repair_results.json",
+    "M_D_L_b2": "data/repaired_result/M_D_L_b2_repair_results.json",
+    "M_D_L_b3": "data/repaired_result/M_D_L_b3_repair_results.json",
 }
 
-COMPOUNDS = {
-    "M_D": ("M", "D"),
-    "M_G": ("M", "G"),
-    "D_G": ("D", "G"),
+FAILURE_RESULTS = {
+    "M_D": "data/results/compound/M_D_results.json",
+    "M_L": "data/results/compound/M_L_results.json",
+    "D_L": "data/results/compound/D_L_results.json",
+    "M_D_L": "data/results/compound/M_D_L_results.json",
+}
+
+OPTIONAL_BASELINE_METHODS = {
+    "M_D": {"b2": "M_D_b2", "b3": "M_D_b3"},
+    "M_L": {"b2": "M_L_b2", "b3": "M_L_b3"},
+    "D_L": {"b2": "D_L_b2", "b3": "D_L_b3"},
+    "M_D_L": {"b2": "M_D_L_b2", "b3": "M_D_L_b3"},
+}
+
+METHOD_GROUPS = {
+    "M_D": {
+        "fixed": "M_D_fixed",
+        "reverse": "M_D_reverse",
+        "safe": "M_D_safe",
+    },
+    "M_L": {
+        "fixed": "M_L_fixed",
+        "reverse": "M_L_reverse",
+        "safe": "M_L_safe",
+    },
+    "D_L": {
+        "fixed": "D_L_fixed",
+        "reverse": "D_L_reverse",
+        "safe": "D_L_safe",
+    },
+    "M_D_L": {
+        "fixed": "M_D_L_fixed",
+        "reverse": "M_D_L_reverse",
+        "safe": "M_D_L_safe",
+    },
 }
 
 
@@ -30,18 +78,86 @@ def load_results(path: str) -> List[Dict[str, Any]]:
 
 
 def _before(trace: Dict[str, Any]) -> Dict[str, Any]:
-    return trace.get("failure_evaluation") or {}
+    return trace.get("failure_evaluation") or trace.get("evaluation", {})
 
 
 def _after(trace: Dict[str, Any]) -> Dict[str, Any]:
     return trace.get("repair_evaluation") or trace.get("evaluation", {})
 
 
+def _evaluation_evaluable(evaluation: Dict[str, Any]) -> bool:
+    return bool(
+        not evaluation.get("generation_failed", False)
+        and not evaluation.get("semantic_judge_error", False)
+    )
+
+
+def _trace_timed_out(trace: Dict[str, Any]) -> bool:
+    """
+    Detect a timeout only when a saved trace explicitly records one.
+
+    If your runner completely skips timed-out traces, they will simply be
+    absent from the result file. method_comparison() handles those by taking
+    the trace-ID intersection across fixed/reverse/Safe.
+
+    This helper intentionally avoids treating a configured timeout duration
+    (for example timeout=60) as an actual timeout event.
+    """
+    containers = [
+        trace,
+        trace.get("runtime", {}),
+        trace.get("execution", {}),
+        trace.get("technical", {}),
+        trace.get("repair_evaluation", {}),
+    ]
+
+    true_flags = {
+        "technical_timeout",
+        "timed_out",
+        "timeout_occurred",
+        "repair_timeout",
+    }
+
+    for container in containers:
+        if not isinstance(container, dict):
+            continue
+
+        for key in true_flags:
+            if container.get(key) is True:
+                return True
+
+        for key in ("technical_status", "execution_status", "status"):
+            value = str(container.get(key, "")).strip().lower()
+            if value in {"timeout", "timed_out", "technical_timeout"}:
+                return True
+
+        error_value = str(container.get("technical_error", "")).strip().lower()
+        if "timeout" in error_value:
+            return True
+
+    return False
+
+
+def _pair_evaluable(
+    trace: Dict[str, Any],
+    before: Dict[str, Any],
+    after: Dict[str, Any],
+) -> bool:
+    return bool(
+        not _trace_timed_out(trace)
+        and _evaluation_evaluable(before)
+        and _evaluation_evaluable(after)
+    )
+
+
 def _percentile(values: List[float], fraction: float) -> float:
     if not values:
         return 0.0
     ordered = sorted(values)
-    index = min(len(ordered) - 1, max(0, int(round(fraction * (len(ordered) - 1)))))
+    index = min(
+        len(ordered) - 1,
+        max(0, int(round(fraction * (len(ordered) - 1)))),
+    )
     return ordered[index]
 
 
@@ -56,281 +172,556 @@ def bootstrap_mean_ci(values: List[float]) -> List[float]:
     return [_percentile(estimates, 0.025), _percentile(estimates, 0.975)]
 
 
+def _supporting_ids(trace: Dict[str, Any]) -> set:
+    explicit = {
+        str(item)
+        for item in trace.get("gold_supporting_passage_ids", [])
+        if item
+    }
+    if explicit:
+        return explicit
+    return {
+        str(item.get("passage_id", ""))
+        for item in trace.get("selected_evidence", [])
+        if item.get("is_supporting", False) and item.get("passage_id")
+    }
+
+
+def _failure_history_ids(
+    trace: Dict[str, Any], failure: str, field: str
+) -> set:
+    values = set()
+    for item in trace.get("failure_history", []):
+        if item.get("failure") != failure:
+            continue
+        value = item.get(field, [])
+        if isinstance(value, list):
+            values.update(str(entry) for entry in value if entry)
+        elif value:
+            values.add(str(value))
+    return values
+
+
 def calculate_metrics(traces: List[Dict[str, Any]]) -> Dict[str, Any]:
     total = len(traces)
-    before_em = []
-    after_em = []
-    before_f1 = []
-    after_f1 = []
-    before_sem = []
-    after_sem = []
+
+    before_em: List[float] = []
+    after_em: List[float] = []
+    before_f1: List[float] = []
+    after_f1: List[float] = []
+    before_sem: List[float] = []
+    after_sem: List[float] = []
+    gain_values: List[float] = []
+    recovery_values: List[float] = []
+    regression_values: List[float] = []
 
     recovered = 0
     regressed = 0
     stayed_correct = 0
     stayed_wrong = 0
+    indeterminate = 0
 
     remaining = Counter()
     new_failures = Counter()
     regression_detected = 0
-    generation_failures = 0
-    judge_errors = 0
+    new_failure_trace_count = 0
+    fully_repaired = 0
 
-    m_context_restored = 0
-    m_added_passages = 0
+    m_restored = 0
     d_removed = 0
-    d_correct_evidence_removed = 0
-    d_unresolved = 0
-    d_detector_failed = 0
-    g_answer_kept = 0
-    g_answer_regenerated = 0
-    g_generation_failed = 0
-    g_dependency_restored = 0
-    g_restoration_mismatch = 0
+    l_rewrite_applied = 0
+    l_no_repair_needed = 0
+    l_technical_errors = 0
+    safe_kept_steps = 0
+    safe_reverted_steps = 0
+    safe_planned_orders = Counter()
+    safe_planner_errors = 0
+    safe_step_errors = 0
 
-    semantic_gain_values = []
-    new_failure_values = []
+    saved_timeout_count = 0
 
     for trace in traces:
         before = _before(trace)
         after = _after(trace)
-        before_exact = bool(before.get("exact_match", False))
-        after_exact = bool(after.get("exact_match", False))
-        before_correct = bool(before.get("semantic_correct", False))
-        after_correct = bool(after.get("semantic_correct", False))
 
-        before_em.append(float(before_exact))
-        after_em.append(float(after_exact))
+        if _trace_timed_out(trace):
+            saved_timeout_count += 1
+
+        # Keep the original full-run EM/F1 summaries for compatibility.
+        # Technical timeout handling for fair cross-method comparison happens
+        # in method_comparison(), where all methods use the same jointly
+        # evaluable trace subset.
+        before_em.append(float(bool(before.get("exact_match", False))))
+        after_em.append(float(bool(after.get("exact_match", False))))
         before_f1.append(float(before.get("token_f1", 0.0)))
         after_f1.append(float(after.get("token_f1", 0.0)))
-        before_sem.append(float(before_correct))
-        after_sem.append(float(after_correct))
-        semantic_gain_values.append(float(after_correct) - float(before_correct))
 
-        if not before_correct and after_correct:
-            recovered += 1
-        elif before_correct and not after_correct:
-            regressed += 1
-        elif before_correct and after_correct:
-            stayed_correct += 1
+        if _pair_evaluable(trace, before, after):
+            b = bool(before.get("semantic_correct", False))
+            a = bool(after.get("semantic_correct", False))
+
+            before_sem.append(float(b))
+            after_sem.append(float(a))
+            gain_values.append(float(a) - float(b))
+
+            if not b:
+                recovery_values.append(float(a))
+            if b:
+                regression_values.append(float(not a))
+
+            if not b and a:
+                recovered += 1
+            elif b and not a:
+                regressed += 1
+            elif b and a:
+                stayed_correct += 1
+            else:
+                stayed_wrong += 1
+
+            if a and not trace.get("failure_after_repair", []):
+                fully_repaired += 1
         else:
-            stayed_wrong += 1
+            indeterminate += 1
 
         remaining.update(trace.get("failure_after_repair", []))
-        new_failures.update(trace.get("new_failures_after_repair", []))
-        detected = bool(trace.get("regression_detected", False))
-        regression_detected += detected
-        new_failure_values.append(float(detected))
-        generation_failures += bool(after.get("generation_failed", False))
-        judge_errors += bool(after.get("semantic_judge_error", False))
+
+        trace_new_failures = trace.get("new_failures_after_repair", [])
+        new_failures.update(trace_new_failures)
+        new_failure_trace_count += bool(trace_new_failures)
+        regression_detected += bool(trace.get("regression_detected", False))
 
         final_ids = {
-            str(document.get("passage_id", ""))
-            for document in trace.get("retrieval_events", [])
+            str(item.get("passage_id", ""))
+            for item in trace.get("retrieval_events", [])
+            if item.get("passage_id")
         }
-        failure_d = next(
-            (
-                item
-                for item in trace.get("failure_history", [])
-                if item.get("failure") == "D"
-            ),
-            None,
-        )
+
+        missing_ids = _failure_history_ids(trace, "M", "removed_passage_ids")
+        distractor_ids = _failure_history_ids(trace, "D", "distractor_passage_id")
+
+        if missing_ids:
+            m_restored += missing_ids.issubset(final_ids)
+        if distractor_ids:
+            d_removed += distractor_ids.isdisjoint(final_ids)
 
         for item in trace.get("repair_history", []):
-            if item.get("failure") == "M":
-                m_context_restored += bool(item.get("context_restored", False))
-                m_added_passages += len(item.get("recovered_passage_ids", []))
-            elif item.get("failure") == "D":
-                removed_ids = set(item.get("removed_passage_ids", []))
-                d_unresolved += bool(item.get("unresolved_conflict", False))
-                d_detector_failed += bool(item.get("detector_failed", False))
-                if failure_d:
-                    distractor_id = failure_d.get("distractor_passage_id")
-                    source_id = failure_d.get("source_passage_id")
-                    d_removed += bool(distractor_id and distractor_id not in final_ids)
-                    d_correct_evidence_removed += bool(
-                        source_id and source_id not in final_ids
-                    )
-                elif removed_ids:
-                    d_removed += 1
-            elif item.get("failure") == "G":
-                g_answer_kept += bool(item.get("answer_kept", False))
-                g_answer_regenerated += bool(item.get("repair_applied", False))
-                g_generation_failed += bool(item.get("generation_failed", False))
+            if item.get("failure") == "L":
+                l_rewrite_applied += bool(item.get("rewrite_applied", False))
+                l_no_repair_needed += item.get("repair_needed") is False
+                l_technical_errors += bool(item.get("technical_error"))
 
-                restored_step_id = str(item.get("restored_step_id", ""))
-                restored_dependency = str(item.get("restored_dependency", ""))
-                expected_step_id = str(trace.get("g_corrupted_step_id", ""))
-                expected_dependency = str(trace.get("g_removed_dependency", ""))
+        composer = trace.get("safe_composer_history", {})
+        if composer:
+            planned_order = "->".join(
+                str(item) for item in composer.get("planned_order", [])
+            )
+            if planned_order:
+                safe_planned_orders[planned_order] += 1
+            safe_planner_errors += bool(composer.get("planner_technical_error"))
 
-                restoration_matches = (
-                    item.get("repair") == "restore_reasoning_dependency"
-                    and restored_step_id == expected_step_id
-                    and restored_dependency == expected_dependency
-                    and bool(restored_step_id)
-                    and bool(restored_dependency)
-                )
-                g_dependency_restored += restoration_matches
-                g_restoration_mismatch += not restoration_matches
+        for step in composer.get("steps", []):
+            if step.get("keep_change"):
+                safe_kept_steps += 1
+            else:
+                safe_reverted_steps += 1
+            safe_step_errors += bool(step.get("technical_error"))
 
-    before_wrong = total - int(sum(before_sem))
-    before_correct_count = int(sum(before_sem))
-    recovery_values = [
-        1.0 if (not bool(_before(t).get("semantic_correct", False)) and bool(_after(t).get("semantic_correct", False))) else 0.0
-        for t in traces
-        if not bool(_before(t).get("semantic_correct", False))
-    ]
-    regression_values = [
-        1.0 if (bool(_before(t).get("semantic_correct", False)) and not bool(_after(t).get("semantic_correct", False))) else 0.0
-        for t in traces
-        if bool(_before(t).get("semantic_correct", False))
-    ]
+    evaluable = len(before_sem)
+    before_wrong = evaluable - int(sum(before_sem))
+    before_correct = int(sum(before_sem))
 
-    duplicate_trace_count = total - len({str(trace.get("trace_id", "")) for trace in traces})
+    trace_ids = [str(trace.get("trace_id", "")) for trace in traces]
+    nonempty = [trace_id for trace_id in trace_ids if trace_id]
+
+    repair_modes = Counter(str(trace.get("repair_mode", "")) for trace in traces)
+    common_mode = repair_modes.most_common(1)[0][0] if repair_modes else ""
 
     return {
         "total": total,
-        "duplicate_trace_count": duplicate_trace_count,
+        "saved_timeout_count": saved_timeout_count,
+        "missing_trace_id_count": total - len(nonempty),
+        "duplicate_trace_count": len(nonempty) - len(set(nonempty)),
+        "repair_mode": common_mode,
         "before_em_accuracy": sum(before_em) / total if total else 0.0,
         "after_em_accuracy": sum(after_em) / total if total else 0.0,
         "em_gain": (sum(after_em) - sum(before_em)) / total if total else 0.0,
         "before_mean_token_f1": sum(before_f1) / total if total else 0.0,
         "after_mean_token_f1": sum(after_f1) / total if total else 0.0,
         "token_f1_gain": (sum(after_f1) - sum(before_f1)) / total if total else 0.0,
-        "before_semantic_accuracy": sum(before_sem) / total if total else 0.0,
-        "after_semantic_accuracy": sum(after_sem) / total if total else 0.0,
-        "semantic_gain": (sum(after_sem) - sum(before_sem)) / total if total else 0.0,
-        "semantic_gain_ci95": bootstrap_mean_ci(semantic_gain_values),
+        "semantic_evaluable_count": evaluable,
+        "semantic_indeterminate_count": indeterminate,
+        "before_semantic_accuracy": sum(before_sem) / evaluable if evaluable else 0.0,
+        "after_semantic_accuracy": sum(after_sem) / evaluable if evaluable else 0.0,
+        "semantic_gain": (
+            (sum(after_sem) - sum(before_sem)) / evaluable
+            if evaluable
+            else 0.0
+        ),
+        "semantic_gain_ci95": bootstrap_mean_ci(gain_values),
         "semantic_recovered_count": recovered,
-        "semantic_regressed_count": regressed,
-        "semantic_stayed_correct": stayed_correct,
-        "semantic_stayed_wrong": stayed_wrong,
+        "semantic_recovery_denominator": before_wrong,
         "semantic_recovery_rate": recovered / before_wrong if before_wrong else 0.0,
         "semantic_recovery_rate_ci95": bootstrap_mean_ci(recovery_values),
+        "semantic_regressed_count": regressed,
+        "semantic_regression_denominator": before_correct,
         "semantic_regression_rate": (
-            regressed / before_correct_count if before_correct_count else 0.0
+            regressed / before_correct if before_correct else 0.0
         ),
         "semantic_regression_rate_ci95": bootstrap_mean_ci(regression_values),
+        "semantic_stayed_correct": stayed_correct,
+        "semantic_stayed_wrong": stayed_wrong,
         "remaining_M_count": remaining["M"],
         "remaining_D_count": remaining["D"],
-        "remaining_G_count": remaining["G"],
-        "fully_repaired_count": sum(
-            not trace.get("failure_after_repair", []) for trace in traces
-        ),
+        "remaining_L_count": remaining["L"],
+        "fully_repaired_count": fully_repaired,
+        "fully_repaired_rate": fully_repaired / evaluable if evaluable else 0.0,
         "new_M_count": new_failures["M"],
         "new_D_count": new_failures["D"],
-        "new_G_count": new_failures["G"],
+        "new_failure_count": new_failure_trace_count,
+        "new_failure_rate": new_failure_trace_count / total if total else 0.0,
         "regression_detected_count": regression_detected,
-        "new_failure_rate": regression_detected / total if total else 0.0,
-        "new_failure_rate_ci95": bootstrap_mean_ci(new_failure_values),
-        "generation_failure_count": generation_failures,
-        "semantic_judge_error_count": judge_errors,
-        "M_context_restored_count": m_context_restored,
-        "M_added_passage_count": m_added_passages,
+        "regression_detected_rate": (
+            regression_detected / total if total else 0.0
+        ),
+        "generation_failure_count": sum(
+            bool(_after(trace).get("generation_failed", False))
+            for trace in traces
+        ),
+        "semantic_judge_error_count": sum(
+            bool(_after(trace).get("semantic_judge_error", False))
+            for trace in traces
+        ),
+        "M_injected_passage_restored_count": m_restored,
         "D_distractor_removed_count": d_removed,
-        "D_correct_evidence_removed_count": d_correct_evidence_removed,
-        "D_unresolved_conflict_count": d_unresolved,
-        "D_detector_failed_count": d_detector_failed,
-        "G_answer_kept_count": g_answer_kept,
-        "G_answer_regenerated_count": g_answer_regenerated,
-        "G_generation_failed_count": g_generation_failed,
-        "G_dependency_restored_count": g_dependency_restored,
-        "G_restoration_mismatch_count": g_restoration_mismatch,
+        "L_rewrite_applied_count": l_rewrite_applied,
+        "L_no_repair_needed_count": l_no_repair_needed,
+        "L_technical_error_count": l_technical_errors,
+        "safe_kept_step_count": safe_kept_steps,
+        "safe_reverted_step_count": safe_reverted_steps,
+        "safe_planned_order_counts": dict(safe_planned_orders),
+        "safe_planner_technical_error_count": safe_planner_errors,
+        "safe_step_technical_error_count": safe_step_errors,
     }
 
 
 def _trace_map(traces: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
-    return {str(trace.get("trace_id", "")): trace for trace in traces}
-
-
-def compound_comparison(
-    name: str,
-    results: Dict[str, List[Dict[str, Any]]],
-) -> Dict[str, Any]:
-    first, second = COMPOUNDS[name]
-    common_ids = (
-        set(_trace_map(results[name]))
-        & set(_trace_map(results[first]))
-        & set(_trace_map(results[second]))
-    )
-    if not common_ids:
-        return {"common_trace_count": 0}
-
-    comparison = {}
-    for condition in (first, second, name):
-        subset = [
-            trace
-            for trace in results[condition]
-            if str(trace.get("trace_id", "")) in common_ids
-        ]
-        metrics = calculate_metrics(subset)
-        comparison[condition] = {
-            "semantic_recovery_rate": metrics["semantic_recovery_rate"],
-            "semantic_regression_rate": metrics["semantic_regression_rate"],
-            "new_failure_rate": metrics["new_failure_rate"],
-        }
-
     return {
-        "common_trace_count": len(common_ids),
-        "conditions": comparison,
-        "extra_recovery_vs_best_single": comparison[name]["semantic_recovery_rate"]
-        - max(
-            comparison[first]["semantic_recovery_rate"],
-            comparison[second]["semantic_recovery_rate"],
-        ),
-        "extra_regression_vs_worst_single": comparison[name]["semantic_regression_rate"]
-        - max(
-            comparison[first]["semantic_regression_rate"],
-            comparison[second]["semantic_regression_rate"],
-        ),
+        str(trace.get("trace_id", "")): trace
+        for trace in traces
+        if trace.get("trace_id")
     }
 
 
-def save_csv(summary: Dict[str, Any], output_path: Path) -> None:
+def _no_repair_row(
+    failure_map: Dict[str, Dict[str, Any]],
+    paired_ids: set,
+    attempted_count: int,
+) -> Dict[str, Any]:
+    selected = [failure_map[trace_id] for trace_id in sorted(paired_ids)]
+    evaluations = [_before(trace) for trace in selected]
+
+    # paired_ids has already been restricted to evaluable traces.
+    count = len(evaluations)
+    semantic_correct = sum(
+        bool(item.get("semantic_correct", False)) for item in evaluations
+    )
+
+    return {
+        "method": "no_repair",
+        "attempted_count": attempted_count,
+        "present_result_count": attempted_count,
+        "missing_result_count": 0,
+        "saved_timeout_count": 0,
+        "trace_count": count,
+        "semantic_evaluable_count": count,
+        "after_em_accuracy": (
+            sum(bool(item.get("exact_match", False)) for item in evaluations) / count
+            if count
+            else 0.0
+        ),
+        "after_mean_token_f1": (
+            sum(float(item.get("token_f1", 0.0)) for item in evaluations) / count
+            if count
+            else 0.0
+        ),
+        "after_semantic_accuracy": semantic_correct / count if count else 0.0,
+        "semantic_recovery_rate": 0.0,
+        "semantic_regression_rate": 0.0,
+        "fully_repaired_rate": 0.0,
+        "regression_detected_rate": 0.0,
+    }
+
+
+def method_comparison(
+    condition: str,
+    group: Dict[str, str],
+    repair_results: Dict[str, List[Dict[str, Any]]],
+    failure_results: List[Dict[str, Any]],
+) -> Dict[str, Any]:
+    """
+    Build a fair paired matrix.
+
+    1. Start from the condition's failure-result trace IDs.
+    2. Keep only trace IDs present in every method included in the matrix.
+       The core methods are fixed, reverse, and Safe; B2/B3 are added when
+       their result files exist. This automatically removes traces completely
+       skipped because of timeout in any included method.
+    3. From those common-present IDs, keep only traces that are semantically
+       evaluable in ALL included methods.
+    4. Calculate every method row on exactly that same paired subset.
+    """
+    maps = {
+        method: _trace_map(repair_results[experiment])
+        for method, experiment in group.items()
+    }
+    failure_map = _trace_map(failure_results)
+
+    attempted_ids = set(failure_map)
+    attempted_count = len(attempted_ids)
+
+    execution = {}
+    for method, mapping in maps.items():
+        present_ids = attempted_ids & set(mapping)
+        saved_timeout_count = sum(
+            _trace_timed_out(mapping[trace_id])
+            for trace_id in present_ids
+        )
+        execution[method] = {
+            "attempted_count": attempted_count,
+            "present_result_count": len(present_ids),
+            "missing_result_count": attempted_count - len(present_ids),
+            "saved_timeout_count": saved_timeout_count,
+        }
+
+    # First remove traces that are absent from any method result file.
+    common_present_ids = set(attempted_ids)
+    for mapping in maps.values():
+        common_present_ids &= set(mapping)
+
+    # Then require the failure result + every repair method to be evaluable.
+    paired_ids = set()
+    for trace_id in common_present_ids:
+        failure_trace = failure_map[trace_id]
+        failure_eval = _before(failure_trace)
+
+        if not _evaluation_evaluable(failure_eval):
+            continue
+
+        all_methods_evaluable = True
+        for mapping in maps.values():
+            trace = mapping[trace_id]
+            if not _pair_evaluable(trace, _before(trace), _after(trace)):
+                all_methods_evaluable = False
+                break
+
+        if all_methods_evaluable:
+            paired_ids.add(trace_id)
+
+    rows = [
+        _no_repair_row(
+            failure_map=failure_map,
+            paired_ids=paired_ids,
+            attempted_count=attempted_count,
+        )
+    ]
+
+    for method, experiment in group.items():
+        subset = [maps[method][trace_id] for trace_id in sorted(paired_ids)]
+        metrics = calculate_metrics(subset)
+        exec_stats = execution[method]
+
+        rows.append(
+            {
+                "method": method,
+                "attempted_count": exec_stats["attempted_count"],
+                "present_result_count": exec_stats["present_result_count"],
+                "missing_result_count": exec_stats["missing_result_count"],
+                "saved_timeout_count": exec_stats["saved_timeout_count"],
+                "trace_count": len(subset),
+                "semantic_evaluable_count": metrics["semantic_evaluable_count"],
+                "after_em_accuracy": metrics["after_em_accuracy"],
+                "after_mean_token_f1": metrics["after_mean_token_f1"],
+                "after_semantic_accuracy": metrics["after_semantic_accuracy"],
+                "semantic_recovery_rate": metrics["semantic_recovery_rate"],
+                "semantic_regression_rate": metrics["semantic_regression_rate"],
+                "fully_repaired_rate": metrics["fully_repaired_rate"],
+                "regression_detected_rate": metrics["regression_detected_rate"],
+            }
+        )
+
+    return {
+        "condition": condition,
+        "attempted_trace_count": attempted_count,
+        "common_present_trace_count": len(common_present_ids),
+        # Keep this key for compatibility, but make it the true paired count.
+        "common_trace_count": len(paired_ids),
+        "paired_common_trace_count": len(paired_ids),
+        "jointly_unevaluable_count": (
+            len(common_present_ids) - len(paired_ids)
+        ),
+        "execution": execution,
+        "methods": rows,
+    }
+
+
+def save_summary_csv(summary: Dict[str, Any], output_path: Path) -> None:
+    fields = [
+        "experiment",
+        "repair_mode",
+        "total",
+        "saved_timeout_count",
+        "semantic_evaluable_count",
+        "semantic_indeterminate_count",
+        "before_em_accuracy",
+        "after_em_accuracy",
+        "em_gain",
+        "before_mean_token_f1",
+        "after_mean_token_f1",
+        "token_f1_gain",
+        "before_semantic_accuracy",
+        "after_semantic_accuracy",
+        "semantic_gain",
+        "semantic_recovery_rate",
+        "semantic_regression_rate",
+        "fully_repaired_rate",
+        "remaining_M_count",
+        "remaining_D_count",
+        "remaining_L_count",
+        "new_failure_count",
+        "regression_detected_rate",
+        "L_rewrite_applied_count",
+        "safe_kept_step_count",
+        "safe_reverted_step_count",
+        "safe_planner_technical_error_count",
+        "safe_step_technical_error_count",
+        "generation_failure_count",
+        "semantic_judge_error_count",
+    ]
+
     rows = []
     for experiment, metrics in summary.items():
-        row = {"experiment": experiment}
-        for key, value in metrics.items():
-            if not isinstance(value, (dict, list)):
-                row[key] = value
-        rows.append(row)
+        rows.append(
+            {
+                field: experiment if field == "experiment" else metrics.get(field, "")
+                for field in fields
+            }
+        )
 
-    fieldnames = sorted({key for row in rows for key in row})
     with open(output_path, "w", encoding="utf-8", newline="") as file:
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        writer = csv.DictWriter(file, fieldnames=fields)
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def save_method_matrix(
+    comparisons: Dict[str, Any],
+    output_path: Path,
+) -> None:
+    fields = [
+        "condition",
+        "method",
+        "attempted_count",
+        "present_result_count",
+        "missing_result_count",
+        "saved_timeout_count",
+        "trace_count",
+        "semantic_evaluable_count",
+        "after_em_accuracy",
+        "after_mean_token_f1",
+        "after_semantic_accuracy",
+        "semantic_recovery_rate",
+        "semantic_regression_rate",
+        "fully_repaired_rate",
+        "regression_detected_rate",
+    ]
+
+    rows = []
+    for condition, comparison in comparisons.items():
+        for method in comparison.get("methods", []):
+            rows.append({"condition": condition, **method})
+
+    with open(output_path, "w", encoding="utf-8", newline="") as file:
+        writer = csv.DictWriter(file, fieldnames=fields)
         writer.writeheader()
         writer.writerows(rows)
 
 
 def main():
-    results = {}
-    for experiment, path in EXPERIMENTS.items():
-        if Path(path).exists():
-            results[experiment] = load_results(path)
+    repair_results = {
+        name: load_results(path)
+        for name, path in EXPERIMENTS.items()
+        if Path(path).exists()
+    }
 
-    if not results:
+    if not repair_results:
         raise FileNotFoundError("No repair result files were found.")
 
+    # Individual experiment summaries use each experiment's own completed file.
     summary = {
         experiment: calculate_metrics(traces)
-        for experiment, traces in results.items()
+        for experiment, traces in repair_results.items()
     }
-    for name in COMPOUNDS:
-        if name in results and all(item in results for item in COMPOUNDS[name]):
-            summary[name]["compound_comparison"] = compound_comparison(name, results)
+
+    # Cross-method matrices use exactly the same paired, jointly evaluable
+    # trace IDs across every method included for that condition.
+    comparisons = {}
+
+    for condition, core_group in METHOD_GROUPS.items():
+        failure_path = Path(FAILURE_RESULTS[condition])
+
+        if not failure_path.exists():
+            continue
+
+        if not all(
+            experiment in repair_results
+            for experiment in core_group.values()
+        ):
+            continue
+
+        # Preserve the existing fixed/reverse/Safe comparison when B2/B3 have
+        # not been run yet. Once their result files exist, add them to the same
+        # paired matrix so every displayed row uses the same common trace IDs.
+        optional_group = OPTIONAL_BASELINE_METHODS.get(condition, {})
+        group = {
+            method: experiment
+            for method, experiment in optional_group.items()
+            if experiment in repair_results
+        }
+        group.update(core_group)
+
+        comparisons[condition] = method_comparison(
+            condition=condition,
+            group=group,
+            repair_results=repair_results,
+            failure_results=load_results(str(failure_path)),
+        )
 
     output_dir = Path("data/analysis")
     output_dir.mkdir(parents=True, exist_ok=True)
+
     json_path = output_dir / "repair_summary.json"
     csv_path = output_dir / "repair_summary.csv"
+    matrix_path = output_dir / "repair_method_matrix.csv"
 
     with open(json_path, "w", encoding="utf-8") as file:
-        json.dump(summary, file, indent=2, ensure_ascii=False)
-    save_csv(summary, csv_path)
+        json.dump(
+            {
+                "experiments": summary,
+                "method_comparisons": comparisons,
+            },
+            file,
+            indent=2,
+            ensure_ascii=False,
+        )
+
+    save_summary_csv(summary, csv_path)
+
+    # This call was missing in the previous version.
+    save_method_matrix(comparisons, matrix_path)
 
     print(f"Saved: {json_path}")
     print(f"Saved: {csv_path}")
+    print(f"Saved: {matrix_path}")
 
 
 if __name__ == "__main__":

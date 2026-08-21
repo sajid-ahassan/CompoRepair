@@ -3,7 +3,9 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List
 
-VALID_FAILURES = {"M", "D", "G"}
+DEFAULT_RETRIEVAL_K = 8
+
+VALID_FAILURES = {"M", "D", "L"}
 REQUIRED_IDENTITY_FIELDS = {
     "trace_id",
     "question_id",
@@ -20,6 +22,14 @@ REQUIRED_EVALUATION_FIELDS = {
 }
 
 
+def _expected_retrieval_k(trace: Dict[str, Any]) -> int:
+    value = trace.get("model_manifest", {}).get("retrieval_k")
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return DEFAULT_RETRIEVAL_K
+
+
 def _evaluation_for_stage(trace: Dict[str, Any]) -> Dict[str, Any]:
     stage = str(trace.get("experiment_stage", ""))
     if stage == "baseline":
@@ -31,210 +41,19 @@ def _evaluation_for_stage(trace: Dict[str, Any]) -> Dict[str, Any]:
     return {}
 
 
-def _validate_reasoning_plan(
-    plan: Any,
-    label: str,
-    require_multi_dependency_final: bool,
-) -> List[str]:
-    errors = []
-
-    if not isinstance(plan, dict):
-        return [f"{label} must be a dictionary"]
-
-    steps = plan.get("steps")
-    if not isinstance(steps, list) or not steps:
-        return [f"{label}.steps must be a non-empty list"]
-
-    if len(steps) < 3:
-        errors.append(f"{label} must contain at least two evidence steps and one final step")
-
-    step_ids = []
-    for index, step in enumerate(steps):
-        if not isinstance(step, dict):
-            errors.append(f"{label}.steps[{index}] must be a dictionary")
-            continue
-
-        step_id = str(step.get("id", "")).strip()
-        task = str(step.get("task", "")).strip()
-        dependencies = step.get("depends_on")
-
-        if not step_id:
-            errors.append(f"{label}.steps[{index}] has an empty id")
-        step_ids.append(step_id)
-
-        if not task:
-            errors.append(f"{label}.steps[{index}] has an empty task")
-
-        if not isinstance(dependencies, list):
-            errors.append(f"{label}.steps[{index}].depends_on must be a list")
-            continue
-
-        if len(dependencies) != len(set(dependencies)):
-            errors.append(f"{label}.steps[{index}].depends_on contains duplicates")
-
-        earlier_ids = set(step_ids[:-1])
-        for dependency in dependencies:
-            if dependency not in earlier_ids:
-                errors.append(
-                    f"{label}.steps[{index}] dependency {dependency!r} "
-                    "must reference an earlier step"
-                )
-
-    non_empty_ids = [step_id for step_id in step_ids if step_id]
-    if len(non_empty_ids) != len(set(non_empty_ids)):
-        errors.append(f"{label} contains duplicate step IDs")
-
-    final_step = steps[-1] if isinstance(steps[-1], dict) else {}
-    final_dependencies = final_step.get("depends_on", [])
-    if (
-        require_multi_dependency_final
-        and isinstance(final_dependencies, list)
-        and len(final_dependencies) < 2
-    ):
-        errors.append(f"{label} final step must depend on at least two earlier steps")
-
-    return errors
-
-
-def _validate_g_intervention(trace: Dict[str, Any]) -> List[str]:
-    errors = []
-
-    clean_plan = trace.get("reasoning_plan")
-    corrupted_plan = trace.get("corrupted_reasoning_plan")
-
-    errors.extend(
-        _validate_reasoning_plan(
-            clean_plan,
-            "reasoning_plan",
-            require_multi_dependency_final=True,
-        )
-    )
-    errors.extend(
-        _validate_reasoning_plan(
-            corrupted_plan,
-            "corrupted_reasoning_plan",
-            require_multi_dependency_final=False,
-        )
-    )
-
-    if not isinstance(clean_plan, dict) or not isinstance(corrupted_plan, dict):
-        return errors
-
-    clean_steps = clean_plan.get("steps", [])
-    corrupted_steps = corrupted_plan.get("steps", [])
-    if not isinstance(clean_steps, list) or not isinstance(corrupted_steps, list):
-        return errors
-    if not clean_steps or not corrupted_steps:
-        return errors
-
-    if len(clean_steps) != len(corrupted_steps):
-        errors.append("G corruption must not add or remove reasoning steps")
-        return errors
-
-    for index, (clean_step, corrupted_step) in enumerate(
-        zip(clean_steps, corrupted_steps)
-    ):
-        if not isinstance(clean_step, dict) or not isinstance(corrupted_step, dict):
-            continue
-
-        if clean_step.get("id") != corrupted_step.get("id"):
-            errors.append(f"G corruption changed step ID at index {index}")
-        if clean_step.get("task") != corrupted_step.get("task"):
-            errors.append(f"G corruption changed step task at index {index}")
-
-        if index < len(clean_steps) - 1:
-            if clean_step.get("depends_on", []) != corrupted_step.get(
-                "depends_on", []
-            ):
-                errors.append(
-                    f"G corruption changed a non-final dependency at step index {index}"
-                )
-
-    clean_final = clean_steps[-1]
-    corrupted_final = corrupted_steps[-1]
-    if not isinstance(clean_final, dict) or not isinstance(corrupted_final, dict):
-        return errors
-
-    clean_dependencies = clean_final.get("depends_on", [])
-    corrupted_dependencies = corrupted_final.get("depends_on", [])
-    if not isinstance(clean_dependencies, list) or not isinstance(
-        corrupted_dependencies, list
-    ):
-        return errors
-
-    removed_dependencies = [
-        dependency
-        for dependency in clean_dependencies
-        if dependency not in corrupted_dependencies
-    ]
-    added_dependencies = [
-        dependency
-        for dependency in corrupted_dependencies
-        if dependency not in clean_dependencies
-    ]
-
-    if len(removed_dependencies) != 1:
-        errors.append("G corruption must remove exactly one final-step dependency")
-    if added_dependencies:
-        errors.append("G corruption must not add final-step dependencies")
-
-    if len(corrupted_dependencies) != len(clean_dependencies) - 1:
-        errors.append("G corrupted final step has an invalid dependency count")
-
-    expected_after_removal = [
-        dependency
-        for dependency in clean_dependencies
-        if dependency not in removed_dependencies
-    ]
-    if corrupted_dependencies != expected_after_removal:
-        errors.append(
-            "G corruption must preserve dependency order and remove only one dependency"
-        )
-
-    recorded_dependency = str(trace.get("g_removed_dependency", ""))
-    recorded_step_id = str(trace.get("g_corrupted_step_id", ""))
-
-    if len(removed_dependencies) == 1:
-        if recorded_dependency != str(removed_dependencies[0]):
-            errors.append("g_removed_dependency does not match the removed dependency")
-
-    if recorded_step_id != str(clean_final.get("id", "")):
-        errors.append("g_corrupted_step_id does not match the final step ID")
-
-    failure_history = trace.get("failure_history", [])
-    g_entry = next(
+def _history_entry(trace: Dict[str, Any], failure: str) -> Dict[str, Any]:
+    return next(
         (
             item
-            for item in failure_history
-            if isinstance(item, dict) and item.get("failure") == "G"
+            for item in trace.get("failure_history", [])
+            if isinstance(item, dict) and item.get("failure") == failure
         ),
         {},
     )
 
-    if g_entry.get("evidence_modified") is not False:
-        errors.append("G injection must record evidence_modified=False")
-    if g_entry.get("failure_type") != "reasoning_dependency_removed":
-        errors.append(
-            "G failure history must record failure_type=reasoning_dependency_removed"
-        )
-    if g_entry.get("intervention_version") != "g_dependency_removal_v1":
-        errors.append(
-            "G failure history must record intervention_version=g_dependency_removal_v1"
-        )
-    if str(g_entry.get("removed_dependency", "")) != recorded_dependency:
-        errors.append(
-            "G failure-history removed_dependency does not match g_removed_dependency"
-        )
-    if str(g_entry.get("corrupted_step_id", "")) != recorded_step_id:
-        errors.append(
-            "G failure-history corrupted_step_id does not match g_corrupted_step_id"
-        )
-
-    return errors
-
 
 def validate_trace(trace: Dict[str, Any]) -> List[str]:
-    errors = []
+    errors: List[str] = []
     missing = REQUIRED_IDENTITY_FIELDS - set(trace)
     errors.extend(f"Missing field: {field}" for field in sorted(missing))
 
@@ -242,12 +61,9 @@ def validate_trace(trace: Dict[str, Any]) -> List[str]:
     if not isinstance(failures, list):
         errors.append("true_failures must be a list")
         failures = []
-
-    invalid_failures = [
-        failure for failure in failures if failure not in VALID_FAILURES
-    ]
-    if invalid_failures:
-        errors.append(f"Invalid failure labels: {invalid_failures}")
+    invalid = [failure for failure in failures if failure not in VALID_FAILURES]
+    if invalid:
+        errors.append(f"Invalid failure labels: {invalid}")
     if len(failures) != len(set(failures)):
         errors.append("true_failures contains duplicates")
 
@@ -255,47 +71,39 @@ def validate_trace(trace: Dict[str, Any]) -> List[str]:
     if not isinstance(retrieval, list):
         errors.append("retrieval_events must be a list")
         retrieval = []
-
     passage_ids = [str(item.get("passage_id", "")) for item in retrieval]
     if any(not passage_id for passage_id in passage_ids):
         errors.append("retrieval_events contains an empty passage_id")
     if len(passage_ids) != len(set(passage_ids)):
         errors.append("retrieval_events contains duplicate passage IDs")
+    text_by_id = {
+        str(item.get("passage_id", "")): str(item.get("text", ""))
+        for item in retrieval
+    }
 
     stage = str(trace.get("experiment_stage", ""))
     is_repair_stage = "repair" in stage
     is_failure_stage = "failure" in stage and not is_repair_stage
+    expected_k = _expected_retrieval_k(trace)
 
-    if "G" in failures:
-        errors.extend(_validate_g_intervention(trace))
-    else:
-        if trace.get("reasoning_plan"):
-            errors.append("reasoning_plan is present without a G failure")
-        if trace.get("corrupted_reasoning_plan"):
-            errors.append("corrupted_reasoning_plan is present without a G failure")
-        if trace.get("reasoning_outputs"):
-            errors.append("reasoning_outputs is present without a G failure")
-
-    if stage == "baseline" and len(retrieval) != 6:
-        errors.append(f"baseline retrieval count must be 6, found {len(retrieval)}")
-
+    if stage == "baseline" and len(retrieval) != expected_k:
+        errors.append(
+            f"baseline retrieval count must be {expected_k}, found {len(retrieval)}"
+        )
     if is_failure_stage:
-        expected_count = 5 if "M" in failures else 6
+        expected_count = expected_k - (1 if "M" in failures else 0)
         if len(retrieval) != expected_count:
             errors.append(
-                f"failure retrieval count must be {expected_count}, "
-                f"found {len(retrieval)}"
+                f"failure retrieval count must be {expected_count}, found {len(retrieval)}"
             )
-
-    if is_repair_stage and len(retrieval) > 6:
+    if is_repair_stage and len(retrieval) > expected_k:
         errors.append(
-            f"repaired retrieval count cannot exceed 6, found {len(retrieval)}"
+            f"repaired retrieval count cannot exceed {expected_k}, found {len(retrieval)}"
         )
 
-    failure_history = trace.get("failure_history", [])
     history_labels = [
         item.get("failure")
-        for item in failure_history
+        for item in trace.get("failure_history", [])
         if isinstance(item, dict)
     ]
     for failure in failures:
@@ -305,84 +113,69 @@ def validate_trace(trace: Dict[str, Any]) -> List[str]:
             )
 
     if "M" in failures and is_failure_stage:
-        entry = next(
-            (
-                item
-                for item in failure_history
-                if isinstance(item, dict) and item.get("failure") == "M"
-            ),
-            {},
-        )
-        if any(
-            passage_id in passage_ids
-            for passage_id in entry.get("removed_passage_ids", [])
-        ):
+        entry = _history_entry(trace, "M")
+        removed = [
+            str(item) for item in entry.get("removed_passage_ids", []) if item
+        ]
+        if not removed:
+            errors.append("M failure history has no removed passage ID")
+        if any(passage_id in passage_ids for passage_id in removed):
             errors.append("M injection did not remove all recorded passage IDs")
 
     if "D" in failures and is_failure_stage:
-        entry = next(
-            (
-                item
-                for item in failure_history
-                if isinstance(item, dict) and item.get("failure") == "D"
-            ),
-            {},
-        )
-        distractor_id = entry.get("distractor_passage_id")
-        source_id = entry.get("source_passage_id")
-
-        if distractor_id not in passage_ids:
+        entry = _history_entry(trace, "D")
+        distractor_id = str(entry.get("distractor_passage_id", ""))
+        source_id = str(entry.get("source_passage_id", ""))
+        m_removed = {
+            str(item)
+            for item in _history_entry(trace, "M").get("removed_passage_ids", [])
+            if item
+        }
+        if not distractor_id or distractor_id not in passage_ids:
             errors.append("D injection distractor is not present")
-        if source_id not in passage_ids:
-            errors.append("D injection source passage is not retained")
+        if source_id not in passage_ids and source_id not in m_removed:
+            errors.append("D source passage is neither retained nor removed by M")
 
-    if "G" in failures and ("failure_result" in stage or is_repair_stage):
-        control_evaluation = trace.get("g_clean_control_evaluation", {})
-        if not isinstance(control_evaluation, dict) or not control_evaluation:
-            errors.append("G result is missing g_clean_control_evaluation")
-        else:
-            missing_control_fields = REQUIRED_EVALUATION_FIELDS - set(
-                control_evaluation
-            )
-            errors.extend(
-                f"Missing G clean-control evaluation field: {field}"
-                for field in sorted(missing_control_fields)
-            )
+    if "L" in failures and is_failure_stage:
+        entry = _history_entry(trace, "L")
+        target_id = str(entry.get("target_passage_id", ""))
+        corrupted_text = str(entry.get("corrupted_passage_text", ""))
+        if not target_id or target_id not in passage_ids:
+            errors.append("L target passage is not present")
+        elif text_by_id.get(target_id) != corrupted_text:
+            errors.append("L target text does not match the recorded corrupted text")
 
-            control_answer = str(
-                trace.get("g_clean_control_answer", "") or ""
-            ).strip()
-            if (
-                not control_answer
-                and not control_evaluation.get("generation_failed", False)
-            ):
-                errors.append(
-                    "g_clean_control_answer is empty but its generation_failed "
-                    "flag is not true"
+        if "M" in failures:
+            removed_by_m = {
+                str(item)
+                for item in _history_entry(trace, "M").get(
+                    "removed_passage_ids", []
                 )
+                if item
+            }
+            if target_id in removed_by_m:
+                errors.append("M must not remove the L target passage")
 
-        if trace.get("g_clean_control_reused_reasoning_outputs") is not True:
-            errors.append(
-                "G clean control must reuse the corrupted run's fixed "
-                "reasoning outputs"
+        if "D" in failures:
+            d_source_id = str(
+                _history_entry(trace, "D").get("source_passage_id", "")
             )
+            if target_id and target_id == d_source_id:
+                errors.append("D must not use the L target passage as its source")
 
     evaluation = _evaluation_for_stage(trace)
     if evaluation:
-        missing_evaluation = REQUIRED_EVALUATION_FIELDS - set(evaluation)
+        missing_fields = REQUIRED_EVALUATION_FIELDS - set(evaluation)
         errors.extend(
             f"Missing evaluation field: {field}"
-            for field in sorted(missing_evaluation)
+            for field in sorted(missing_fields)
         )
-
         answer_field = "final_answer"
         if stage == "baseline":
             answer_field = "baseline_answer"
         elif "failure_result" in stage:
             answer_field = "failure_answer"
-
-        answer = trace.get(answer_field, "")
-        if not str(answer).strip() and not evaluation.get(
+        if not str(trace.get(answer_field, "")).strip() and not evaluation.get(
             "generation_failed", False
         ):
             errors.append(
@@ -401,22 +194,46 @@ def validate_trace(trace: Dict[str, Any]) -> List[str]:
                     f"repair_history must contain exactly one {failure} entry"
                 )
 
+        order = trace.get("repair_order", [])
+        if not isinstance(order, list):
+            errors.append("repair_order must be a list")
+        elif set(order) != set(failures) or len(order) != len(failures):
+            errors.append("repair_order must contain every true failure exactly once")
+
         remaining = trace.get("failure_after_repair", [])
         new_failures = trace.get("new_failures_after_repair", [])
-
         if any(failure not in remaining for failure in new_failures):
             errors.append(
-                "new_failures_after_repair must be a subset of "
-                "failure_after_repair"
+                "new_failures_after_repair must be a subset of failure_after_repair"
             )
+        if any(failure not in VALID_FAILURES for failure in remaining):
+            errors.append("failure_after_repair contains an invalid label")
 
-        if bool(new_failures) != bool(
-            trace.get("regression_detected", False)
+        semantic_regression = bool(
+            trace.get("semantic_regression_detected", False)
+        )
+        structural_regression = bool(
+            trace.get("structural_regression_detected", False)
+        )
+        regression_detected = bool(trace.get("regression_detected", False))
+        expected_structural = any(
+            failure in {"M", "D"} for failure in new_failures
+        )
+        if structural_regression != expected_structural:
+            errors.append(
+                "structural_regression_detected does not match newly introduced failures"
+            )
+        if regression_detected != bool(
+            semantic_regression or structural_regression
         ):
             errors.append(
-                "regression_detected does not match "
-                "new_failures_after_repair"
+                "regression_detected does not match semantic or structural regression"
             )
+
+        if trace.get("repair_mode") == "safe" and not trace.get(
+            "safe_composer_history"
+        ):
+            errors.append("safe repair trace is missing safe_composer_history")
 
     return errors
 
@@ -427,15 +244,12 @@ def validate_file(path: str) -> int:
 
     seen_trace_ids = set()
     total_errors = 0
-
     for index, trace in enumerate(traces):
         trace_id = str(trace.get("trace_id", ""))
         errors = validate_trace(trace)
-
         if trace_id in seen_trace_ids:
             errors.append("Duplicate trace_id in file")
         seen_trace_ids.add(trace_id)
-
         if errors:
             print(f"\nTrace {index} ({trace_id or 'missing-id'}) failed:")
             for error in errors:
@@ -446,7 +260,6 @@ def validate_file(path: str) -> int:
         print(f"Validation failed for {path}. Total errors: {total_errors}")
     else:
         print(f"Validation passed: {path}")
-
     return total_errors
 
 
@@ -454,11 +267,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="Validate CompoRepair trace files."
     )
-    parser.add_argument(
-        "paths",
-        nargs="+",
-        help="JSON trace files to validate",
-    )
+    parser.add_argument("paths", nargs="+", help="JSON trace files to validate")
     args = parser.parse_args()
 
     total_errors = 0
@@ -467,9 +276,7 @@ def main():
             print(f"Missing file: {path}")
             total_errors += 1
             continue
-
         total_errors += validate_file(path)
-
     raise SystemExit(1 if total_errors else 0)
 
 

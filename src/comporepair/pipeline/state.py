@@ -54,6 +54,8 @@ class CompoRepairTraceState(TypedDict, total=False):
 
     question: str
     canonical_answer: str
+    gold_supporting_passage_ids: List[str]
+    baseline_evaluation: EvaluationState
     answer_aliases: List[str]
 
     retrieval_events: List[RetrievalEvent]
@@ -66,7 +68,6 @@ class CompoRepairTraceState(TypedDict, total=False):
     failure_answer: str
     final_answer: str
 
-    baseline_evaluation: EvaluationState
     failure_evaluation: EvaluationState
     repair_evaluation: EvaluationState
     evaluation: EvaluationState
@@ -77,28 +78,25 @@ class CompoRepairTraceState(TypedDict, total=False):
 
     failure_after_repair: List[str]
     new_failures_after_repair: List[str]
+    semantic_regression_detected: bool
+    structural_regression_detected: bool
     regression_detected: bool
 
+    l_target_passage_id: str
+    l_source_passage_ids: List[str]
+    l_original_link_phrase: str
+    l_replacement_phrase: str
+    l_original_passage_text: str
+    l_corrupted_passage_text: str
+
     repair_type: str
+    repair_mode: str
+    repair_order: List[str]
     repair_history: List[Dict[str, Any]]
     repair_diagnosis: Dict[str, Any]
     repair_latency_ms: int
     repair_token_usage: Dict[str, int]
-    reasoning_constraint: str
-
-    reasoning_plan: Dict[str, Any]
-    corrupted_reasoning_plan: Dict[str, Any]
-    reasoning_outputs: Dict[str, str]
-    failure_reasoning_outputs: Dict[str, str]
-    g_removed_dependency: str
-    g_corrupted_step_id: str
-    g_clean_control_answer: str
-    g_clean_control_evaluation: EvaluationState
-    g_clean_control_reused_reasoning_outputs: bool
-    g_clean_control_latency_ms: int
-    g_clean_control_token_usage: Dict[str, int]
-    repaired_reasoning_plan: Dict[str, Any]
-    g_intervention_active: bool
+    safe_composer_history: Dict[str, Any]
 
     model_manifest: Dict[str, Any]
     prompt_hashes: Dict[str, str]
@@ -111,8 +109,6 @@ class RAGState(TypedDict, total=False):
     retrieved_documents: List[Any]
     context: str
     answer: str
-    reasoning_plan: Dict[str, Any]
-    reasoning_outputs: Dict[str, str]
     generation_failed: bool
     generation_attempts: int
     latency_ms: int

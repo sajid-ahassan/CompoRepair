@@ -1,5 +1,4 @@
 import hashlib
-
 import re
 import string
 import time
@@ -14,39 +13,96 @@ from pydantic import BaseModel
 from .state import RAGState
 from ..models.local_llm import get_local_ollama_llm
 from ..retrieval.vector_store import RETRIEVAL_K, get_retriever
-from copy import deepcopy
 
 MAX_RETRIES = 1
 
 BASE_SYSTEM_PROMPT = """Answer the question using only the provided evidence.
 
-Rules:
+Strict Rules:
 - Do not use outside knowledge or memory.
-- Combine information across passages when needed.
+- To get the final answer, you may need to combine information from multiple passages.
+- You may need to reason across multiple passages to get the final answer.
+- Combine information across given passages when needed.
 - Return only the concise final answer.
 - Do not explain or show reasoning.
-- For yes/no questions, return only yes or no.
-- For names, locations, dates, organizations, or titles, return only that value.
+- Do not include explanations, comparisons, dates, reasons, evidence, or extra words.
+- If the question asks "Who...", return only the person's name.
+- If the question asks "Which film...", return only the film title.
+- If the question asks "Where...", return only the place.
+- If the question asks "When..." or asks for a date, return only the date/year.
+- If the question asks which of two candidates is younger, older, earlier, later, larger, smaller, etc., return only the selected candidate's name.
+- Never restate the question.
+- Never write "X is younger than Y", "X because...", or similar explanatory text.
+- Never ask the user to provide the question.
+
+Return only the concise final answer, normally 1-5 words.
 """
 
-SEMANTIC_JUDGE_PROMPT = """Decide whether the predicted answer has the same required meaning as the reference answer. Allow capitalization, harmless wording, and equivalent short forms."""
+
+SEMANTIC_JUDGE_PROMPT = """
+Role: You are a strict semantic answer evaluator.
+
+Determine whether the predicted answer directly gives the SAME answer
+as the reference answer for the given question.
+
+Important:
+- The reference answer is authoritative.
+- Judge the answer to the QUESTION, not whether the prediction is related
+  to the same topic.
+- A related person, film, place, date, country, or intermediate entity is
+  NOT the same answer.
+- For comparison questions, the prediction must select the same candidate
+  as the reference.
+- If the question asks for a film, returning its director is incorrect.
+- If the question asks for a person, returning that person's parent,
+  child, spouse, or another related person is incorrect.
+- If the question asks for a place, returning a person is incorrect.
+- If the question asks for a date/year, a refusal or missing-information
+  statement is incorrect.
+- A prediction that says the answer cannot be determined, is unavailable,
+  or is not in the evidence is incorrect when the reference contains an answer.
+- Do not mark an answer correct merely because words from the reference
+  appear somewhere in the prediction.
+- Extra wording is allowed when the prediction clearly contains the
+  same final answer as the reference and does not introduce a conflicting
+  alternative answer.
+- Allow capitalization, punctuation, spelling variants, common
+  abbreviations, and genuinely equivalent names.
+
+Return only: correct or incorrect.
+
+Some examples:
+Question: Which film has the younger director?
+Reference: The World of Apu
+Prediction: Satyajit Ray
+Verdict: incorrect
+
+Question: What is the date of death of X's husband?
+Reference: 548
+Prediction: There is no information about X's husband.
+Verdict: incorrect
+
+Question: What nationality is X's husband?
+Reference: Venezuelan
+Prediction: X's husband is Venezuelan.
+Verdict: correct
+
+Question: Who is X's maternal grandfather?
+Reference: Sextus Aelius Catus
+Prediction: X's maternal grandfather is Sextus Aelius Catus.
+Verdict: correct
+
+Reference: 24 March 1927
+Prediction: Elizabeth Mavrikievna died on 24 March 1927.
+→ correct
+"""
+
+# One shared model instance for generation and every structured-output task.
 llm = get_local_ollama_llm()
-
-# =========================================================
-
 
 
 class SemanticJudgeResult(BaseModel):
     verdict: Literal["correct", "incorrect"]
-
-
-class ReasoningPlanDraft(BaseModel):
-    evidence_task_1: str
-    evidence_task_2: str
-    final_task: str
-
-
-# One shared model instance for generation and every structured-output task.
 
 
 def hash_text(text: str) -> str:
@@ -54,19 +110,14 @@ def hash_text(text: str) -> str:
 
 
 def format_evidence(documents: Iterable[Any]) -> str:
+    """Format evidence without exposing passage titles to any LLM."""
     blocks = []
     for index, document in enumerate(documents, start=1):
         if hasattr(document, "page_content"):
             text = str(document.page_content).strip()
-            title = str(document.metadata.get("title", "")).strip()
         else:
             text = str(document.get("text", "")).strip()
-            title = str(document.get("title", "")).strip()
-
-        header = f"[P{index}]"
-        if title:
-            header += f" Title: {title}"
-        blocks.append(f"{header}\nText: {text}")
+        blocks.append(f"[P{index}]\nText: {text}")
     return "\n\n".join(blocks)
 
 
@@ -85,8 +136,12 @@ def _response_text(response: Any) -> str:
 def _token_usage(response: Any) -> Dict[str, int]:
     usage = getattr(response, "usage_metadata", None) or {}
     metadata = getattr(response, "response_metadata", None) or {}
-    input_tokens = int(usage.get("input_tokens") or metadata.get("prompt_eval_count") or 0)
-    output_tokens = int(usage.get("output_tokens") or metadata.get("eval_count") or 0)
+    input_tokens = int(
+        usage.get("input_tokens") or metadata.get("prompt_eval_count") or 0
+    )
+    output_tokens = int(
+        usage.get("output_tokens") or metadata.get("eval_count") or 0
+    )
     return {
         "input_tokens": input_tokens,
         "output_tokens": output_tokens,
@@ -150,193 +205,14 @@ def generate_answer(
         SystemMessage(content=system_prompt),
         HumanMessage(
             content=(
-                f"Question:\n{question}\n\n"
-                f"Evidence:\n{format_evidence(documents)}\n\nAnswer:"
+                f"The question you need to answer is:\n{question}\n\n"
+                f"Passages:\n{format_evidence(documents)}\n\nAnswer:"
             )
         ),
     ]
     result = invoke_text(messages)
     result["prompt_hash"] = hash_text(
-        f"{system_prompt}\nQuestion:\n{{question}}\nEvidence:\n{{evidence}}"
-    )
-    return result
-
-
-def generate_reasoning_plan(
-    question: str,
-    documents: Iterable[Any],
-) -> Dict[str, Any]:
-    """Create the clean explicit plan used only for G conditions."""
-    planner = llm.with_structured_output(
-        ReasoningPlanDraft,
-        method="json_schema",
-    )
-    draft = invoke_structured(
-        planner,
-        [
-            SystemMessage(
-                content="""Create exactly three task descriptions for answering the question.
-
-Rules:
-- Use only the provided evidence.
-- evidence_task_1 must extract one necessary answer-relevant fact.
-- evidence_task_2 must independently extract a second necessary answer-relevant fact.
-- final_task must combine or compare those two facts to answer the question.
-- Do not answer the question.
-- Do not include factual answers in any task description.
-- Do not refer to passage numbers such as P1 or P2.
-"""
-            ),
-            HumanMessage(
-                content=(
-                    f"Question:\n{question}\n\n"
-                    f"Evidence:\n{format_evidence(documents)}"
-                )
-            ),
-        ]
-    )
-
-    return {
-        "steps": [
-            {
-                "id": "step_1",
-                "task": draft.evidence_task_1,
-                "depends_on": [],
-            },
-            {
-                "id": "step_2",
-                "task": draft.evidence_task_2,
-                "depends_on": [],
-            },
-            {
-                "id": "step_3",
-                "task": draft.final_task,
-                "depends_on": ["step_1", "step_2"],
-            },
-        ]
-    }
-
-
-def generate_planned_answer(
-    question: str,
-    documents: Iterable[Any],
-    plan: Dict[str, Any],
-) -> Dict[str, Any]:
-    """Execute a clean or corrupted reasoning plan for a G condition."""
-    documents = list(documents)
-    active_plan = deepcopy(plan)
-    evidence = format_evidence(documents)
-    step_outputs: Dict[str, str] = {}
-    total_usage = {"input_tokens": 0, "output_tokens": 0, "total_tokens": 0}
-    total_latency = 0
-    total_attempts = 0
-
-    for step in active_plan["steps"][:-1]:
-        step_result = invoke_text(
-            [
-                SystemMessage(
-                    content="""Complete only the requested evidence-extraction task.
-
-Use only the provided evidence.
-Return only the concise result of this step.
-Do not answer the original question.
-"""
-                ),
-                HumanMessage(
-                    content=(
-                        f"Original question:\n{question}\n\n"
-                        f"Current step:\n{step['id']}: {step['task']}\n\n"
-                        f"Evidence:\n{evidence}\n\n"
-                        "Step result:"
-                    )
-                ),
-            ]
-        )
-
-        total_latency += step_result["latency_ms"]
-        total_attempts += step_result["attempts"]
-        for key in total_usage:
-            total_usage[key] += step_result["token_usage"][key]
-
-        if step_result["generation_failed"]:
-            return {
-                "text": "",
-                "reasoning_plan": active_plan,
-                "reasoning_outputs": step_outputs,
-                "generation_failed": True,
-                "attempts": total_attempts,
-                "latency_ms": total_latency,
-                "token_usage": total_usage,
-                "prompt_hash": hash_text("g_planned_answer_v1"),
-            }
-
-        step_outputs[step["id"]] = step_result["text"]
-
-    final_result = generate_plan_final_answer(
-        question,
-        active_plan,
-        step_outputs,
-    )
-
-    total_latency += final_result["latency_ms"]
-    total_attempts += final_result["attempts"]
-    for key in total_usage:
-        total_usage[key] += final_result["token_usage"][key]
-
-    return {
-        "text": final_result["text"],
-        "reasoning_plan": active_plan,
-        "reasoning_outputs": step_outputs,
-        "generation_failed": final_result["generation_failed"],
-        "attempts": total_attempts,
-        "latency_ms": total_latency,
-        "token_usage": total_usage,
-        "prompt_hash": hash_text(f"g_planned_answer_v1\n{active_plan}"),
-    }
-
-
-def generate_plan_final_answer(
-    question: str,
-    plan: Dict[str, Any],
-    reasoning_outputs: Dict[str, str],
-) -> Dict[str, Any]:
-    """Execute only a plan's final step using fixed intermediate outputs.
-
-    This is used as the clean-plan control for G conditions. The control and
-    corrupted answers therefore share exactly the same extracted evidence
-    outputs and differ only in which dependencies reach the final step.
-    """
-    active_plan = deepcopy(plan)
-    final_step = active_plan["steps"][-1]
-    final_inputs = "\n".join(
-        f"{dependency_id}: {reasoning_outputs[dependency_id]}"
-        for dependency_id in final_step.get("depends_on", [])
-        if dependency_id in reasoning_outputs
-    )
-
-    result = invoke_text(
-        [
-            SystemMessage(
-                content="""Answer the original question using only the supplied intermediate results.
-
-Do not use the raw evidence or outside knowledge.
-Return only the concise final answer.
-Do not explain or show reasoning.
-For yes/no questions, return only yes or no.
-"""
-            ),
-            HumanMessage(
-                content=(
-                    f"Question:\n{question}\n\n"
-                    f"Final task:\n{final_step['task']}\n\n"
-                    f"Available intermediate results:\n{final_inputs or 'None'}\n\n"
-                    "Answer:"
-                )
-            ),
-        ]
-    )
-    result["prompt_hash"] = hash_text(
-        f"g_plan_final_v1\n{active_plan}"
+        f"{system_prompt}\nQuestion:\n{{question}}\nPassages:\n{{evidence}}"
     )
     return result
 
@@ -361,7 +237,7 @@ def semantic_evaluation(
                     f"Predicted answer:\n{predicted_answer}"
                 )
             ),
-        ]
+        ],
     )
     return {
         "semantic_correct": result.verdict == "correct",
@@ -420,9 +296,6 @@ def evaluate_prediction(
         semantic_correct = bool(semantic["semantic_correct"])
         semantic_judge_error = False
     except Exception:
-        # Preserve deterministic EM/F1 and mark only the judge result as
-        # indeterminate so one malformed structured response cannot stop the
-        # complete experiment.
         semantic_correct = False
         semantic_judge_error = True
 
