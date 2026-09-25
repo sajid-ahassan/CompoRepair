@@ -48,4 +48,6 @@ htmlcov/
 
 # OS generated files
 .DS_Store
+# Private datasets and experimental outputs
+/data/
 Thumbs.db
