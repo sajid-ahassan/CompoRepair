@@ -1,0 +1,13 @@
+{
+  "input_zip": "raw_results.zip",
+  "input_sha256": "18ed827e962204ec7122a7f86eee3cbe521acea299a314ebcde44a197803c497",
+  "bootstrap_samples": 10000,
+  "bootstrap_seed": 20260830,
+  "paired_ci": "percentile paired bootstrap",
+  "paired_binary_test": "exact two-sided McNemar/binomial",
+  "single_proportion_ci": "Clopper-Pearson exact 95%",
+  "multiplicity": "Holm correction within pre-specified comparison/metric families",
+  "safe_composer_in_primary_analysis": false,
+  "b1_present": false,
+  "note": "Contrast-specific intersections; semantic analyses exclude generation failures and semantic judge errors."
+}

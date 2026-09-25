@@ -1,0 +1,13 @@
+PASS - Fixed vs B0 significant 16/16
+PASS - Fixed vs B2 significant 15/16
+PASS - Fixed vs B3 significant 15/16
+PASS - Fixed vs Reverse significant 2/16
+PASS - Singles significant 7/12
+PASS - 2Wiki-Qwen M_D order N=107
+PASS - 2Wiki-Qwen M_D order delta=0.261682...
+PASS - 2Wiki-Qwen M_D order discordant=31 vs 3
+PASS - 2Wiki-Qwen M_D Holm p=1.2256205e-05
+PASS - Hotpot-Qwen M_D order delta=0.185185...
+PASS - Hotpot-Qwen M_D order discordant=21 vs 1
+
+All 11 validation checks passed.

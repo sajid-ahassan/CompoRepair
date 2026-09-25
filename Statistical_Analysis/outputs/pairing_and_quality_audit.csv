@@ -1,0 +1,157 @@
+setting,condition,method,source_file,raw_record_count,usable_trace_count,missing_trace_id_count,duplicate_trace_id_count,duplicate_trace_ids,baseline_unevaluable_count,final_unevaluable_count,baseline_mismatch_count,pairwise_trace_count,baseline_mismatch_excluded_count,A_available_trace_count,B_available_trace_count
+2Wiki-Llama,M,fixed,raw results/2wiki+ollama/repaired_result/M_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Llama,D,fixed,raw results/2wiki+ollama/repaired_result/D_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Llama,L,fixed,raw results/2wiki+ollama/repaired_result/L_repair_results.json,107,107,0,0,[],0,0,,,,,
+2Wiki-Llama,M_D,fixed,raw results/2wiki+ollama/repaired_result/M_D_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Llama,M_D,reverse,raw results/2wiki+ollama/repaired_result/M_D_reverse_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Llama,M_D,b2,raw results/2wiki+ollama/repaired_result/M_D_b2_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Llama,M_D,b3,raw results/2wiki+ollama/repaired_result/M_D_b3_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Llama,M_D,baseline_consensus,merged failure_evaluation from fixed/reverse/b2/b3,,108,,,,,,0,,,,
+2Wiki-Llama,M_D,Fixed_vs_B0,pairwise intersection,,,,,,,,,108,0,108,108
+2Wiki-Llama,M_D,Fixed_vs_B2,pairwise intersection,,,,,,,,,108,0,108,108
+2Wiki-Llama,M_D,Fixed_vs_B3,pairwise intersection,,,,,,,,,108,0,108,108
+2Wiki-Llama,M_D,Fixed_vs_Reverse,pairwise intersection,,,,,,,,,108,0,108,108
+2Wiki-Llama,M_L,fixed,raw results/2wiki+ollama/repaired_result/M_L_repair_results.json,107,107,0,0,[],0,0,,,,,
+2Wiki-Llama,M_L,reverse,raw results/2wiki+ollama/repaired_result/M_L_reverse_repair_results.json,107,107,0,0,[],0,0,,,,,
+2Wiki-Llama,M_L,b2,raw results/2wiki+ollama/repaired_result/M_L_b2_repair_results.json,107,107,0,0,[],0,0,,,,,
+2Wiki-Llama,M_L,b3,raw results/2wiki+ollama/repaired_result/M_L_b3_repair_results.json,107,107,0,0,[],0,0,,,,,
+2Wiki-Llama,M_L,baseline_consensus,merged failure_evaluation from fixed/reverse/b2/b3,,107,,,,,,0,,,,
+2Wiki-Llama,M_L,Fixed_vs_B0,pairwise intersection,,,,,,,,,107,0,107,107
+2Wiki-Llama,M_L,Fixed_vs_B2,pairwise intersection,,,,,,,,,107,0,107,107
+2Wiki-Llama,M_L,Fixed_vs_B3,pairwise intersection,,,,,,,,,107,0,107,107
+2Wiki-Llama,M_L,Fixed_vs_Reverse,pairwise intersection,,,,,,,,,107,0,107,107
+2Wiki-Llama,D_L,fixed,raw results/2wiki+ollama/repaired_result/D_L_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Llama,D_L,reverse,raw results/2wiki+ollama/repaired_result/D_L_reverse_repair_results.json,107,107,0,0,[],0,0,,,,,
+2Wiki-Llama,D_L,b2,raw results/2wiki+ollama/repaired_result/D_L_b2_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Llama,D_L,b3,raw results/2wiki+ollama/repaired_result/D_L_b3_repair_results.json,107,107,0,0,[],0,0,,,,,
+2Wiki-Llama,D_L,baseline_consensus,merged failure_evaluation from fixed/reverse/b2/b3,,108,,,,,,0,,,,
+2Wiki-Llama,D_L,Fixed_vs_B0,pairwise intersection,,,,,,,,,108,0,108,108
+2Wiki-Llama,D_L,Fixed_vs_B2,pairwise intersection,,,,,,,,,108,0,108,108
+2Wiki-Llama,D_L,Fixed_vs_B3,pairwise intersection,,,,,,,,,107,0,108,107
+2Wiki-Llama,D_L,Fixed_vs_Reverse,pairwise intersection,,,,,,,,,107,0,108,107
+2Wiki-Llama,M_D_L,fixed,raw results/2wiki+ollama/repaired_result/M_D_L_repair_results.json,107,107,0,0,[],0,0,,,,,
+2Wiki-Llama,M_D_L,reverse,raw results/2wiki+ollama/repaired_result/M_D_L_reverse_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Llama,M_D_L,b2,raw results/2wiki+ollama/repaired_result/M_D_L_b2_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Llama,M_D_L,b3,raw results/2wiki+ollama/repaired_result/M_D_L_b3_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Llama,M_D_L,baseline_consensus,merged failure_evaluation from fixed/reverse/b2/b3,,108,,,,,,0,,,,
+2Wiki-Llama,M_D_L,Fixed_vs_B0,pairwise intersection,,,,,,,,,107,0,107,107
+2Wiki-Llama,M_D_L,Fixed_vs_B2,pairwise intersection,,,,,,,,,107,0,107,108
+2Wiki-Llama,M_D_L,Fixed_vs_B3,pairwise intersection,,,,,,,,,107,0,107,108
+2Wiki-Llama,M_D_L,Fixed_vs_Reverse,pairwise intersection,,,,,,,,,107,0,107,108
+2Wiki-Qwen,M,fixed,raw results/2wiki+qwen/repaired_result/M_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Qwen,D,fixed,raw results/2wiki+qwen/repaired_result/D_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Qwen,L,fixed,raw results/2wiki+qwen/repaired_result/L_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Qwen,M_D,fixed,raw results/2wiki+qwen/repaired_result/M_D_repair_results.json,108,107,0,0,[],1,0,,,,,
+2Wiki-Qwen,M_D,reverse,raw results/2wiki+qwen/repaired_result/M_D_reverse_repair_results.json,108,107,0,0,[],1,0,,,,,
+2Wiki-Qwen,M_D,b2,raw results/2wiki+qwen/repaired_result/M_D_b2_repair_results.json,108,107,0,0,[],1,0,,,,,
+2Wiki-Qwen,M_D,b3,raw results/2wiki+qwen/repaired_result/M_D_b3_repair_results.json,108,107,0,0,[],1,0,,,,,
+2Wiki-Qwen,M_D,baseline_consensus,merged failure_evaluation from fixed/reverse/b2/b3,,107,,,,,,0,,,,
+2Wiki-Qwen,M_D,Fixed_vs_B0,pairwise intersection,,,,,,,,,107,0,107,107
+2Wiki-Qwen,M_D,Fixed_vs_B2,pairwise intersection,,,,,,,,,107,0,107,107
+2Wiki-Qwen,M_D,Fixed_vs_B3,pairwise intersection,,,,,,,,,107,0,107,107
+2Wiki-Qwen,M_D,Fixed_vs_Reverse,pairwise intersection,,,,,,,,,107,0,107,107
+2Wiki-Qwen,M_L,fixed,raw results/2wiki+qwen/repaired_result/M_L_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Qwen,M_L,reverse,raw results/2wiki+qwen/repaired_result/M_L_reverse_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Qwen,M_L,b2,raw results/2wiki+qwen/repaired_result/M_L_b2_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Qwen,M_L,b3,raw results/2wiki+qwen/repaired_result/M_L_b3_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Qwen,M_L,baseline_consensus,merged failure_evaluation from fixed/reverse/b2/b3,,108,,,,,,0,,,,
+2Wiki-Qwen,M_L,Fixed_vs_B0,pairwise intersection,,,,,,,,,108,0,108,108
+2Wiki-Qwen,M_L,Fixed_vs_B2,pairwise intersection,,,,,,,,,108,0,108,108
+2Wiki-Qwen,M_L,Fixed_vs_B3,pairwise intersection,,,,,,,,,108,0,108,108
+2Wiki-Qwen,M_L,Fixed_vs_Reverse,pairwise intersection,,,,,,,,,108,0,108,108
+2Wiki-Qwen,D_L,fixed,raw results/2wiki+qwen/repaired_result/D_L_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Qwen,D_L,reverse,raw results/2wiki+qwen/repaired_result/D_L_reverse_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Qwen,D_L,b2,raw results/2wiki+qwen/repaired_result/D_L_b2_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Qwen,D_L,b3,raw results/2wiki+qwen/repaired_result/D_L_b3_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Qwen,D_L,baseline_consensus,merged failure_evaluation from fixed/reverse/b2/b3,,108,,,,,,0,,,,
+2Wiki-Qwen,D_L,Fixed_vs_B0,pairwise intersection,,,,,,,,,108,0,108,108
+2Wiki-Qwen,D_L,Fixed_vs_B2,pairwise intersection,,,,,,,,,108,0,108,108
+2Wiki-Qwen,D_L,Fixed_vs_B3,pairwise intersection,,,,,,,,,108,0,108,108
+2Wiki-Qwen,D_L,Fixed_vs_Reverse,pairwise intersection,,,,,,,,,108,0,108,108
+2Wiki-Qwen,M_D_L,fixed,raw results/2wiki+qwen/repaired_result/M_D_L_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Qwen,M_D_L,reverse,raw results/2wiki+qwen/repaired_result/M_D_L_reverse_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Qwen,M_D_L,b2,raw results/2wiki+qwen/repaired_result/M_D_L_b2_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Qwen,M_D_L,b3,raw results/2wiki+qwen/repaired_result/M_D_L_b3_repair_results.json,108,108,0,0,[],0,0,,,,,
+2Wiki-Qwen,M_D_L,baseline_consensus,merged failure_evaluation from fixed/reverse/b2/b3,,108,,,,,,0,,,,
+2Wiki-Qwen,M_D_L,Fixed_vs_B0,pairwise intersection,,,,,,,,,108,0,108,108
+2Wiki-Qwen,M_D_L,Fixed_vs_B2,pairwise intersection,,,,,,,,,108,0,108,108
+2Wiki-Qwen,M_D_L,Fixed_vs_B3,pairwise intersection,,,,,,,,,108,0,108,108
+2Wiki-Qwen,M_D_L,Fixed_vs_Reverse,pairwise intersection,,,,,,,,,108,0,108,108
+Hotpot-Llama,M,fixed,raw results/hotpot+ollama/repaired_result/M_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Llama,D,fixed,raw results/hotpot+ollama/repaired_result/D_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Llama,L,fixed,raw results/hotpot+ollama/repaired_result/L_repair_results.json,103,103,0,0,[],0,0,,,,,
+Hotpot-Llama,M_D,fixed,raw results/hotpot+ollama/repaired_result/M_D_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Llama,M_D,reverse,raw results/hotpot+ollama/repaired_result/M_D_reverse_repair_results.json,106,106,0,0,[],0,0,,,,,
+Hotpot-Llama,M_D,b2,raw results/hotpot+ollama/repaired_result/M_D_b2_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Llama,M_D,b3,raw results/hotpot+ollama/repaired_result/M_D_b3_repair_results.json,106,106,0,0,[],0,0,,,,,
+Hotpot-Llama,M_D,baseline_consensus,merged failure_evaluation from fixed/reverse/b2/b3,,108,,,,,,0,,,,
+Hotpot-Llama,M_D,Fixed_vs_B0,pairwise intersection,,,,,,,,,108,0,108,108
+Hotpot-Llama,M_D,Fixed_vs_B2,pairwise intersection,,,,,,,,,108,0,108,108
+Hotpot-Llama,M_D,Fixed_vs_B3,pairwise intersection,,,,,,,,,106,0,108,106
+Hotpot-Llama,M_D,Fixed_vs_Reverse,pairwise intersection,,,,,,,,,106,0,108,106
+Hotpot-Llama,M_L,fixed,raw results/hotpot+ollama/repaired_result/M_L_repair_results.json,101,101,0,0,[],0,0,,,,,
+Hotpot-Llama,M_L,reverse,raw results/hotpot+ollama/repaired_result/M_L_reverse_repair_results.json,100,100,0,0,[],0,0,,,,,
+Hotpot-Llama,M_L,b2,raw results/hotpot+ollama/repaired_result/M_L_b2_repair_results.json,107,107,0,0,[],0,0,,,,,
+Hotpot-Llama,M_L,b3,raw results/hotpot+ollama/repaired_result/M_L_b3_repair_results.json,107,107,0,0,[],0,0,,,,,
+Hotpot-Llama,M_L,baseline_consensus,merged failure_evaluation from fixed/reverse/b2/b3,,107,,,,,,0,,,,
+Hotpot-Llama,M_L,Fixed_vs_B0,pairwise intersection,,,,,,,,,101,0,101,101
+Hotpot-Llama,M_L,Fixed_vs_B2,pairwise intersection,,,,,,,,,101,0,101,107
+Hotpot-Llama,M_L,Fixed_vs_B3,pairwise intersection,,,,,,,,,101,0,101,107
+Hotpot-Llama,M_L,Fixed_vs_Reverse,pairwise intersection,,,,,,,,,96,0,101,100
+Hotpot-Llama,D_L,fixed,raw results/hotpot+ollama/repaired_result/D_L_repair_results.json,101,101,0,0,[],0,0,,,,,
+Hotpot-Llama,D_L,reverse,raw results/hotpot+ollama/repaired_result/D_L_reverse_repair_results.json,105,105,0,0,[],0,0,,,,,
+Hotpot-Llama,D_L,b2,raw results/hotpot+ollama/repaired_result/D_L_b2_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Llama,D_L,b3,raw results/hotpot+ollama/repaired_result/D_L_b3_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Llama,D_L,baseline_consensus,merged failure_evaluation from fixed/reverse/b2/b3,,108,,,,,,0,,,,
+Hotpot-Llama,D_L,Fixed_vs_B0,pairwise intersection,,,,,,,,,101,0,101,101
+Hotpot-Llama,D_L,Fixed_vs_B2,pairwise intersection,,,,,,,,,101,0,101,108
+Hotpot-Llama,D_L,Fixed_vs_B3,pairwise intersection,,,,,,,,,101,0,101,108
+Hotpot-Llama,D_L,Fixed_vs_Reverse,pairwise intersection,,,,,,,,,99,0,101,105
+Hotpot-Llama,M_D_L,fixed,raw results/hotpot+ollama/repaired_result/M_D_L_repair_results.json,104,104,0,0,[],0,0,,,,,
+Hotpot-Llama,M_D_L,reverse,raw results/hotpot+ollama/repaired_result/M_D_L_reverse_repair_results.json,103,103,0,0,[],0,0,,,,,
+Hotpot-Llama,M_D_L,b2,raw results/hotpot+ollama/repaired_result/M_D_L_b2_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Llama,M_D_L,b3,raw results/hotpot+ollama/repaired_result/M_D_L_b3_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Llama,M_D_L,baseline_consensus,merged failure_evaluation from fixed/reverse/b2/b3,,108,,,,,,0,,,,
+Hotpot-Llama,M_D_L,Fixed_vs_B0,pairwise intersection,,,,,,,,,104,0,104,104
+Hotpot-Llama,M_D_L,Fixed_vs_B2,pairwise intersection,,,,,,,,,104,0,104,108
+Hotpot-Llama,M_D_L,Fixed_vs_B3,pairwise intersection,,,,,,,,,104,0,104,108
+Hotpot-Llama,M_D_L,Fixed_vs_Reverse,pairwise intersection,,,,,,,,,99,0,104,103
+Hotpot-Qwen,M,fixed,raw results/hotpot+qwen/repaired_result/M_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Qwen,D,fixed,raw results/hotpot+qwen/repaired_result/D_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Qwen,L,fixed,raw results/hotpot+qwen/repaired_result/L_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Qwen,M_D,fixed,raw results/hotpot+qwen/repaired_result/M_D_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Qwen,M_D,reverse,raw results/hotpot+qwen/repaired_result/M_D_reverse_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Qwen,M_D,b2,raw results/hotpot+qwen/repaired_result/M_D_b2_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Qwen,M_D,b3,raw results/hotpot+qwen/repaired_result/M_D_b3_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Qwen,M_D,baseline_consensus,merged failure_evaluation from fixed/reverse/b2/b3,,108,,,,,,0,,,,
+Hotpot-Qwen,M_D,Fixed_vs_B0,pairwise intersection,,,,,,,,,108,0,108,108
+Hotpot-Qwen,M_D,Fixed_vs_B2,pairwise intersection,,,,,,,,,108,0,108,108
+Hotpot-Qwen,M_D,Fixed_vs_B3,pairwise intersection,,,,,,,,,108,0,108,108
+Hotpot-Qwen,M_D,Fixed_vs_Reverse,pairwise intersection,,,,,,,,,108,0,108,108
+Hotpot-Qwen,M_L,fixed,raw results/hotpot+qwen/repaired_result/M_L_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Qwen,M_L,reverse,raw results/hotpot+qwen/repaired_result/M_L_reverse_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Qwen,M_L,b2,raw results/hotpot+qwen/repaired_result/M_L_b2_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Qwen,M_L,b3,raw results/hotpot+qwen/repaired_result/M_L_b3_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Qwen,M_L,baseline_consensus,merged failure_evaluation from fixed/reverse/b2/b3,,108,,,,,,0,,,,
+Hotpot-Qwen,M_L,Fixed_vs_B0,pairwise intersection,,,,,,,,,108,0,108,108
+Hotpot-Qwen,M_L,Fixed_vs_B2,pairwise intersection,,,,,,,,,108,0,108,108
+Hotpot-Qwen,M_L,Fixed_vs_B3,pairwise intersection,,,,,,,,,108,0,108,108
+Hotpot-Qwen,M_L,Fixed_vs_Reverse,pairwise intersection,,,,,,,,,108,0,108,108
+Hotpot-Qwen,D_L,fixed,raw results/hotpot+qwen/repaired_result/D_L_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Qwen,D_L,reverse,raw results/hotpot+qwen/repaired_result/D_L_reverse_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Qwen,D_L,b2,raw results/hotpot+qwen/repaired_result/D_L_b2_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Qwen,D_L,b3,raw results/hotpot+qwen/repaired_result/D_L_b3_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Qwen,D_L,baseline_consensus,merged failure_evaluation from fixed/reverse/b2/b3,,108,,,,,,0,,,,
+Hotpot-Qwen,D_L,Fixed_vs_B0,pairwise intersection,,,,,,,,,108,0,108,108
+Hotpot-Qwen,D_L,Fixed_vs_B2,pairwise intersection,,,,,,,,,108,0,108,108
+Hotpot-Qwen,D_L,Fixed_vs_B3,pairwise intersection,,,,,,,,,108,0,108,108
+Hotpot-Qwen,D_L,Fixed_vs_Reverse,pairwise intersection,,,,,,,,,108,0,108,108
+Hotpot-Qwen,M_D_L,fixed,raw results/hotpot+qwen/repaired_result/M_D_L_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Qwen,M_D_L,reverse,raw results/hotpot+qwen/repaired_result/M_D_L_reverse_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Qwen,M_D_L,b2,raw results/hotpot+qwen/repaired_result/M_D_L_b2_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Qwen,M_D_L,b3,raw results/hotpot+qwen/repaired_result/M_D_L_b3_repair_results.json,108,108,0,0,[],0,0,,,,,
+Hotpot-Qwen,M_D_L,baseline_consensus,merged failure_evaluation from fixed/reverse/b2/b3,,108,,,,,,0,,,,
+Hotpot-Qwen,M_D_L,Fixed_vs_B0,pairwise intersection,,,,,,,,,108,0,108,108
+Hotpot-Qwen,M_D_L,Fixed_vs_B2,pairwise intersection,,,,,,,,,108,0,108,108
+Hotpot-Qwen,M_D_L,Fixed_vs_B3,pairwise intersection,,,,,,,,,108,0,108,108
+Hotpot-Qwen,M_D_L,Fixed_vs_Reverse,pairwise intersection,,,,,,,,,108,0,108,108
